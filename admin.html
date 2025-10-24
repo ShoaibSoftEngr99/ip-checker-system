@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - User Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --danger: #f72585;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --dark: #212529;
+            --light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: none;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .admin-nav {
+            background: var(--light);
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .admin-content {
+            padding: 30px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+        }
+
+        /* User Management Styles */
+        .user-form {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .users-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .users-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Statistics Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--dark);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .data-table th {
+            background: var(--light);
+            font-weight: 600;
+        }
+
+        .login-form {
+            text-align: center;
+        }
+
+        .login-form h2 {
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        .form-group-full {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group-full label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group-full input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-nav {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Login -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-form">
+            <h2><i class="fas fa-lock"></i> Admin Login</h2>
+            <div class="form-group-full">
+                <label for="adminPassword">Admin Password:</label>
+                <input type="password" id="adminPassword" placeholder="Enter admin password">
+            </div>
+            <button class="login-btn" onclick="adminLogin()">
+                <i class="fas fa-sign-in-alt"></i> Login as Admin
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-container" id="adminContainer">
+        <div class="admin-header">
+            <h1><i class="fas fa-users-cog"></i> User Management System</h1>
+            <p>Create and manage user accounts</p>
+            <button class="logout-btn" onclick="adminLogout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <div class="admin-nav">
+            <button class="nav-btn active" onclick="showSection('users')">
+                <i class="fas fa-users"></i> User Management
+            </button>
+            <button class="nav-btn" onclick="showSection('statistics')">
+                <i class="fas fa-chart-bar"></i> Statistics
+            </button>
+        </div>
+
+        <div class="admin-content">
+            <!-- User Management Section -->
+            <div class="section active" id="usersSection">
+                <h3 class="section-title"><i class="fas fa-user-plus"></i> Create New User</h3>
+                
+                <div class="user-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newUsername">Username:</label>
+                            <input type="text" id="newUsername" placeholder="Enter username">
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Password:</label>
+                            <input type="text" id="newPassword" placeholder="Enter password">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="createUser()">
+                        <i class="fas fa-plus"></i> Create User
+                    </button>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-list"></i> Existing Users</h3>
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Created Date</th>
+                            <th>Total IPs</th>
+                            <th>Today's IPs</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <!-- Users will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="section" id="statisticsSection">
+                <h3 class="section-title"><i class="fas fa-chart-pie"></i> System Statistics</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalUsers">0</span>
+                        <span class="stat-label">Total Users</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalIPs">0</span>
+                        <span class="stat-label">Total IPs</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="todayIPs">0</span>
+                        <span class="stat-label">Today's IPs</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="activeUsers">0</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-history"></i> Recent IP Activity</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>IP Address</th>
+                            <th>Type</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentActivityTable">
+                        <!-- Activity will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = "shoaib252525"; // Change this password
+
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminContainer').style.display = 'block';
+                loadUsersData();
+                loadStatistics();
+            } else {
+                alert('Invalid admin password!');
+            }
+        }
+
+        function adminLogout() {
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('adminContainer').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section and activate button
+            document.getElementById(sectionName + 'Section').classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Reload data if needed
+            if (sectionName === 'statistics') {
+                loadStatistics();
+            }
+        }
+
+        // User Management Functions
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('ipSystemUsers')) || [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('ipSystemUsers', JSON.stringify(users));
+        }
+
+        function createUser() {
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value.trim();
+            
+            if (!username || !password) {
+                alert('Please enter both username and password!');
+                return;
+            }
+            
+            const users = getUsers();
+            
+            // Check if username already exists
+            if (users.some(user => user.username === username)) {
+                alert('Username already exists!');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                username: username,
+                password: password,
+                created: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            saveUsers(users);
+            
+            // Clear form and refresh table
+            document.getElementById('newUsername').value = '';
+            document.getElementById('newPassword').value = '';
+            
+            loadUsersData();
+            alert('User created successfully!');
+        }
+
+        function deleteUser(username) {
+            if (confirm(`Are you sure you want to delete user "${username}"?`)) {
+                let users = getUsers();
+                users = users.filter(user => user.username !== username);
+                saveUsers(users);
+                loadUsersData();
+            }
+        }
+
+        function resetUserPassword(username) {
+            const newPassword = prompt(`Enter new password for ${username}:`);
+            if (newPassword) {
+                let users = getUsers();
+                const user = users.find(u => u.username === username);
+                if (user) {
+                    user.password = newPassword;
+                    saveUsers(users);
+                    loadUsersData();
+                    alert('Password reset successfully!');
+                }
+            }
+        }
+
+        function loadUsersData() {
+            const users = getUsers();
+            const usersTable = document.getElementById('usersTable');
+            usersTable.innerHTML = '';
+            
+            users.forEach(user => {
+                const userIPs = getUserTotalIPs(user.username);
+                const todayIPs = getUserTodayIPs(user.username);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${new Date(user.created).toLocaleDateString()}</td>
+                    <td>${userIPs}</td>
+                    <td>${todayIPs}</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="resetUserPassword('${user.username}')">
+                            <i class="fas fa-key"></i> Reset Password
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteUser('${user.username}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                usersTable.appendChild(row);
+            });
+        }
+
+        function getUserTotalIPs(username) {
+            let total = 0;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(`userIPs_${username}_`)) {
+                    const ips = JSON.parse(localStorage.getItem(key));
+                    total += ips.length;
+                }
+            }
+            return total;
+        }
+
+        function getUserTodayIPs(username) {
+            const todayKey = `userIPs_${username}_${new Date().toDateString()}`;
+            const todayIPs = JSON.parse(localStorage.getItem(todayKey)) || [];
+            return todayIPs.length;
+        }
+
+        function loadStatistics() {
+            const users = getUsers();
+            let totalIPs = 0;
+            let todayIPs = 0;
+            const recentActivity = [];
+            
+            // Calculate statistics
+            users.forEach(user => {
+                totalIPs += getUserTotalIPs(user.username);
+                todayIPs += getUserTodayIPs(user.username);
+                
+                // Get recent activity for this user
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith(`userIPs_${user.username}_`)) {
+                        const ips = JSON.parse(localStorage.getItem(key));
+                        ips.forEach(ip => {
+                            recentActivity.push({
+                                user: user.username,
+                                ip: ip.ip,
+                                type: ip.type,
+                                time: ip.timestamp
+                            });
+                        });
+                    }
+                }
+            });
+            
+            // Update statistics
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalIPs').textContent = totalIPs;
+            document.getElementById('todayIPs').textContent = todayIPs;
+            document.getElementById('activeUsers').textContent = users.filter(user => getUserTodayIPs(user.username) > 0).length;
+            
+            // Update recent activity table
+            const activityTable = document.getElementById('recentActivityTable');
+            activityTable.innerHTML = '';
+            
+            // Sort by timestamp (newest first) and take last 20
+            recentActivity
+                .sort((a, b) => new Date(b.time) - new Date(a.time))
+                .slice(0, 20)
+                .forEach(activity => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${activity.user}</td>
+                        <td>${activity.ip}</td>
+                        <td>${activity.type}</td>
+                        <td>${new Date(activity.time).toLocaleString()}</td>
+                    `;
+                    activityTable.appendChild(row);
+                });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if users exist, if not create default admin user
+            const users = getUsers();
+            if (users.length === 0) {
+                const defaultUser = {
+                    username: 'demo',
+                    password: 'demo123',
+                    created: new Date().toISOString()
+                };
+                users.push(defaultUser);
+                saveUsers(users);
+            }
+        });
+    </script>
+</body>
+</html>
