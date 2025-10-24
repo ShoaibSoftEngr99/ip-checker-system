@@ -40,7 +40,7 @@
         }
 
         .admin-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -81,6 +81,7 @@
             display: flex;
             gap: 15px;
             border-bottom: 1px solid #dee2e6;
+            flex-wrap: wrap;
         }
 
         .nav-btn {
@@ -131,10 +132,12 @@
             display: flex;
             gap: 15px;
             margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
         .form-group {
             flex: 1;
+            min-width: 200px;
         }
 
         .form-group label {
@@ -144,7 +147,7 @@
             color: var(--dark);
         }
 
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 10px 12px;
             border: 2px solid #dee2e6;
@@ -152,7 +155,7 @@
             font-size: 1rem;
         }
 
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--primary);
         }
@@ -164,6 +167,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
+            margin: 2px;
         }
 
         .btn-primary {
@@ -183,6 +187,11 @@
 
         .btn-warning {
             background: var(--warning);
+            color: white;
+        }
+
+        .btn-info {
+            background: #17a2b8;
             color: white;
         }
 
@@ -248,6 +257,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 0.9rem;
         }
 
         .data-table th,
@@ -260,6 +270,51 @@
         .data-table th {
             background: var(--light);
             font-weight: 600;
+        }
+
+        /* Bulk Delete Styles */
+        .bulk-actions {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #ffeaa7;
+        }
+
+        .bulk-section {
+            margin-bottom: 25px;
+        }
+
+        .checkbox-cell {
+            width: 40px;
+            text-align: center;
+        }
+
+        .select-all {
+            margin-right: 10px;
+        }
+
+        .storage-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            transition: width 0.3s;
         }
 
         .login-form {
@@ -315,6 +370,10 @@
             .admin-nav {
                 flex-direction: column;
             }
+            
+            .users-table {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -349,6 +408,12 @@
             </button>
             <button class="nav-btn" onclick="showSection('statistics')">
                 <i class="fas fa-chart-bar"></i> Statistics
+            </button>
+            <button class="nav-btn" onclick="showSection('bulkDelete')">
+                <i class="fas fa-trash-alt"></i> Bulk Delete
+            </button>
+            <button class="nav-btn" onclick="showSection('storage')">
+                <i class="fas fa-database"></i> Storage Management
             </button>
         </div>
 
@@ -428,11 +493,142 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Bulk Delete Section -->
+            <div class="section" id="bulkDeleteSection">
+                <h3 class="section-title"><i class="fas fa-trash-alt"></i> Bulk Delete Operations</h3>
+                
+                <div class="bulk-actions">
+                    <h4><i class="fas fa-broom"></i> Quick Cleanup</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Delete IPs Older Than:</label>
+                            <select id="cleanupDays">
+                                <option value="7">1 Week</option>
+                                <option value="30">1 Month</option>
+                                <option value="60">2 Months</option>
+                                <option value="90">3 Months</option>
+                                <option value="180">6 Months</option>
+                                <option value="365">1 Year</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-danger" onclick="cleanupOldIPs()">
+                                <i class="fas fa-broom"></i> Cleanup Now
+                            </button>
+                        </div>
+                    </div>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">
+                        This will permanently delete all IPs older than selected time period.
+                    </p>
+                </div>
+
+                <div class="bulk-section">
+                    <h4><i class="fas fa-users-slash"></i> Delete by User</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Select User:</label>
+                            <select id="userSelect">
+                                <!-- Users will be populated here -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Delete Data:</label>
+                            <select id="userDataSelect">
+                                <option value="all">All IP Data</option>
+                                <option value="old">IPs Older Than 1 Month</option>
+                                <option value="today">Today's IPs Only</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-warning" onclick="deleteUserIPs()">
+                                <i class="fas fa-trash"></i> Delete User Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bulk-section">
+                    <h4><i class="fas fa-nuclear"></i> Nuclear Option</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Delete Everything:</label>
+                            <button class="btn btn-danger" onclick="showNuclearConfirm()">
+                                <i class="fas fa-radiation"></i> Delete ALL Data
+                            </button>
+                        </div>
+                    </div>
+                    <p style="color: #dc3545; font-size: 0.9rem; margin-top: 10px;">
+                        ⚠️ This will delete ALL IP data from ALL users. This action cannot be undone!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Storage Management Section -->
+            <div class="section" id="storageSection">
+                <h3 class="section-title"><i class="fas fa-database"></i> Storage Information</h3>
+                
+                <div class="storage-info">
+                    <h4><i class="fas fa-info-circle"></i> Storage Usage</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="storageProgress" style="width: 0%"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                        <span>Used: <strong id="usedStorage">0 KB</strong></span>
+                        <span>Available: <strong id="availableStorage">5 MB</strong></span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalEntries">0</span>
+                        <span class="stat-label">Total IP Entries</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalKeys">0</span>
+                        <span class="stat-label">Storage Keys</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="oldestData">0</span>
+                        <span class="stat-label">Oldest Data (Days)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="avgDaily">0</span>
+                        <span class="stat-label">Avg Daily IPs</span>
+                    </div>
+                </div>
+
+                <h4 class="section-title"><i class="fas fa-cog"></i> Auto-Cleanup Settings</h4>
+                <div class="user-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Auto Delete IPs Older Than:</label>
+                            <select id="autoCleanupDays">
+                                <option value="0">Never (Manual Only)</option>
+                                <option value="30">1 Month</option>
+                                <option value="60">2 Months</option>
+                                <option value="90">3 Months</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-success" onclick="saveAutoCleanup()">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn btn-info" onclick="runAutoCleanup()">
+                        <i class="fas fa-play"></i> Run Auto Cleanup Now
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "shoaib252525"; // Change this password
+        const ADMIN_PASSWORD = "admainshoaib2525"; // Change this password
 
         function adminLogin() {
             const password = document.getElementById('adminPassword').value;
@@ -441,6 +637,7 @@
                 document.getElementById('adminContainer').style.display = 'block';
                 loadUsersData();
                 loadStatistics();
+                loadStorageInfo();
             } else {
                 alert('Invalid admin password!');
             }
@@ -470,6 +667,10 @@
             // Reload data if needed
             if (sectionName === 'statistics') {
                 loadStatistics();
+            } else if (sectionName === 'storage') {
+                loadStorageInfo();
+            } else if (sectionName === 'bulkDelete') {
+                loadUserSelect();
             }
         }
 
@@ -514,15 +715,21 @@
             document.getElementById('newPassword').value = '';
             
             loadUsersData();
+            loadUserSelect();
             alert('User created successfully!');
         }
 
         function deleteUser(username) {
-            if (confirm(`Are you sure you want to delete user "${username}"?`)) {
+            if (confirm(`Are you sure you want to delete user "${username}"? This will also delete all their IP data!`)) {
                 let users = getUsers();
                 users = users.filter(user => user.username !== username);
                 saveUsers(users);
+                
+                // Delete user's IP data
+                deleteUserIPData(username);
+                
                 loadUsersData();
+                loadUserSelect();
             }
         }
 
@@ -568,6 +775,20 @@
             });
         }
 
+        function loadUserSelect() {
+            const users = getUsers();
+            const userSelect = document.getElementById('userSelect');
+            userSelect.innerHTML = '<option value="">Select User</option>';
+            
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.username;
+                option.textContent = user.username;
+                userSelect.appendChild(option);
+            });
+        }
+
+        // IP Data Management Functions
         function getUserTotalIPs(username) {
             let total = 0;
             for (let i = 0; i < localStorage.length; i++) {
@@ -584,6 +805,195 @@
             const todayKey = `userIPs_${username}_${new Date().toDateString()}`;
             const todayIPs = JSON.parse(localStorage.getItem(todayKey)) || [];
             return todayIPs.length;
+        }
+
+        function deleteUserIPData(username) {
+            // Delete all IP data for user
+            const keysToDelete = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(`userIPs_${username}_`)) {
+                    keysToDelete.push(key);
+                }
+            }
+            
+            keysToDelete.forEach(key => {
+                localStorage.removeItem(key);
+            });
+            
+            return keysToDelete.length;
+        }
+
+        // Bulk Delete Functions
+        function cleanupOldIPs() {
+            const days = parseInt(document.getElementById('cleanupDays').value);
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - days);
+            
+            let deletedCount = 0;
+            const users = getUsers();
+            
+            users.forEach(user => {
+                const keysToDelete = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith(`userIPs_${user.username}_`)) {
+                        // Extract date from key (format: userIPs_username_Day Month Date Year)
+                        const dateStr = key.split('_').slice(2).join(' ');
+                        const keyDate = new Date(dateStr);
+                        
+                        if (keyDate < cutoffDate) {
+                            keysToDelete.push(key);
+                        }
+                    }
+                }
+                
+                keysToDelete.forEach(key => {
+                    localStorage.removeItem(key);
+                    deletedCount++;
+                });
+            });
+            
+            alert(`Deleted ${deletedCount} IP entries older than ${days} days.`);
+            loadStatistics();
+            loadStorageInfo();
+        }
+
+        function deleteUserIPs() {
+            const username = document.getElementById('userSelect').value;
+            const deleteType = document.getElementById('userDataSelect').value;
+            
+            if (!username) {
+                alert('Please select a user!');
+                return;
+            }
+            
+            if (deleteType === 'all') {
+                const count = deleteUserIPData(username);
+                alert(`Deleted all ${count} IP entries for user ${username}`);
+            } else if (deleteType === 'old') {
+                // Delete IPs older than 30 days
+                const cutoffDate = new Date();
+                cutoffDate.setDate(cutoffDate.getDate() - 30);
+                let deletedCount = 0;
+                
+                const keysToDelete = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith(`userIPs_${username}_`)) {
+                        const dateStr = key.split('_').slice(2).join(' ');
+                        const keyDate = new Date(dateStr);
+                        
+                        if (keyDate < cutoffDate) {
+                            keysToDelete.push(key);
+                        }
+                    }
+                }
+                
+                keysToDelete.forEach(key => {
+                    localStorage.removeItem(key);
+                    deletedCount++;
+                });
+                
+                alert(`Deleted ${deletedCount} IP entries older than 1 month for user ${username}`);
+            } else if (deleteType === 'today') {
+                const todayKey = `userIPs_${username}_${new Date().toDateString()}`;
+                localStorage.removeItem(todayKey);
+                alert(`Deleted today's IPs for user ${username}`);
+            }
+            
+            loadStatistics();
+            loadStorageInfo();
+        }
+
+        function showNuclearConfirm() {
+            if (confirm('🚨 NUCLEAR OPTION 🚨\n\nThis will delete ALL IP data from ALL users!\n\nThis action cannot be undone!\n\nAre you absolutely sure?')) {
+                if (confirm('FINAL WARNING: This will permanently delete everything!\n\nType "DELETE ALL" to confirm:')) {
+                    const users = getUsers();
+                    let totalDeleted = 0;
+                    
+                    users.forEach(user => {
+                        totalDeleted += deleteUserIPData(user.username);
+                    });
+                    
+                    alert(`💥 Nuclear cleanup complete! Deleted ${totalDeleted} IP entries.`);
+                    loadStatistics();
+                    loadStorageInfo();
+                }
+            }
+        }
+
+        // Storage Management Functions
+        function loadStorageInfo() {
+            let totalEntries = 0;
+            let totalKeys = 0;
+            let oldestDate = new Date();
+            let dailyCounts = {};
+            
+            // Calculate storage usage
+            let totalSize = 0;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                totalSize += key.length + value.length;
+                totalKeys++;
+                
+                if (key.startsWith('userIPs_')) {
+                    const ips = JSON.parse(value);
+                    totalEntries += ips.length;
+                    
+                    // Extract date from key
+                    const dateStr = key.split('_').slice(2).join(' ');
+                    const keyDate = new Date(dateStr);
+                    
+                    if (keyDate < oldestDate) {
+                        oldestDate = keyDate;
+                    }
+                    
+                    // Count daily entries
+                    const dateKey = keyDate.toDateString();
+                    dailyCounts[dateKey] = (dailyCounts[dateKey] || 0) + ips.length;
+                }
+            }
+            
+            // Calculate days since oldest data
+            const daysOld = Math.floor((new Date() - oldestDate) / (1000 * 60 * 60 * 24));
+            
+            // Calculate average daily IPs
+            const dailyValues = Object.values(dailyCounts);
+            const avgDaily = dailyValues.length > 0 ? 
+                Math.round(dailyValues.reduce((a, b) => a + b) / dailyValues.length) : 0;
+            
+            // Update UI
+            document.getElementById('totalEntries').textContent = totalEntries.toLocaleString();
+            document.getElementById('totalKeys').textContent = totalKeys.toLocaleString();
+            document.getElementById('oldestData').textContent = daysOld;
+            document.getElementById('avgDaily').textContent = avgDaily.toLocaleString();
+            
+            // Update storage progress
+            const usedKB = Math.round(totalSize / 1024);
+            const maxKB = 5120; // 5MB limit for localStorage
+            const percent = Math.min(100, (usedKB / maxKB) * 100);
+            
+            document.getElementById('storageProgress').style.width = percent + '%';
+            document.getElementById('usedStorage').textContent = usedKB + ' KB';
+            document.getElementById('availableStorage').textContent = (maxKB - usedKB) + ' KB';
+        }
+
+        function saveAutoCleanup() {
+            const days = document.getElementById('autoCleanupDays').value;
+            localStorage.setItem('autoCleanupDays', days);
+            alert('Auto-cleanup settings saved!');
+        }
+
+        function runAutoCleanup() {
+            const days = parseInt(localStorage.getItem('autoCleanupDays') || '0');
+            if (days > 0) {
+                document.getElementById('cleanupDays').value = days;
+                cleanupOldIPs();
+            } else {
+                alert('Auto-cleanup is disabled. Please enable it in settings.');
+            }
         }
 
         function loadStatistics() {
@@ -616,8 +1026,8 @@
             
             // Update statistics
             document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('totalIPs').textContent = totalIPs;
-            document.getElementById('todayIPs').textContent = todayIPs;
+            document.getElementById('totalIPs').textContent = totalIPs.toLocaleString();
+            document.getElementById('todayIPs').textContent = todayIPs.toLocaleString();
             document.getElementById('activeUsers').textContent = users.filter(user => getUserTodayIPs(user.username) > 0).length;
             
             // Update recent activity table
@@ -653,6 +1063,10 @@
                 users.push(defaultUser);
                 saveUsers(users);
             }
+            
+            // Load auto-cleanup settings
+            const autoCleanupDays = localStorage.getItem('autoCleanupDays') || '0';
+            document.getElementById('autoCleanupDays').value = autoCleanupDays;
         });
     </script>
 </body>
