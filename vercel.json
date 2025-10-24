@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "ip-checker-system",
+  "name": "ip-system",
   "builds": [
     {
       "src": "*.html",
@@ -9,12 +9,12 @@
   ],
   "routes": [
     {
-      "src": "/",
-      "dest": "/index.html"
+      "src": "/admin",
+      "dest": "/admin-panel.html"
     },
     {
-      "src": "/admin",
-      "dest": "/admin.html"
+      "src": "/",
+      "dest": "/user-panel.html"
     }
   ]
 }
