@@ -13,8 +13,12 @@
       "dest": "/admin-panel.html"
     },
     {
-      "src": "/",
+      "src": "/user",
       "dest": "/user-panel.html"
+    },
+    {
+      "src": "/",
+      "dest": "/dashboard.html"
     }
   ]
 }
