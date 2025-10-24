@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Complete IP System</title>
-    <!-- Bootstrap CSS -->
+    <title>Admin Panel - IP Manager</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -14,63 +12,51 @@
             --secondary: #34495e;
             --success: #27ae60;
             --danger: #e74c3c;
-            --warning: #f39c12;
-            --info: #3498db;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: #f8f9fa;
             margin: 0;
-            padding: 20px;
-        }
-
-        .admin-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
-            margin: 0 auto;
-            max-width: 1400px;
+            padding: 0;
         }
 
         .admin-header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 25px;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .sidebar {
-            background: var(--light);
+            background: white;
             min-height: 100vh;
-            padding: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            padding: 20px 0;
         }
 
-        .sidebar .nav-link {
-            color: var(--dark);
+        .nav-link {
+            color: var(--primary);
             padding: 15px 20px;
-            border-bottom: 1px solid #ddd;
+            margin: 5px 10px;
+            border-radius: 8px;
             transition: all 0.3s;
             text-decoration: none;
             display: block;
         }
 
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+        .nav-link:hover, .nav-link.active {
             background: var(--primary);
             color: white;
         }
 
-        .sidebar .nav-link i {
-            width: 25px;
-            text-align: center;
+        .nav-link i {
+            width: 20px;
             margin-right: 10px;
         }
 
         .main-content {
-            padding: 25px;
+            padding: 30px;
             background: #f8f9fa;
             min-height: 100vh;
         }
@@ -78,39 +64,20 @@
         .card {
             border: none;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
             margin-bottom: 20px;
         }
 
-        .stat-card {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: block;
-        }
-
-        .stat-label {
-            color: var(--secondary);
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .btn-custom {
+        .btn-admin {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
             border-radius: 8px;
             padding: 10px 20px;
             transition: all 0.3s;
-            cursor: pointer;
         }
 
-        .btn-custom:hover {
+        .btn-admin:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             color: white;
@@ -122,7 +89,7 @@
             background: white;
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .section {
@@ -131,6 +98,24 @@
 
         .section.active {
             display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
         }
     </style>
 </head>
@@ -139,259 +124,302 @@
     <div class="login-container" id="loginContainer">
         <div class="text-center mb-4">
             <h2><i class="fas fa-lock"></i> Admin Login</h2>
+            <p class="text-muted">Enter admin credentials</p>
         </div>
-        <div class="form-group mb-3">
-            <label for="adminUsername" class="form-label">Username:</label>
-            <input type="text" class="form-control" id="adminUsername" value="admin">
+        <div class="mb-3">
+            <label class="form-label">Username:</label>
+            <input type="text" class="form-control" id="adminUsername" value="admin" placeholder="Enter username">
         </div>
-        <div class="form-group mb-3">
-            <label for="adminPassword" class="form-label">Password:</label>
-            <input type="password" class="form-control" id="adminPassword" value="admin123">
+        <div class="mb-3">
+            <label class="form-label">Password:</label>
+            <input type="password" class="form-control" id="adminPassword" value="admin123" placeholder="Enter password">
         </div>
-        <button class="btn btn-custom w-100" onclick="adminLogin()">
+        <button class="btn btn-admin w-100" onclick="adminLogin()">
             <i class="fas fa-sign-in-alt"></i> Login
         </button>
+        <div class="text-center mt-3">
+            <a href="dashboard.html" class="text-muted">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
     </div>
 
     <!-- Main Admin Panel -->
-    <div class="admin-container" id="adminPanel" style="display: none;">
+    <div id="adminPanel" style="display: none;">
         <div class="admin-header">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <h2><i class="fas fa-cogs"></i> Admin Control Panel</h2>
-                    <p class="mb-0">Complete User & Proxy Management System</p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <button class="btn btn-light" onclick="adminLogout()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h3><i class="fas fa-cogs"></i> Admin Panel</h3>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="dashboard.html" class="btn btn-light me-2">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                        <button class="btn btn-light" onclick="adminLogout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="row g-0">
-            <!-- Sidebar -->
-            <div class="col-md-3 sidebar">
-                <nav class="nav flex-column">
-                    <a class="nav-link active" href="javascript:void(0)" onclick="showSection('userManagement')">
-                        <i class="fas fa-users"></i> User Management
-                    </a>
-                    <a class="nav-link" href="javascript:void(0)" onclick="showSection('userAgents')">
-                        <i class="fas fa-desktop"></i> User Agents
-                    </a>
-                    <a class="nav-link" href="javascript:void(0)" onclick="showSection('proxyManagement')">
-                        <i class="fas fa-server"></i> Proxy Management
-                    </a>
-                    <a class="nav-link" href="javascript:void(0)" onclick="showSection('userLinks')">
-                        <i class="fas fa-link"></i> User Links
-                    </a>
-                </nav>
-            </div>
-
-            <!-- Main Content -->
-            <div class="col-md-9 main-content">
-                <!-- User Management Section -->
-                <div class="section active" id="userManagementSection">
-                    <h3 class="mb-4"><i class="fas fa-users"></i> User Management</h3>
-                    
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0"><i class="fas fa-user-plus"></i> Create New User</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control mb-2" id="newUsername" placeholder="Username">
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="password" class="form-control mb-2" id="newPassword" placeholder="Password">
-                                </div>
-                                <div class="col-md-4">
-                                    <button class="btn btn-custom w-100" onclick="createUser()">
-                                        <i class="fas fa-plus"></i> Create User
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="mb-0"><i class="fas fa-list"></i> All Users</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Username</th>
-                                            <th>Created</th>
-                                            <th>Proxies</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="usersTable">
-                                        <!-- Users will be loaded here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" onclick="showSection('dashboard')">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                        <a class="nav-link" onclick="showSection('users')">
+                            <i class="fas fa-users"></i> Users
+                        </a>
+                        <a class="nav-link" onclick="showSection('userAgents')">
+                            <i class="fas fa-desktop"></i> User Agents
+                        </a>
+                        <a class="nav-link" onclick="showSection('proxies')">
+                            <i class="fas fa-server"></i> Proxies
+                        </a>
+                        <a class="nav-link" onclick="showSection('links')">
+                            <i class="fas fa-link"></i> User Links
+                        </a>
+                    </nav>
                 </div>
 
-                <!-- User Agents Section -->
-                <div class="section" id="userAgentsSection">
-                    <h3 class="mb-4"><i class="fas fa-desktop"></i> Global User Agents</h3>
-                    
-                    <div class="card">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0"><i class="fas fa-plus"></i> Add User Agents (All Users Can Use)</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label">Add User Agents (One per line):</label>
-                                <textarea class="form-control" id="userAgentsInput" rows="8" placeholder="Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15..."></textarea>
+                <!-- Main Content -->
+                <div class="col-md-9 col-lg-10 main-content">
+                    <!-- Dashboard Section -->
+                    <div class="section active" id="dashboardSection">
+                        <h3 class="mb-4">Admin Dashboard</h3>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card stat-card">
+                                    <div class="stat-number" id="totalUsers">0</div>
+                                    <div class="text-muted">Total Users</div>
+                                </div>
                             </div>
-                            <button class="btn btn-custom" onclick="addUserAgents()">
-                                <i class="fas fa-save"></i> Save User Agents
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header bg-warning text-white">
-                            <h5 class="mb-0"><i class="fas fa-list"></i> Current User Agents (Total: <span id="uaCount">0</span>)</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>User Agent</th>
-                                            <th>Used By</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="userAgentsTable">
-                                        <!-- User agents will be loaded here -->
-                                    </tbody>
-                                </table>
+                            <div class="col-md-3">
+                                <div class="card stat-card">
+                                    <div class="stat-number" id="totalAgents">0</div>
+                                    <div class="text-muted">User Agents</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stat-card">
+                                    <div class="stat-number" id="activeProxies">0</div>
+                                    <div class="text-muted">Active Proxies</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card stat-card">
+                                    <div class="stat-number" id="configuredLinks">0</div>
+                                    <div class="text-muted">User Links</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Proxy Management Section -->
-                <div class="section" id="proxyManagementSection">
-                    <h3 class="mb-4"><i class="fas fa-server"></i> Proxy Management</h3>
-                    
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0"><i class="fas fa-link"></i> Assign Proxies to Users</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label class="form-label">Select User:</label>
-                                    <select class="form-control" id="proxyUserSelect">
-                                        <option value="">Select User</option>
-                                    </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Quick Actions</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <button class="btn btn-admin w-100 mb-2" onclick="showSection('users')">
+                                            <i class="fas fa-user-plus"></i> Add New User
+                                        </button>
+                                        <button class="btn btn-admin w-100 mb-2" onclick="showSection('userAgents')">
+                                            <i class="fas fa-desktop"></i> Manage User Agents
+                                        </button>
+                                        <button class="btn btn-admin w-100" onclick="showSection('proxies')">
+                                            <i class="fas fa-server"></i> Assign Proxies
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Proxy Links (One per line):</label>
-                                    <textarea class="form-control" id="userProxiesInput" rows="3" placeholder="http://proxy1.com:8080&#10;http://proxy2.com:8080"></textarea>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">&nbsp;</label>
-                                    <button class="btn btn-custom w-100" onclick="assignUserProxies()" style="margin-top: 8px;">
-                                        <i class="fas fa-save"></i> Assign
-                                    </button>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> System Info</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Last Updated:</strong> <span id="lastUpdated">Just now</span></p>
+                                        <p><strong>Default Admin:</strong> admin / admin123</p>
+                                        <p><strong>Demo User:</strong> demo / demo123</p>
+                                        <p><strong>Status:</strong> <span class="badge bg-success">All Systems Operational</span></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="mb-0"><i class="fas fa-list"></i> User Proxy Assignments</h5>
+                    <!-- Users Section -->
+                    <div class="section" id="usersSection">
+                        <h3 class="mb-4">User Management</h3>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-user-plus"></i> Create New User</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control mb-2" id="newUsername" placeholder="Username">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="password" class="form-control mb-2" id="newPassword" placeholder="Password">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-admin w-100" onclick="createUser()">
+                                            <i class="fas fa-plus"></i> Create User
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>User</th>
-                                            <th>Assigned Proxies</th>
-                                            <th>Last Updated</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="proxyAssignmentsTable">
-                                        <!-- Proxy assignments will be loaded here -->
-                                    </tbody>
-                                </table>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-list"></i> All Users</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Created</th>
+                                                <th>Proxies</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="usersTable">
+                                            <!-- Users will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- User Links Section -->
-                <div class="section" id="userLinksSection">
-                    <h3 class="mb-4"><i class="fas fa-link"></i> User Links Management</h3>
-                    
-                    <div class="card">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0"><i class="fas fa-cog"></i> Set User Working Links</h5>
+                    <!-- User Agents Section -->
+                    <div class="section" id="userAgentsSection">
+                        <h3 class="mb-4">Global User Agents</h3>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-plus"></i> Add User Agents</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Add User Agents (One per line):</label>
+                                    <textarea class="form-control" id="userAgentsInput" rows="6" placeholder="Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15..."></textarea>
+                                </div>
+                                <button class="btn btn-admin" onclick="addUserAgents()">
+                                    <i class="fas fa-save"></i> Save User Agents
+                                </button>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-md-3">
-                                    <label class="form-label">Select User:</label>
-                                    <select class="form-control" id="linkUserSelect">
-                                        <option value="">Select User</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Working Link:</label>
-                                    <input type="text" class="form-control" id="workingLinkInput" placeholder="https://example.com/campaign">
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Campaign Name:</label>
-                                    <input type="text" class="form-control" id="campaignInput" placeholder="Summer Promotion">
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Vertical:</label>
-                                    <input type="text" class="form-control" id="verticalInput" placeholder="E-commerce">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-list"></i> Current User Agents (<span id="uaCount">0</span>)</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="userAgentsList">
+                                    <!-- User agents will be loaded here -->
                                 </div>
                             </div>
-                            <button class="btn btn-custom" onclick="saveUserLinks()">
-                                <i class="fas fa-save"></i> Save User Links
-                            </button>
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-header bg-warning text-white">
-                            <h5 class="mb-0"><i class="fas fa-list"></i> Current User Links</h5>
+                    <!-- Proxies Section -->
+                    <div class="section" id="proxiesSection">
+                        <h3 class="mb-4">Proxy Management</h3>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-link"></i> Assign Proxies</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Select User:</label>
+                                        <select class="form-control" id="proxyUserSelect">
+                                            <option value="">Select User</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <label class="form-label">Proxy Links (One per line):</label>
+                                        <textarea class="form-control" id="userProxiesInput" rows="3" placeholder="http://proxy1.com:8080&#10;http://proxy2.com:8080"></textarea>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button class="btn btn-admin w-100" onclick="assignUserProxies()" style="margin-top: 8px;">
+                                            <i class="fas fa-save"></i> Assign
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>User</th>
-                                            <th>Working Link</th>
-                                            <th>Campaign</th>
-                                            <th>Vertical</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="userLinksTable">
-                                        <!-- User links will be loaded here -->
-                                    </tbody>
-                                </table>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-list"></i> Proxy Assignments</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="proxyAssignmentsList">
+                                    <!-- Proxy assignments will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Links Section -->
+                    <div class="section" id="linksSection">
+                        <h3 class="mb-4">User Links Management</h3>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-cog"></i> Set User Links</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Select User:</label>
+                                        <select class="form-control" id="linkUserSelect">
+                                            <option value="">Select User</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Working Link:</label>
+                                        <input type="text" class="form-control" id="workingLinkInput" placeholder="https://example.com/campaign">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Campaign:</label>
+                                        <input type="text" class="form-control" id="campaignInput" placeholder="Summer Promotion">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Vertical:</label>
+                                        <input type="text" class="form-control" id="verticalInput" placeholder="E-commerce">
+                                    </div>
+                                </div>
+                                <button class="btn btn-admin mt-3" onclick="saveUserLinks()">
+                                    <i class="fas fa-save"></i> Save Links
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-list"></i> Current User Links</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="userLinksList">
+                                    <!-- User links will be loaded here -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -402,21 +430,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Admin Credentials
-        const ADMIN_CREDENTIALS = {
-            username: "admin",
-            password: "admin123"
-        };
+        // Simplified Admin JavaScript
+        const ADMIN_CREDENTIALS = { username: "admin", password: "admin123" };
 
-        // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
             initializeDefaultData();
-            setTimeout(() => {
-                adminLogin();
-            }, 500);
         });
 
-        // Admin Login
         function adminLogin() {
             const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
@@ -424,86 +444,68 @@
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
-                loadUserManagement();
+                loadDashboard();
             } else {
-                alert('Invalid admin credentials!');
+                alert('Invalid credentials!');
             }
         }
 
-        // Admin Logout
         function adminLogout() {
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('loginContainer').style.display = 'block';
         }
 
-        // Show Section
         function showSection(sectionName) {
             document.querySelectorAll('.section').forEach(section => {
-                section.style.display = 'none';
+                section.classList.remove('active');
             });
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             
-            document.getElementById(sectionName + 'Section').style.display = 'block';
+            document.getElementById(sectionName + 'Section').classList.add('active');
             event.currentTarget.classList.add('active');
 
             switch(sectionName) {
-                case 'userManagement':
-                    loadUserManagement();
-                    break;
-                case 'userAgents':
-                    loadUserAgents();
-                    break;
-                case 'proxyManagement':
-                    loadProxyManagement();
-                    break;
-                case 'userLinks':
-                    loadUserLinks();
-                    break;
+                case 'dashboard': loadDashboard(); break;
+                case 'users': loadUsers(); break;
+                case 'userAgents': loadUserAgents(); break;
+                case 'proxies': loadProxies(); break;
+                case 'links': loadLinks(); break;
             }
         }
 
         // Data Storage Functions
-        function getUsers() {
-            return JSON.parse(localStorage.getItem('systemUsers')) || [];
+        function getUsers() { return JSON.parse(localStorage.getItem('systemUsers')) || []; }
+        function saveUsers(users) { localStorage.setItem('systemUsers', JSON.stringify(users)); }
+        function getUserAgents() { return JSON.parse(localStorage.getItem('globalUserAgents')) || []; }
+        function saveUserAgents(agents) { localStorage.setItem('globalUserAgents', JSON.stringify(agents)); }
+        function getUserProxies() { return JSON.parse(localStorage.getItem('userProxies')) || {}; }
+        function saveUserProxies(proxies) { localStorage.setItem('userProxies', JSON.stringify(proxies)); }
+        function getUserLinks() { return JSON.parse(localStorage.getItem('userLinks')) || {}; }
+        function saveUserLinks(links) { localStorage.setItem('userLinks', JSON.stringify(links)); }
+
+        // Dashboard Functions
+        function loadDashboard() {
+            const users = getUsers();
+            const agents = getUserAgents();
+            const proxies = getUserProxies();
+            const links = getUserLinks();
+
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalAgents').textContent = agents.length;
+            document.getElementById('activeProxies').textContent = Object.keys(proxies).length;
+            document.getElementById('configuredLinks').textContent = Object.keys(links).length;
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
         }
 
-        function saveUsers(users) {
-            localStorage.setItem('systemUsers', JSON.stringify(users));
-        }
-
-        function getUserAgents() {
-            return JSON.parse(localStorage.getItem('globalUserAgents')) || [];
-        }
-
-        function saveUserAgents(agents) {
-            localStorage.setItem('globalUserAgents', JSON.stringify(agents));
-        }
-
-        function getUserProxies() {
-            return JSON.parse(localStorage.getItem('userProxies')) || {};
-        }
-
-        function saveUserProxies(proxies) {
-            localStorage.setItem('userProxies', JSON.stringify(proxies));
-        }
-
-        function getUserLinks() {
-            return JSON.parse(localStorage.getItem('userLinks')) || {};
-        }
-
-        function saveUserLinks(links) {
-            localStorage.setItem('userLinks', JSON.stringify(links));
-        }
-
-        // User Management Functions
-        function loadUserManagement() {
+        // Users Functions
+        function loadUsers() {
             const users = getUsers();
             const usersTable = document.getElementById('usersTable');
             
             if (users.length === 0) {
-                usersTable.innerHTML = '<tr><td colspan="5" class="text-center">No users found</td></tr>';
+                usersTable.innerHTML = '<tr><td colspan="4" class="text-center">No users found</td></tr>';
                 return;
             }
             
@@ -515,7 +517,6 @@
                         <td>${user.username}</td>
                         <td>${new Date(user.created).toLocaleDateString()}</td>
                         <td>${userProxies.length}</td>
-                        <td><span class="badge bg-success">Active</span></td>
                         <td>
                             <button class="btn btn-sm btn-warning" onclick="resetUserPassword('${user.username}')">
                                 <i class="fas fa-key"></i>
@@ -547,19 +548,16 @@
                 return;
             }
 
-            const newUser = {
+            users.push({
                 username: username,
                 password: password,
                 created: new Date().toISOString()
-            };
+            });
 
-            users.push(newUser);
             saveUsers(users);
-
             document.getElementById('newUsername').value = '';
             document.getElementById('newPassword').value = '';
-
-            loadUserManagement();
+            loadUsers();
             alert('User created successfully!');
         }
 
@@ -571,19 +569,18 @@
                 if (user) {
                     user.password = newPassword;
                     saveUsers(users);
-                    loadUserManagement();
+                    loadUsers();
                     alert('Password reset successfully!');
                 }
             }
         }
 
         function deleteUser(username) {
-            if (confirm(`Delete user "${username}" and all their data?`)) {
+            if (confirm(`Delete user "${username}"?`)) {
                 let users = getUsers();
                 users = users.filter(user => user.username !== username);
                 saveUsers(users);
 
-                // Delete user's data
                 const userProxies = getUserProxies();
                 delete userProxies[username];
                 saveUserProxies(userProxies);
@@ -592,7 +589,7 @@
                 delete userLinks[username];
                 saveUserLinks(userLinks);
 
-                loadUserManagement();
+                loadUsers();
                 alert('User deleted successfully!');
             }
         }
@@ -603,34 +600,28 @@
             document.getElementById('uaCount').textContent = agents.length;
             
             if (agents.length === 0) {
-                document.getElementById('userAgentsTable').innerHTML = '<tr><td colspan="4" class="text-center">No user agents added</td></tr>';
+                document.getElementById('userAgentsList').innerHTML = '<div class="text-center text-muted">No user agents added</div>';
                 return;
             }
             
             let html = '';
             agents.forEach((agent, index) => {
-                const usedBy = getUsersUsingAgent(agent);
                 html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td><small title="${agent}">${agent.substring(0, 80)}...</small></td>
-                        <td>${usedBy}</td>
-                        <td>
-                            <button class="btn btn-sm btn-danger" onclick="deleteUserAgent(${index})">
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div style="flex: 1;">
+                                <strong>User Agent ${index + 1}:</strong>
+                                <div class="small text-muted">${agent}</div>
+                            </div>
+                            <button class="btn btn-sm btn-danger ms-2" onclick="deleteUserAgent(${index})">
                                 <i class="fas fa-trash"></i>
                             </button>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                 `;
             });
             
-            document.getElementById('userAgentsTable').innerHTML = html;
-        }
-
-        function getUsersUsingAgent(agent) {
-            // This would track which users are using which agents
-            // For simplicity, showing "All Users" for now
-            return "All Users";
+            document.getElementById('userAgentsList').innerHTML = html;
         }
 
         function addUserAgents() {
@@ -654,7 +645,7 @@
             saveUserAgents(existingAgents);
             document.getElementById('userAgentsInput').value = '';
             loadUserAgents();
-            alert(`Added ${addedCount} user agents! Total: ${existingAgents.length}`);
+            alert(`Added ${addedCount} user agents!`);
         }
 
         function deleteUserAgent(index) {
@@ -664,8 +655,8 @@
             loadUserAgents();
         }
 
-        // Proxy Management Functions
-        function loadProxyManagement() {
+        // Proxies Functions
+        function loadProxies() {
             loadUserSelect('proxyUserSelect');
             loadProxyAssignments();
         }
@@ -713,10 +704,10 @@
         function loadProxyAssignments() {
             const userProxies = getUserProxies();
             const users = getUsers();
-            const table = document.getElementById('proxyAssignmentsTable');
+            const list = document.getElementById('proxyAssignmentsList');
             
             if (Object.keys(userProxies).length === 0) {
-                table.innerHTML = '<tr><td colspan="4" class="text-center">No proxy assignments</td></tr>';
+                list.innerHTML = '<div class="text-center text-muted">No proxy assignments</div>';
                 return;
             }
             
@@ -725,29 +716,31 @@
                 const assignment = userProxies[user.username];
                 if (assignment) {
                     html += `
-                        <tr>
-                            <td>${user.username}</td>
-                            <td>
-                                ${assignment.proxies.map(proxy => 
-                                    `<span class="badge bg-primary me-1">${proxy}</span>`
-                                ).join('')}
-                            </td>
-                            <td>${new Date(assignment.updated).toLocaleString()}</td>
-                            <td>
-                                <button class="btn btn-sm btn-danger" onclick="removeUserProxies('${user.username}')">
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div style="flex: 1;">
+                                    <strong>${user.username}</strong>
+                                    <div class="small text-muted">
+                                        ${assignment.proxies.map(proxy => 
+                                            `<span class="badge bg-primary me-1">${proxy}</span>`
+                                        ).join('')}
+                                    </div>
+                                    <small class="text-muted">Updated: ${new Date(assignment.updated).toLocaleString()}</small>
+                                </div>
+                                <button class="btn btn-sm btn-danger ms-2" onclick="removeUserProxies('${user.username}')">
                                     <i class="fas fa-trash"></i>
                                 </button>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
                     `;
                 }
             });
             
-            table.innerHTML = html || '<tr><td colspan="4" class="text-center">No proxy assignments</td></tr>';
+            list.innerHTML = html || '<div class="text-center text-muted">No proxy assignments</div>';
         }
 
         function removeUserProxies(username) {
-            if (confirm(`Remove all proxies from ${username}?`)) {
+            if (confirm(`Remove proxies from ${username}?`)) {
                 const userProxies = getUserProxies();
                 delete userProxies[username];
                 saveUserProxies(userProxies);
@@ -755,10 +748,10 @@
             }
         }
 
-        // User Links Functions
-        function loadUserLinks() {
+        // Links Functions
+        function loadLinks() {
             loadUserSelect('linkUserSelect');
-            loadUserLinksTable();
+            loadUserLinksList();
         }
 
         function saveUserLinks() {
@@ -792,17 +785,17 @@
             document.getElementById('campaignInput').value = '';
             document.getElementById('verticalInput').value = '';
             
-            loadUserLinksTable();
+            loadUserLinksList();
             alert(`Links saved for ${username}`);
         }
 
-        function loadUserLinksTable() {
+        function loadUserLinksList() {
             const userLinks = getUserLinks();
             const users = getUsers();
-            const table = document.getElementById('userLinksTable');
+            const list = document.getElementById('userLinksList');
             
             if (Object.keys(userLinks).length === 0) {
-                table.innerHTML = '<tr><td colspan="5" class="text-center">No user links configured</td></tr>';
+                list.innerHTML = '<div class="text-center text-muted">No user links configured</div>';
                 return;
             }
             
@@ -811,22 +804,27 @@
                 const links = userLinks[user.username];
                 if (links) {
                     html += `
-                        <tr>
-                            <td>${user.username}</td>
-                            <td><small>${links.workingLink}</small></td>
-                            <td>${links.campaign}</td>
-                            <td>${links.vertical}</td>
-                            <td>
-                                <button class="btn btn-sm btn-danger" onclick="removeUserLinks('${user.username}')">
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div style="flex: 1;">
+                                    <strong>${user.username}</strong>
+                                    <div class="small">
+                                        <strong>Link:</strong> ${links.workingLink}<br>
+                                        <strong>Campaign:</strong> ${links.campaign}<br>
+                                        <strong>Vertical:</strong> ${links.vertical}
+                                    </div>
+                                    <small class="text-muted">Updated: ${new Date(links.updated).toLocaleString()}</small>
+                                </div>
+                                <button class="btn btn-sm btn-danger ms-2" onclick="removeUserLinks('${user.username}')">
                                     <i class="fas fa-trash"></i>
                                 </button>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
                     `;
                 }
             });
             
-            table.innerHTML = html || '<tr><td colspan="5" class="text-center">No user links configured</td></tr>';
+            list.innerHTML = html || '<div class="text-center text-muted">No user links configured</div>';
         }
 
         function removeUserLinks(username) {
@@ -834,30 +832,26 @@
                 const userLinks = getUserLinks();
                 delete userLinks[username];
                 saveUserLinks(userLinks);
-                loadUserLinksTable();
+                loadUserLinksList();
             }
         }
 
         // Initialize default data
         function initializeDefaultData() {
-            // Default user agents
             if (getUserAgents().length === 0) {
                 const defaultAgents = [
                     "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
-                    "Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36",
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                    "Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36"
                 ];
                 saveUserAgents(defaultAgents);
             }
 
-            // Default demo user
             if (getUsers().length === 0) {
-                const demoUser = {
+                saveUsers([{
                     username: "demo",
                     password: "demo123",
                     created: new Date().toISOString()
-                };
-                saveUsers([demoUser]);
+                }]);
             }
         }
     </script>
