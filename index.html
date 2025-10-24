@@ -3,165 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Verification System - User Login</title>
+    <title>User Panel - IP Checker System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --success: #4cc9f0;
-            --danger: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
+            --primary: #3498db;
+            --secondary: #2980b9;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #9b59b6;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .user-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            margin: 20px;
+            min-height: 95vh;
+        }
+
+        .user-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar {
+            background: var(--light);
             min-height: 100vh;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            border-right: 1px solid #ddd;
         }
 
-        .container {
-            max-width: 500px;
-            width: 100%;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
+        .main-content {
+            padding: 25px;
+            background: #f8f9fa;
+            min-height: 100vh;
         }
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: var(--dark);
-            font-size: 2rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .header p {
-            color: var(--gray);
-            font-size: 1rem;
-        }
-
-        .form-group {
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
 
-        .form-group label {
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
         }
 
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s;
+        .stat-label {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
         }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 15px;
+        .btn-custom {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 10px 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .user-agent-item {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.3s;
-            margin-bottom: 15px;
         }
 
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
-        }
-
-        .user-info {
-            background: var(--light);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .user-welcome {
-            text-align: center;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .logout-btn {
-            background: var(--danger);
+        .user-agent-item:hover {
+            background: var(--primary);
             color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            margin-top: 10px;
         }
 
-        /* IP Upload Section */
-        .ip-upload-section {
-            display: none;
-        }
-
-        .checkboxes-horizontal {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            flex-wrap: wrap;
+        .user-agent-item.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
         .checkbox-card {
             background: var(--light);
-            padding: 15px 20px;
-            border-radius: 10px;
-            border: 2px solid #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             text-align: center;
-            min-width: 100px;
         }
 
         .checkbox-card:hover {
@@ -175,446 +156,717 @@
             border-color: var(--primary);
         }
 
-        .checkbox-card input {
-            display: none;
-        }
-
-        .checkbox-card i {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .checkbox-card span {
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-
-        .ip-input-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin: 20px 0;
-        }
-
-        .ip-input-group input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .upload-btn {
-            padding: 12px 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-        }
-
-        .daily-counter {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        .work-summary {
+            background: linear-gradient(135deg, #00b894, #00cec9);
             color: white;
             border-radius: 10px;
-        }
-
-        .counter-number {
-            font-size: 2rem;
-            font-weight: 700;
-            display: block;
-        }
-
-        .counter-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .message {
-            margin-top: 15px;
-            padding: 12px 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-        }
-
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .verification-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-        }
-
-        .verification-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .verification-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .verification-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            flex: 1;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Login Section -->
-        <div id="loginSection">
-            <div class="header">
-                <h1><i class="fas fa-user-shield"></i> User Login</h1>
-                <p>Enter your credentials to continue</p>
-            </div>
+    <!-- User Login -->
+    <div class="login-container" id="loginContainer">
+        <div class="text-center mb-4">
+            <h2><i class="fas fa-user-shield"></i> User Login</h2>
+            <p class="text-muted">Enter your credentials to continue</p>
+        </div>
+        <div class="form-group mb-3">
+            <label for="userUsername" class="form-label">Username:</label>
+            <input type="text" class="form-control" id="userUsername" placeholder="Enter your username">
+        </div>
+        <div class="form-group mb-3">
+            <label for="userPassword" class="form-label">Password:</label>
+            <input type="password" class="form-control" id="userPassword" placeholder="Enter your password">
+        </div>
+        <button class="btn btn-custom w-100" onclick="userLogin()">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+        <div class="text-center mt-3">
+            <small class="text-muted">Contact admin for account creation</small>
+        </div>
+    </div>
 
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" placeholder="Enter your username">
+    <!-- Main User Panel -->
+    <div class="user-container" id="userPanel" style="display: none;">
+        <div class="user-header">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2><i class="fas fa-user"></i> User Control Panel</h2>
+                    <p class="mb-0" id="userWelcome">Welcome, User!</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-light" onclick="userLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" placeholder="Enter your password">
-            </div>
-
-            <button class="login-btn" onclick="userLogin()">
-                <i class="fas fa-sign-in-alt"></i> Login
-            </button>
         </div>
 
-        <!-- User Info Section -->
-        <div class="user-info" id="userInfo">
-            <div class="user-welcome">
-                Welcome, <span id="userDisplayName">User</span>!
-            </div>
-            <button class="logout-btn" onclick="userLogout()">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-
-        <!-- IP Upload Section -->
-        <div class="ip-upload-section" id="ipUploadSection">
-            <div class="header">
-                <h1><i class="fas fa-cloud-upload-alt"></i> Upload IP</h1>
-                <p>Select type and enter IP address</p>
-            </div>
-
-            <div class="checkboxes-horizontal">
-                <div class="checkbox-card" onclick="selectCheckbox('session')">
-                    <input type="checkbox" id="sessionCheck" name="checkType" value="session">
-                    <i class="fas fa-globe"></i>
-                    <span>Session</span>
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-md-3 sidebar">
+                <div class="work-summary">
+                    <h5><i class="fas fa-chart-line"></i> Today's Work</h5>
+                    <div class="stat-number" id="todayWorkCount">0</div>
+                    <div class="stat-label">Total IPs Uploaded</div>
                 </div>
-                <div class="checkbox-card" onclick="selectCheckbox('search')">
-                    <input type="checkbox" id="searchCheck" name="checkType" value="search">
-                    <i class="fas fa-search"></i>
-                    <span>Search</span>
+
+                <div class="mb-4">
+                    <h6><i class="fas fa-link"></i> Your Links</h6>
+                    <div class="card">
+                        <div class="card-body">
+                            <strong>Working Link:</strong>
+                            <div id="workingLink" class="text-primary small mb-2">Not set</div>
+                            
+                            <strong>Campaign:</strong>
+                            <div id="campaignName" class="text-success small mb-2">Not set</div>
+                            
+                            <strong>Vertical:</strong>
+                            <div id="verticalName" class="text-info small">Not set</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="checkbox-card" onclick="selectCheckbox('click')">
-                    <input type="checkbox" id="clickCheck" name="checkType" value="click">
-                    <i class="fas fa-mouse-pointer"></i>
-                    <span>Click</span>
+
+                <div class="mb-4">
+                    <h6><i class="fas fa-server"></i> Your Proxies</h6>
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="userProxies">
+                                <div class="text-center text-muted">No proxies assigned</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h6><i class="fas fa-desktop"></i> Selected User Agent</h6>
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="selectedUserAgentDisplay" class="small text-muted">
+                                No user agent selected
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="ip-input-group">
-                <input type="text" id="ipAddress" placeholder="Enter IP Address (e.g., 192.168.1.1)">
-                <button class="upload-btn" onclick="uploadIP()">
-                    <i class="fas fa-upload"></i> Upload
-                </button>
-            </div>
+            <!-- Main Content -->
+            <div class="col-md-9 main-content">
+                <ul class="nav nav-pills mb-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:void(0)" onclick="showSection('ipChecker')">
+                            <i class="fas fa-search"></i> IP Checker
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" onclick="showSection('uploadWork')">
+                            <i class="fas fa-cloud-upload-alt"></i> Upload Work
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" onclick="showSection('userAgents')">
+                            <i class="fas fa-desktop"></i> User Agents
+                        </a>
+                    </li>
+                </ul>
 
-            <div class="daily-counter">
-                <span class="counter-number" id="dailyCount">0</span>
-                <span class="counter-label">Today's IP Count</span>
-            </div>
+                <!-- IP Checker Section -->
+                <div class="section active" id="ipCheckerSection">
+                    <h3 class="mb-4"><i class="fas fa-search-location"></i> IP Checker</h3>
+                    
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-cloud-upload-alt"></i> Upload IP for Verification</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label">Select Check Type:</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="checkbox-card" onclick="selectCheckType('session')">
+                                                <input type="checkbox" id="sessionCheck" name="checkType" value="session">
+                                                <i class="fas fa-globe fa-2x mb-2"></i>
+                                                <div>Session</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="checkbox-card" onclick="selectCheckType('search')">
+                                                <input type="checkbox" id="searchCheck" name="checkType" value="search">
+                                                <i class="fas fa-search fa-2x mb-2"></i>
+                                                <div>Search</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="checkbox-card" onclick="selectCheckType('click')">
+                                                <input type="checkbox" id="clickCheck" name="checkType" value="click">
+                                                <i class="fas fa-mouse-pointer fa-2x mb-2"></i>
+                                                <div>Click</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-            <div id="message" class="message"></div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label class="form-label">IP Address:</label>
+                                    <input type="text" class="form-control" id="ipAddress" placeholder="Enter IP Address (e.g., 192.168.1.1)">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button class="btn btn-custom w-100" onclick="uploadIP()" style="margin-top: 8px;">
+                                        <i class="fas fa-upload"></i> Upload IP
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-history"></i> Recent IP Uploads</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>IP Address</th>
+                                            <th>Type</th>
+                                            <th>User Agent</th>
+                                            <th>Time</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentUploadsTable">
+                                        <tr>
+                                            <td colspan="5" class="text-center">No recent uploads</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Work Section -->
+                <div class="section" id="uploadWorkSection">
+                    <h3 class="mb-4"><i class="fas fa-tasks"></i> Daily Work Upload</h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Upload Session + Search</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">IP Addresses (One per line):</label>
+                                        <textarea class="form-control" id="sessionSearchIPs" rows="6" placeholder="192.168.1.1&#10;192.168.1.2&#10;192.168.1.3"></textarea>
+                                    </div>
+                                    <button class="btn btn-custom w-100" onclick="uploadSessionSearch()">
+                                        <i class="fas fa-upload"></i> Upload Session + Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-warning text-white">
+                                    <h5 class="mb-0"><i class="fas fa-mouse-pointer"></i> Upload Clicks</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">IP Addresses for Clicks (One per line):</label>
+                                        <textarea class="form-control" id="clickIPs" rows="6" placeholder="192.168.1.1&#10;192.168.1.2&#10;192.168.1.3"></textarea>
+                                    </div>
+                                    <button class="btn btn-custom w-100" onclick="uploadClicks()">
+                                        <i class="fas fa-upload"></i> Upload Clicks
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-list-check"></i> Today's Work Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                    <div class="stat-number text-primary" id="sessionSearchCount">0</div>
+                                    <div class="stat-label">Session + Search IPs</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-number text-warning" id="clickCount">0</div>
+                                    <div class="stat-label">Click IPs</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-number text-success" id="totalWorkCount">0</div>
+                                    <div class="stat-label">Total IPs</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Agents Section -->
+                <div class="section" id="userAgentsSection">
+                    <h3 class="mb-4"><i class="fas fa-desktop"></i> Available User Agents</h3>
+                    
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-list"></i> Global User Agents (All Users Can Use)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Filter by Device Type:</label>
+                                <select class="form-control" id="deviceFilter" onchange="filterUserAgents()">
+                                    <option value="">All Devices</option>
+                                    <option value="iPhone">iPhone</option>
+                                    <option value="Android">Android</option>
+                                    <option value="Windows">Windows</option>
+                                    <option value="Mac">Mac</option>
+                                </select>
+                            </div>
+                            <div class="user-agents-list" style="max-height: 400px; overflow-y: auto;">
+                                <div id="userAgentsList">
+                                    <!-- User agents will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Verification Modal -->
-    <div class="verification-modal" id="verificationModal">
-        <div class="verification-content">
-            <h3><i class="fas fa-link"></i> Link Verification</h3>
-            <p>Is your link working properly at this IP?</p>
-            <div class="verification-buttons">
-                <button class="btn btn-success" onclick="confirmLink(true)">
-                    <i class="fas fa-check"></i> Yes
-                </button>
-                <button class="btn btn-danger" onclick="confirmLink(false)">
-                    <i class="fas fa-times"></i> No
-                </button>
+    <div class="modal fade" id="verificationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-link"></i> Link Verification</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-question-circle fa-3x text-warning mb-3"></i>
+                    <h5>Is your link working properly at this IP?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success w-50" onclick="confirmLink(true)">
+                        <i class="fas fa-check"></i> Yes
+                    </button>
+                    <button type="button" class="btn btn-danger w-50" onclick="confirmLink(false)">
+                        <i class="fas fa-times"></i> No
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        // User Management Functions
-        function getUsers() {
-            return JSON.parse(localStorage.getItem('ipSystemUsers')) || [];
-        }
+        let currentUser = null;
+        let selectedUserAgent = '';
+        const verificationModal = new bootstrap.Modal(document.getElementById('verificationModal'));
 
-        function saveUsers(users) {
-            localStorage.setItem('ipSystemUsers', JSON.stringify(users));
-        }
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showUserPanel();
+            }
+        });
 
-        function getCurrentUser() {
-            return JSON.parse(localStorage.getItem('currentUser')) || null;
-        }
-
-        function setCurrentUser(user) {
-            localStorage.setItem('currentUser', JSON.stringify(user));
-        }
-
+        // User Login
         function userLogin() {
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value;
-            const users = getUsers();
+            const username = document.getElementById('userUsername').value.trim();
+            const password = document.getElementById('userPassword').value;
 
+            const users = getUsers();
             const user = users.find(u => u.username === username && u.password === password);
             
             if (user) {
-                setCurrentUser(user);
-                showUserInterface();
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showUserPanel();
             } else {
                 alert('Invalid username or password!');
             }
         }
 
+        // User Logout
         function userLogout() {
+            currentUser = null;
             localStorage.removeItem('currentUser');
-            showLoginInterface();
+            document.getElementById('userPanel').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
         }
 
-        function showLoginInterface() {
-            document.getElementById('loginSection').style.display = 'block';
-            document.getElementById('userInfo').style.display = 'none';
-            document.getElementById('ipUploadSection').style.display = 'none';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-        }
-
-        function showUserInterface() {
-            const currentUser = getCurrentUser();
-            if (!currentUser) {
-                showLoginInterface();
-                return;
-            }
-
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('userInfo').style.display = 'block';
-            document.getElementById('ipUploadSection').style.display = 'block';
-            document.getElementById('userDisplayName').textContent = currentUser.username;
+        // Show User Panel
+        function showUserPanel() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('userPanel').style.display = 'block';
+            document.getElementById('userWelcome').textContent = `Welcome, ${currentUser.username}!`;
             
-            updateDailyCounter();
+            loadUserData();
+            showSection('ipChecker');
         }
 
-        // IP Management Functions
-        function getUserTodayKey() {
-            const currentUser = getCurrentUser();
-            const today = new Date().toDateString();
-            return `userIPs_${currentUser.username}_${today}`;
+        // Show Section
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(sectionName + 'Section').classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            switch(sectionName) {
+                case 'ipChecker':
+                    loadRecentUploads();
+                    break;
+                case 'uploadWork':
+                    loadWorkSummary();
+                    break;
+                case 'userAgents':
+                    loadUserAgents();
+                    break;
+            }
+        }
+
+        // Data Storage Functions
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('systemUsers')) || [];
+        }
+
+        function getUserAgents() {
+            return JSON.parse(localStorage.getItem('globalUserAgents')) || [];
+        }
+
+        function getUserProxies() {
+            return JSON.parse(localStorage.getItem('userProxies')) || {};
+        }
+
+        function getUserLinks() {
+            return JSON.parse(localStorage.getItem('userLinks')) || {};
         }
 
         function getUserIPs() {
-            const todayKey = getUserTodayKey();
+            const todayKey = `userIPs_${currentUser.username}_${new Date().toDateString()}`;
             return JSON.parse(localStorage.getItem(todayKey)) || [];
         }
 
-        function saveUserIP(ip) {
-            const todayKey = getUserTodayKey();
-            const userIPs = getUserIPs();
-            userIPs.push({
-                ip: ip,
-                timestamp: new Date().toISOString(),
-                type: getSelectedCheckType()
-            });
-            localStorage.setItem(todayKey, JSON.stringify(userIPs));
-            updateDailyCounter();
+        function saveUserIPs(ips) {
+            const todayKey = `userIPs_${currentUser.username}_${new Date().toDateString()}`;
+            localStorage.setItem(todayKey, JSON.stringify(ips));
         }
 
-        function updateDailyCounter() {
-            const userIPs = getUserIPs();
-            document.getElementById('dailyCount').textContent = userIPs.length;
+        // Load User Data
+        function loadUserData() {
+            // Load user links
+            const userLinks = getUserLinks();
+            const userLink = userLinks[currentUser.username];
+            if (userLink) {
+                document.getElementById('workingLink').textContent = userLink.workingLink;
+                document.getElementById('campaignName').textContent = userLink.campaign;
+                document.getElementById('verticalName').textContent = userLink.vertical;
+            }
+
+            // Load user proxies
+            const userProxies = getUserProxies();
+            const userProxy = userProxies[currentUser.username];
+            if (userProxy && userProxy.proxies) {
+                const proxiesHtml = userProxy.proxies.map(proxy => 
+                    `<div class="border-bottom pb-2 mb-2">
+                        <small><i class="fas fa-server text-success"></i> ${proxy}</small>
+                    </div>`
+                ).join('');
+                document.getElementById('userProxies').innerHTML = proxiesHtml;
+            }
+
+            loadTodayWorkCount();
         }
 
-        // Checkbox Functions
-        function selectCheckbox(type) {
+        function loadTodayWorkCount() {
+            const userIPs = getUserIPs();
+            document.getElementById('todayWorkCount').textContent = userIPs.length;
+        }
+
+        // IP Checker Functions
+        function selectCheckType(type) {
             document.querySelectorAll('.checkbox-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            
             const card = event.currentTarget;
             card.classList.add('selected');
             
             document.querySelectorAll('input[name="checkType"]').forEach(checkbox => {
                 checkbox.checked = false;
             });
-            
             document.getElementById(type + 'Check').checked = true;
         }
-
-        function getSelectedCheckType() {
-            const selected = document.querySelector('input[name="checkType"]:checked');
-            return selected ? selected.value : '';
-        }
-
-        // IP Upload Functions
-        let currentIP = '';
 
         function uploadIP() {
             const selectedCheckbox = document.querySelector('input[name="checkType"]:checked');
             const ipAddress = document.getElementById('ipAddress').value.trim();
-            const messageDiv = document.getElementById('message');
-            
-            messageDiv.style.display = 'none';
-            
+
             if (!selectedCheckbox) {
-                showMessage('Please select a check type!', 'error');
+                alert('Please select a check type!');
                 return;
             }
-            
+
             if (!ipAddress) {
-                showMessage('Please enter an IP address!', 'error');
+                alert('Please enter an IP address!');
                 return;
             }
-            
-            const ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
-            if (!ipPattern.test(ipAddress)) {
-                showMessage('Please enter a valid IP address!', 'error');
+
+            if (!isValidIP(ipAddress)) {
+                alert('Please enter a valid IP address!');
                 return;
             }
-            
-            // Check for duplicate IP in user's today list
+
+            // Check for duplicate IP
             const userIPs = getUserIPs();
             if (userIPs.some(entry => entry.ip === ipAddress)) {
-                showMessage('❌ This IP has already been uploaded today!', 'error');
+                alert('❌ This IP has already been uploaded today!');
                 return;
             }
-            
+
             currentIP = ipAddress;
-            showVerificationModal();
-        }
-
-        function showVerificationModal() {
-            document.getElementById('verificationModal').classList.add('active');
-        }
-
-        function hideVerificationModal() {
-            document.getElementById('verificationModal').classList.remove('active');
+            verificationModal.show();
         }
 
         function confirmLink(isWorking) {
             if (isWorking) {
-                saveUserIP(currentIP);
-                showMessage(`✅ IP ${currentIP} successfully verified!`, 'success');
+                const selectedCheckbox = document.querySelector('input[name="checkType"]:checked');
+                const userIPs = getUserIPs();
+                
+                userIPs.push({
+                    ip: currentIP,
+                    type: selectedCheckbox.value,
+                    userAgent: selectedUserAgent || 'Default Agent',
+                    timestamp: new Date().toISOString(),
+                    status: 'verified'
+                });
+
+                saveUserIPs(userIPs);
+                alert(`✅ IP ${currentIP} successfully verified!`);
+                
+                document.getElementById('ipAddress').value = '';
+                document.querySelectorAll('.checkbox-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+
+                loadRecentUploads();
+                loadTodayWorkCount();
             } else {
-                showMessage(`❌ IP ${currentIP} - Link is not working.`, 'error');
+                alert(`❌ IP ${currentIP} - Link is not working.`);
             }
-            
-            document.getElementById('ipAddress').value = '';
-            document.querySelectorAll('.checkbox-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            document.querySelectorAll('input[name="checkType"]').forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            
-            hideVerificationModal();
+
+            verificationModal.hide();
         }
 
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById('message');
-            messageDiv.textContent = text;
-            messageDiv.className = `message ${type}`;
-            messageDiv.style.display = 'block';
+        function loadRecentUploads() {
+            const userIPs = getUserIPs();
+            const recentUploadsTable = document.getElementById('recentUploadsTable');
             
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 5000);
+            if (userIPs.length === 0) {
+                recentUploadsTable.innerHTML = '<tr><td colspan="5" class="text-center">No recent uploads</td></tr>';
+                return;
+            }
+
+            const recentIPs = userIPs.slice(-10).reverse();
+            const html = recentIPs.map(ip => `
+                <tr>
+                    <td>${ip.ip}</td>
+                    <td><span class="badge bg-primary">${ip.type}</span></td>
+                    <td><small>${ip.userAgent.substring(0, 30)}...</small></td>
+                    <td>${new Date(ip.timestamp).toLocaleTimeString()}</td>
+                    <td><span class="badge bg-success">${ip.status}</span></td>
+                </tr>
+            `).join('');
+
+            recentUploadsTable.innerHTML = html;
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentUser = getCurrentUser();
-            if (currentUser) {
-                showUserInterface();
-            } else {
-                showLoginInterface();
+        // Work Upload Functions
+        function uploadSessionSearch() {
+            const ipsInput = document.getElementById('sessionSearchIPs').value.trim();
+            if (!ipsInput) {
+                alert('Please enter IP addresses!');
+                return;
             }
-        });
 
-        // Close modal when clicking outside
-        document.getElementById('verificationModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideVerificationModal();
+            const ips = ipsInput.split('\n').filter(ip => ip.trim());
+            const userIPs = getUserIPs();
+            let addedCount = 0;
+
+            ips.forEach(ip => {
+                if (isValidIP(ip) && !userIPs.some(entry => entry.ip === ip)) {
+                    userIPs.push({
+                        ip: ip.trim(),
+                        type: 'session_search',
+                        userAgent: selectedUserAgent || 'Default Agent',
+                        timestamp: new Date().toISOString(),
+                        status: 'uploaded'
+                    });
+                    addedCount++;
+                }
+            });
+
+            saveUserIPs(userIPs);
+            document.getElementById('sessionSearchIPs').value = '';
+            alert(`✅ ${addedCount} IPs uploaded for Session + Search!`);
+            loadWorkSummary();
+            loadTodayWorkCount();
+        }
+
+        function uploadClicks() {
+            const ipsInput = document.getElementById('clickIPs').value.trim();
+            if (!ipsInput) {
+                alert('Please enter IP addresses!');
+                return;
             }
-        });
+
+            const ips = ipsInput.split('\n').filter(ip => ip.trim());
+            const userIPs = getUserIPs();
+            let addedCount = 0;
+
+            ips.forEach(ip => {
+                if (isValidIP(ip) && !userIPs.some(entry => entry.ip === ip)) {
+                    userIPs.push({
+                        ip: ip.trim(),
+                        type: 'click',
+                        userAgent: selectedUserAgent || 'Default Agent',
+                        timestamp: new Date().toISOString(),
+                        status: 'uploaded'
+                    });
+                    addedCount++;
+                }
+            });
+
+            saveUserIPs(userIPs);
+            document.getElementById('clickIPs').value = '';
+            alert(`✅ ${addedCount} IPs uploaded for Clicks!`);
+            loadWorkSummary();
+            loadTodayWorkCount();
+        }
+
+        function isValidIP(ip) {
+            const ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
+            return ipPattern.test(ip.trim());
+        }
+
+        function loadWorkSummary() {
+            const userIPs = getUserIPs();
+            const sessionSearchCount = userIPs.filter(ip => ip.type === 'session_search').length;
+            const clickCount = userIPs.filter(ip => ip.type === 'click').length;
+            const totalCount = userIPs.length;
+
+            document.getElementById('sessionSearchCount').textContent = sessionSearchCount;
+            document.getElementById('clickCount').textContent = clickCount;
+            document.getElementById('totalWorkCount').textContent = totalCount;
+        }
+
+        // User Agents Functions
+        function loadUserAgents() {
+            const agents = getUserAgents();
+            const agentsList = document.getElementById('userAgentsList');
+            
+            if (agents.length === 0) {
+                agentsList.innerHTML = '<div class="text-center text-muted">No user agents available</div>';
+                return;
+            }
+
+            let html = '';
+            agents.forEach((agent, index) => {
+                const deviceType = getDeviceType(agent);
+                html += `
+                    <div class="user-agent-item" onclick="selectUserAgent(${index})" id="agent-${index}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${deviceType}</strong>
+                                <div class="small">${agent.substring(0, 80)}...</div>
+                            </div>
+                            <i class="fas fa-check text-success" style="display: none;"></i>
+                        </div>
+                    </div>
+                `;
+            });
+
+            agentsList.innerHTML = html;
+        }
+
+        function getDeviceType(agent) {
+            if (agent.includes('iPhone')) return 'iPhone';
+            if (agent.includes('Android')) return 'Android';
+            if (agent.includes('Windows')) return 'Windows';
+            if (agent.includes('Macintosh')) return 'Mac';
+            return 'Other';
+        }
+
+        function selectUserAgent(index) {
+            const agents = getUserAgents();
+            selectedUserAgent = agents[index];
+            
+            document.querySelectorAll('.user-agent-item').forEach(item => {
+                item.classList.remove('selected');
+                item.querySelector('.fa-check').style.display = 'none';
+            });
+            
+            const selectedItem = document.getElementById(`agent-${index}`);
+            selectedItem.classList.add('selected');
+            selectedItem.querySelector('.fa-check').style.display = 'block';
+            
+            document.getElementById('selectedUserAgentDisplay').textContent = selectedUserAgent.substring(0, 50) + '...';
+        }
+
+        function filterUserAgents() {
+            const filter = document.getElementById('deviceFilter').value;
+            const agents = getUserAgents();
+            
+            if (!filter) {
+                loadUserAgents();
+                return;
+            }
+
+            const filteredAgents = agents.filter(agent => getDeviceType(agent) === filter);
+            const agentsList = document.getElementById('userAgentsList');
+            
+            if (filteredAgents.length === 0) {
+                agentsList.innerHTML = '<div class="text-center text-muted">No user agents found</div>';
+                return;
+            }
+
+            let html = '';
+            filteredAgents.forEach((agent, index) => {
+                const deviceType = getDeviceType(agent);
+                html += `
+                    <div class="user-agent-item" onclick="selectUserAgent(${agents.indexOf(agent)})" id="agent-${agents.indexOf(agent)}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${deviceType}</strong>
+                                <div class="small">${agent.substring(0, 80)}...</div>
+                            </div>
+                            <i class="fas fa-check text-success" style="display: none;"></i>
+                        </div>
+                    </div>
+                `;
+            });
+
+            agentsList.innerHTML = html;
+        }
     </script>
 </body>
 </html>
