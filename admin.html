@@ -3,105 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - User Management</title>
+    <title>Admin Panel - Complete IP System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --danger: #f72585;
-            --success: #4cc9f0;
-            --warning: #f8961e;
-            --dark: #212529;
-            --light: #f8f9fa;
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            margin: 0;
             padding: 20px;
         }
 
-        .login-container {
-            max-width: 400px;
-            margin: 50px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            display: block;
-        }
-
         .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             overflow: hidden;
-            display: none;
+            margin: 0 auto;
+            max-width: 1400px;
         }
 
         .admin-header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 30px;
-            text-align: center;
-            position: relative;
+            padding: 25px;
         }
 
-        .admin-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .admin-nav {
+        .sidebar {
             background: var(--light);
-            padding: 20px;
-            display: flex;
-            gap: 15px;
-            border-bottom: 1px solid #dee2e6;
-            flex-wrap: wrap;
+            min-height: 100vh;
+            padding: 0;
         }
 
-        .nav-btn {
-            padding: 10px 20px;
-            background: white;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
+        .sidebar .nav-link {
+            color: var(--dark);
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
             transition: all 0.3s;
+            text-decoration: none;
+            display: block;
         }
 
-        .nav-btn.active {
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
             background: var(--primary);
             color: white;
-            border-color: var(--primary);
         }
 
-        .admin-content {
-            padding: 30px;
+        .sidebar .nav-link i {
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .main-content {
+            padding: 25px;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .section {
@@ -111,626 +132,435 @@
         .section.active {
             display: block;
         }
-
-        .section-title {
-            font-size: 1.5rem;
-            color: var(--dark);
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--light);
-            padding-bottom: 10px;
-        }
-
-        /* User Management Styles */
-        .user-form {
-            background: var(--light);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .form-group {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 2px solid #dee2e6;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin: 2px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
-
-        .btn-info {
-            background: #17a2b8;
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .users-table th,
-        .users-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .users-table th {
-            background: var(--light);
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .users-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        /* Statistics Styles */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-left: 4px solid var(--primary);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: block;
-        }
-
-        .stat-label {
-            color: var(--dark);
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.9rem;
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .data-table th {
-            background: var(--light);
-            font-weight: 600;
-        }
-
-        /* Bulk Delete Styles */
-        .bulk-actions {
-            background: #fff3cd;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid #ffeaa7;
-        }
-
-        .bulk-section {
-            margin-bottom: 25px;
-        }
-
-        .checkbox-cell {
-            width: 40px;
-            text-align: center;
-        }
-
-        .select-all {
-            margin-right: 10px;
-        }
-
-        .storage-info {
-            background: #e7f3ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border-left: 4px solid var(--primary);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #e9ecef;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--success), var(--primary));
-            transition: width 0.3s;
-        }
-
-        .login-form {
-            text-align: center;
-        }
-
-        .login-form h2 {
-            margin-bottom: 30px;
-            color: var(--dark);
-        }
-
-        .form-group-full {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group-full label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .form-group-full input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .admin-nav {
-                flex-direction: column;
-            }
-            
-            .users-table {
-                font-size: 0.8rem;
-            }
-        }
     </style>
 </head>
 <body>
     <!-- Admin Login -->
     <div class="login-container" id="loginContainer">
-        <div class="login-form">
+        <div class="text-center mb-4">
             <h2><i class="fas fa-lock"></i> Admin Login</h2>
-            <div class="form-group-full">
-                <label for="adminPassword">Admin Password:</label>
-                <input type="password" id="adminPassword" placeholder="Enter admin password">
-            </div>
-            <button class="login-btn" onclick="adminLogin()">
-                <i class="fas fa-sign-in-alt"></i> Login as Admin
-            </button>
         </div>
+        <div class="form-group mb-3">
+            <label for="adminUsername" class="form-label">Username:</label>
+            <input type="text" class="form-control" id="adminUsername" value="admin">
+        </div>
+        <div class="form-group mb-3">
+            <label for="adminPassword" class="form-label">Password:</label>
+            <input type="password" class="form-control" id="adminPassword" value="admin123">
+        </div>
+        <button class="btn btn-custom w-100" onclick="adminLogin()">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
     </div>
 
-    <!-- Admin Panel -->
-    <div class="admin-container" id="adminContainer">
+    <!-- Main Admin Panel -->
+    <div class="admin-container" id="adminPanel" style="display: none;">
         <div class="admin-header">
-            <h1><i class="fas fa-users-cog"></i> User Management System</h1>
-            <p>Create and manage user accounts</p>
-            <button class="logout-btn" onclick="adminLogout()">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-
-        <div class="admin-nav">
-            <button class="nav-btn active" onclick="showSection('users')">
-                <i class="fas fa-users"></i> User Management
-            </button>
-            <button class="nav-btn" onclick="showSection('statistics')">
-                <i class="fas fa-chart-bar"></i> Statistics
-            </button>
-            <button class="nav-btn" onclick="showSection('bulkDelete')">
-                <i class="fas fa-trash-alt"></i> Bulk Delete
-            </button>
-            <button class="nav-btn" onclick="showSection('storage')">
-                <i class="fas fa-database"></i> Storage Management
-            </button>
-        </div>
-
-        <div class="admin-content">
-            <!-- User Management Section -->
-            <div class="section active" id="usersSection">
-                <h3 class="section-title"><i class="fas fa-user-plus"></i> Create New User</h3>
-                
-                <div class="user-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="newUsername">Username:</label>
-                            <input type="text" id="newUsername" placeholder="Enter username">
-                        </div>
-                        <div class="form-group">
-                            <label for="newPassword">Password:</label>
-                            <input type="text" id="newPassword" placeholder="Enter password">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="createUser()">
-                        <i class="fas fa-plus"></i> Create User
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2><i class="fas fa-cogs"></i> Admin Control Panel</h2>
+                    <p class="mb-0">Complete User & Proxy Management System</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-light" onclick="adminLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
                     </button>
                 </div>
+            </div>
+        </div>
 
-                <h3 class="section-title"><i class="fas fa-list"></i> Existing Users</h3>
-                <table class="users-table">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Created Date</th>
-                            <th>Total IPs</th>
-                            <th>Today's IPs</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTable">
-                        <!-- Users will be populated here -->
-                    </tbody>
-                </table>
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-md-3 sidebar">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="javascript:void(0)" onclick="showSection('userManagement')">
+                        <i class="fas fa-users"></i> User Management
+                    </a>
+                    <a class="nav-link" href="javascript:void(0)" onclick="showSection('userAgents')">
+                        <i class="fas fa-desktop"></i> User Agents
+                    </a>
+                    <a class="nav-link" href="javascript:void(0)" onclick="showSection('proxyManagement')">
+                        <i class="fas fa-server"></i> Proxy Management
+                    </a>
+                    <a class="nav-link" href="javascript:void(0)" onclick="showSection('userLinks')">
+                        <i class="fas fa-link"></i> User Links
+                    </a>
+                </nav>
             </div>
 
-            <!-- Statistics Section -->
-            <div class="section" id="statisticsSection">
-                <h3 class="section-title"><i class="fas fa-chart-pie"></i> System Statistics</h3>
-                
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-number" id="totalUsers">0</span>
-                        <span class="stat-label">Total Users</span>
+            <!-- Main Content -->
+            <div class="col-md-9 main-content">
+                <!-- User Management Section -->
+                <div class="section active" id="userManagementSection">
+                    <h3 class="mb-4"><i class="fas fa-users"></i> User Management</h3>
+                    
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-user-plus"></i> Create New User</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control mb-2" id="newUsername" placeholder="Username">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="password" class="form-control mb-2" id="newPassword" placeholder="Password">
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-custom w-100" onclick="createUser()">
+                                        <i class="fas fa-plus"></i> Create User
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <span class="stat-number" id="totalIPs">0</span>
-                        <span class="stat-label">Total IPs</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" id="todayIPs">0</span>
-                        <span class="stat-label">Today's IPs</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" id="activeUsers">0</span>
-                        <span class="stat-label">Active Users</span>
+
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-list"></i> All Users</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Created</th>
+                                            <th>Proxies</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTable">
+                                        <!-- Users will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <h3 class="section-title"><i class="fas fa-history"></i> Recent IP Activity</h3>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>IP Address</th>
-                            <th>Type</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recentActivityTable">
-                        <!-- Activity will be populated here -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Bulk Delete Section -->
-            <div class="section" id="bulkDeleteSection">
-                <h3 class="section-title"><i class="fas fa-trash-alt"></i> Bulk Delete Operations</h3>
-                
-                <div class="bulk-actions">
-                    <h4><i class="fas fa-broom"></i> Quick Cleanup</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Delete IPs Older Than:</label>
-                            <select id="cleanupDays">
-                                <option value="7">1 Week</option>
-                                <option value="30">1 Month</option>
-                                <option value="60">2 Months</option>
-                                <option value="90">3 Months</option>
-                                <option value="180">6 Months</option>
-                                <option value="365">1 Year</option>
-                            </select>
+                <!-- User Agents Section -->
+                <div class="section" id="userAgentsSection">
+                    <h3 class="mb-4"><i class="fas fa-desktop"></i> Global User Agents</h3>
+                    
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-plus"></i> Add User Agents (All Users Can Use)</h5>
                         </div>
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-danger" onclick="cleanupOldIPs()">
-                                <i class="fas fa-broom"></i> Cleanup Now
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Add User Agents (One per line):</label>
+                                <textarea class="form-control" id="userAgentsInput" rows="8" placeholder="Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15..."></textarea>
+                            </div>
+                            <button class="btn btn-custom" onclick="addUserAgents()">
+                                <i class="fas fa-save"></i> Save User Agents
                             </button>
                         </div>
                     </div>
-                    <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">
-                        This will permanently delete all IPs older than selected time period.
-                    </p>
+
+                    <div class="card">
+                        <div class="card-header bg-warning text-white">
+                            <h5 class="mb-0"><i class="fas fa-list"></i> Current User Agents (Total: <span id="uaCount">0</span>)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>User Agent</th>
+                                            <th>Used By</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="userAgentsTable">
+                                        <!-- User agents will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="bulk-section">
-                    <h4><i class="fas fa-users-slash"></i> Delete by User</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Select User:</label>
-                            <select id="userSelect">
-                                <!-- Users will be populated here -->
-                            </select>
+                <!-- Proxy Management Section -->
+                <div class="section" id="proxyManagementSection">
+                    <h3 class="mb-4"><i class="fas fa-server"></i> Proxy Management</h3>
+                    
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-link"></i> Assign Proxies to Users</h5>
                         </div>
-                        <div class="form-group">
-                            <label>Delete Data:</label>
-                            <select id="userDataSelect">
-                                <option value="all">All IP Data</option>
-                                <option value="old">IPs Older Than 1 Month</option>
-                                <option value="today">Today's IPs Only</option>
-                            </select>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Select User:</label>
+                                    <select class="form-control" id="proxyUserSelect">
+                                        <option value="">Select User</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Proxy Links (One per line):</label>
+                                    <textarea class="form-control" id="userProxiesInput" rows="3" placeholder="http://proxy1.com:8080&#10;http://proxy2.com:8080"></textarea>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button class="btn btn-custom w-100" onclick="assignUserProxies()" style="margin-top: 8px;">
+                                        <i class="fas fa-save"></i> Assign
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-warning" onclick="deleteUserIPs()">
-                                <i class="fas fa-trash"></i> Delete User Data
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-list"></i> User Proxy Assignments</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Assigned Proxies</th>
+                                            <th>Last Updated</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="proxyAssignmentsTable">
+                                        <!-- Proxy assignments will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Links Section -->
+                <div class="section" id="userLinksSection">
+                    <h3 class="mb-4"><i class="fas fa-link"></i> User Links Management</h3>
+                    
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-cog"></i> Set User Working Links</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">Select User:</label>
+                                    <select class="form-control" id="linkUserSelect">
+                                        <option value="">Select User</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Working Link:</label>
+                                    <input type="text" class="form-control" id="workingLinkInput" placeholder="https://example.com/campaign">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Campaign Name:</label>
+                                    <input type="text" class="form-control" id="campaignInput" placeholder="Summer Promotion">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Vertical:</label>
+                                    <input type="text" class="form-control" id="verticalInput" placeholder="E-commerce">
+                                </div>
+                            </div>
+                            <button class="btn btn-custom" onclick="saveUserLinks()">
+                                <i class="fas fa-save"></i> Save User Links
                             </button>
                         </div>
                     </div>
-                </div>
 
-                <div class="bulk-section">
-                    <h4><i class="fas fa-nuclear"></i> Nuclear Option</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Delete Everything:</label>
-                            <button class="btn btn-danger" onclick="showNuclearConfirm()">
-                                <i class="fas fa-radiation"></i> Delete ALL Data
-                            </button>
+                    <div class="card">
+                        <div class="card-header bg-warning text-white">
+                            <h5 class="mb-0"><i class="fas fa-list"></i> Current User Links</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Working Link</th>
+                                            <th>Campaign</th>
+                                            <th>Vertical</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="userLinksTable">
+                                        <!-- User links will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <p style="color: #dc3545; font-size: 0.9rem; margin-top: 10px;">
-                        ⚠️ This will delete ALL IP data from ALL users. This action cannot be undone!
-                    </p>
-                </div>
-            </div>
-
-            <!-- Storage Management Section -->
-            <div class="section" id="storageSection">
-                <h3 class="section-title"><i class="fas fa-database"></i> Storage Information</h3>
-                
-                <div class="storage-info">
-                    <h4><i class="fas fa-info-circle"></i> Storage Usage</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="storageProgress" style="width: 0%"></div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
-                        <span>Used: <strong id="usedStorage">0 KB</strong></span>
-                        <span>Available: <strong id="availableStorage">5 MB</strong></span>
-                    </div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-number" id="totalEntries">0</span>
-                        <span class="stat-label">Total IP Entries</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" id="totalKeys">0</span>
-                        <span class="stat-label">Storage Keys</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" id="oldestData">0</span>
-                        <span class="stat-label">Oldest Data (Days)</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" id="avgDaily">0</span>
-                        <span class="stat-label">Avg Daily IPs</span>
-                    </div>
-                </div>
-
-                <h4 class="section-title"><i class="fas fa-cog"></i> Auto-Cleanup Settings</h4>
-                <div class="user-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Auto Delete IPs Older Than:</label>
-                            <select id="autoCleanupDays">
-                                <option value="0">Never (Manual Only)</option>
-                                <option value="30">1 Month</option>
-                                <option value="60">2 Months</option>
-                                <option value="90">3 Months</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-success" onclick="saveAutoCleanup()">
-                                <i class="fas fa-save"></i> Save Settings
-                            </button>
-                        </div>
-                    </div>
-                    <button class="btn btn-info" onclick="runAutoCleanup()">
-                        <i class="fas fa-play"></i> Run Auto Cleanup Now
-                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const ADMIN_PASSWORD = "admainshoaib2525"; // Change this password
+        // Admin Credentials
+        const ADMIN_CREDENTIALS = {
+            username: "admin",
+            password: "admin123"
+        };
 
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDefaultData();
+            setTimeout(() => {
+                adminLogin();
+            }, 500);
+        });
+
+        // Admin Login
         function adminLogin() {
+            const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
-            if (password === ADMIN_PASSWORD) {
+
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
                 document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('adminContainer').style.display = 'block';
-                loadUsersData();
-                loadStatistics();
-                loadStorageInfo();
+                document.getElementById('adminPanel').style.display = 'block';
+                loadUserManagement();
             } else {
-                alert('Invalid admin password!');
+                alert('Invalid admin credentials!');
             }
         }
 
+        // Admin Logout
         function adminLogout() {
+            document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('loginContainer').style.display = 'block';
-            document.getElementById('adminContainer').style.display = 'none';
-            document.getElementById('adminPassword').value = '';
         }
 
+        // Show Section
         function showSection(sectionName) {
-            // Hide all sections
             document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
             });
             
-            // Remove active class from all nav buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected section and activate button
-            document.getElementById(sectionName + 'Section').classList.add('active');
+            document.getElementById(sectionName + 'Section').style.display = 'block';
             event.currentTarget.classList.add('active');
 
-            // Reload data if needed
-            if (sectionName === 'statistics') {
-                loadStatistics();
-            } else if (sectionName === 'storage') {
-                loadStorageInfo();
-            } else if (sectionName === 'bulkDelete') {
-                loadUserSelect();
+            switch(sectionName) {
+                case 'userManagement':
+                    loadUserManagement();
+                    break;
+                case 'userAgents':
+                    loadUserAgents();
+                    break;
+                case 'proxyManagement':
+                    loadProxyManagement();
+                    break;
+                case 'userLinks':
+                    loadUserLinks();
+                    break;
             }
         }
 
-        // User Management Functions
+        // Data Storage Functions
         function getUsers() {
-            return JSON.parse(localStorage.getItem('ipSystemUsers')) || [];
+            return JSON.parse(localStorage.getItem('systemUsers')) || [];
         }
 
         function saveUsers(users) {
-            localStorage.setItem('ipSystemUsers', JSON.stringify(users));
+            localStorage.setItem('systemUsers', JSON.stringify(users));
+        }
+
+        function getUserAgents() {
+            return JSON.parse(localStorage.getItem('globalUserAgents')) || [];
+        }
+
+        function saveUserAgents(agents) {
+            localStorage.setItem('globalUserAgents', JSON.stringify(agents));
+        }
+
+        function getUserProxies() {
+            return JSON.parse(localStorage.getItem('userProxies')) || {};
+        }
+
+        function saveUserProxies(proxies) {
+            localStorage.setItem('userProxies', JSON.stringify(proxies));
+        }
+
+        function getUserLinks() {
+            return JSON.parse(localStorage.getItem('userLinks')) || {};
+        }
+
+        function saveUserLinks(links) {
+            localStorage.setItem('userLinks', JSON.stringify(links));
+        }
+
+        // User Management Functions
+        function loadUserManagement() {
+            const users = getUsers();
+            const usersTable = document.getElementById('usersTable');
+            
+            if (users.length === 0) {
+                usersTable.innerHTML = '<tr><td colspan="5" class="text-center">No users found</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            users.forEach(user => {
+                const userProxies = getUserProxies()[user.username] || [];
+                html += `
+                    <tr>
+                        <td>${user.username}</td>
+                        <td>${new Date(user.created).toLocaleDateString()}</td>
+                        <td>${userProxies.length}</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" onclick="resetUserPassword('${user.username}')">
+                                <i class="fas fa-key"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.username}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            usersTable.innerHTML = html;
         }
 
         function createUser() {
             const username = document.getElementById('newUsername').value.trim();
             const password = document.getElementById('newPassword').value.trim();
-            
+
             if (!username || !password) {
                 alert('Please enter both username and password!');
                 return;
             }
-            
+
             const users = getUsers();
             
-            // Check if username already exists
             if (users.some(user => user.username === username)) {
                 alert('Username already exists!');
                 return;
             }
-            
-            // Create new user
+
             const newUser = {
                 username: username,
                 password: password,
                 created: new Date().toISOString()
             };
-            
+
             users.push(newUser);
             saveUsers(users);
-            
-            // Clear form and refresh table
+
             document.getElementById('newUsername').value = '';
             document.getElementById('newPassword').value = '';
-            
-            loadUsersData();
-            loadUserSelect();
-            alert('User created successfully!');
-        }
 
-        function deleteUser(username) {
-            if (confirm(`Are you sure you want to delete user "${username}"? This will also delete all their IP data!`)) {
-                let users = getUsers();
-                users = users.filter(user => user.username !== username);
-                saveUsers(users);
-                
-                // Delete user's IP data
-                deleteUserIPData(username);
-                
-                loadUsersData();
-                loadUserSelect();
-            }
+            loadUserManagement();
+            alert('User created successfully!');
         }
 
         function resetUserPassword(username) {
@@ -741,333 +571,295 @@
                 if (user) {
                     user.password = newPassword;
                     saveUsers(users);
-                    loadUsersData();
+                    loadUserManagement();
                     alert('Password reset successfully!');
                 }
             }
         }
 
-        function loadUsersData() {
-            const users = getUsers();
-            const usersTable = document.getElementById('usersTable');
-            usersTable.innerHTML = '';
+        function deleteUser(username) {
+            if (confirm(`Delete user "${username}" and all their data?`)) {
+                let users = getUsers();
+                users = users.filter(user => user.username !== username);
+                saveUsers(users);
+
+                // Delete user's data
+                const userProxies = getUserProxies();
+                delete userProxies[username];
+                saveUserProxies(userProxies);
+
+                const userLinks = getUserLinks();
+                delete userLinks[username];
+                saveUserLinks(userLinks);
+
+                loadUserManagement();
+                alert('User deleted successfully!');
+            }
+        }
+
+        // User Agents Functions
+        function loadUserAgents() {
+            const agents = getUserAgents();
+            document.getElementById('uaCount').textContent = agents.length;
             
-            users.forEach(user => {
-                const userIPs = getUserTotalIPs(user.username);
-                const todayIPs = getUserTodayIPs(user.username);
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.username}</td>
-                    <td>${new Date(user.created).toLocaleDateString()}</td>
-                    <td>${userIPs}</td>
-                    <td>${todayIPs}</td>
-                    <td>
-                        <button class="btn btn-warning" onclick="resetUserPassword('${user.username}')">
-                            <i class="fas fa-key"></i> Reset Password
-                        </button>
-                        <button class="btn btn-danger" onclick="deleteUser('${user.username}')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </td>
+            if (agents.length === 0) {
+                document.getElementById('userAgentsTable').innerHTML = '<tr><td colspan="4" class="text-center">No user agents added</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            agents.forEach((agent, index) => {
+                const usedBy = getUsersUsingAgent(agent);
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><small title="${agent}">${agent.substring(0, 80)}...</small></td>
+                        <td>${usedBy}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="deleteUserAgent(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
                 `;
-                usersTable.appendChild(row);
             });
-        }
-
-        function loadUserSelect() {
-            const users = getUsers();
-            const userSelect = document.getElementById('userSelect');
-            userSelect.innerHTML = '<option value="">Select User</option>';
             
-            users.forEach(user => {
-                const option = document.createElement('option');
-                option.value = user.username;
-                option.textContent = user.username;
-                userSelect.appendChild(option);
-            });
+            document.getElementById('userAgentsTable').innerHTML = html;
         }
 
-        // IP Data Management Functions
-        function getUserTotalIPs(username) {
-            let total = 0;
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(`userIPs_${username}_`)) {
-                    const ips = JSON.parse(localStorage.getItem(key));
-                    total += ips.length;
-                }
+        function getUsersUsingAgent(agent) {
+            // This would track which users are using which agents
+            // For simplicity, showing "All Users" for now
+            return "All Users";
+        }
+
+        function addUserAgents() {
+            const agentsInput = document.getElementById('userAgentsInput').value.trim();
+            if (!agentsInput) {
+                alert('Please enter user agents!');
+                return;
             }
-            return total;
-        }
 
-        function getUserTodayIPs(username) {
-            const todayKey = `userIPs_${username}_${new Date().toDateString()}`;
-            const todayIPs = JSON.parse(localStorage.getItem(todayKey)) || [];
-            return todayIPs.length;
-        }
-
-        function deleteUserIPData(username) {
-            // Delete all IP data for user
-            const keysToDelete = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(`userIPs_${username}_`)) {
-                    keysToDelete.push(key);
+            const newAgents = agentsInput.split('\n').filter(agent => agent.trim());
+            const existingAgents = getUserAgents();
+            
+            let addedCount = 0;
+            newAgents.forEach(agent => {
+                if (!existingAgents.includes(agent.trim())) {
+                    existingAgents.push(agent.trim());
+                    addedCount++;
                 }
-            }
-            
-            keysToDelete.forEach(key => {
-                localStorage.removeItem(key);
             });
-            
-            return keysToDelete.length;
+
+            saveUserAgents(existingAgents);
+            document.getElementById('userAgentsInput').value = '';
+            loadUserAgents();
+            alert(`Added ${addedCount} user agents! Total: ${existingAgents.length}`);
         }
 
-        // Bulk Delete Functions
-        function cleanupOldIPs() {
-            const days = parseInt(document.getElementById('cleanupDays').value);
-            const cutoffDate = new Date();
-            cutoffDate.setDate(cutoffDate.getDate() - days);
-            
-            let deletedCount = 0;
+        function deleteUserAgent(index) {
+            const agents = getUserAgents();
+            agents.splice(index, 1);
+            saveUserAgents(agents);
+            loadUserAgents();
+        }
+
+        // Proxy Management Functions
+        function loadProxyManagement() {
+            loadUserSelect('proxyUserSelect');
+            loadProxyAssignments();
+        }
+
+        function loadUserSelect(selectId) {
             const users = getUsers();
+            const select = document.getElementById(selectId);
             
+            let options = '<option value="">Select User</option>';
             users.forEach(user => {
-                const keysToDelete = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.startsWith(`userIPs_${user.username}_`)) {
-                        // Extract date from key (format: userIPs_username_Day Month Date Year)
-                        const dateStr = key.split('_').slice(2).join(' ');
-                        const keyDate = new Date(dateStr);
-                        
-                        if (keyDate < cutoffDate) {
-                            keysToDelete.push(key);
-                        }
-                    }
-                }
-                
-                keysToDelete.forEach(key => {
-                    localStorage.removeItem(key);
-                    deletedCount++;
-                });
+                options += `<option value="${user.username}">${user.username}</option>`;
             });
             
-            alert(`Deleted ${deletedCount} IP entries older than ${days} days.`);
-            loadStatistics();
-            loadStorageInfo();
+            select.innerHTML = options;
         }
 
-        function deleteUserIPs() {
-            const username = document.getElementById('userSelect').value;
-            const deleteType = document.getElementById('userDataSelect').value;
-            
+        function assignUserProxies() {
+            const username = document.getElementById('proxyUserSelect').value;
+            const proxiesInput = document.getElementById('userProxiesInput').value.trim();
+
             if (!username) {
                 alert('Please select a user!');
                 return;
             }
-            
-            if (deleteType === 'all') {
-                const count = deleteUserIPData(username);
-                alert(`Deleted all ${count} IP entries for user ${username}`);
-            } else if (deleteType === 'old') {
-                // Delete IPs older than 30 days
-                const cutoffDate = new Date();
-                cutoffDate.setDate(cutoffDate.getDate() - 30);
-                let deletedCount = 0;
-                
-                const keysToDelete = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.startsWith(`userIPs_${username}_`)) {
-                        const dateStr = key.split('_').slice(2).join(' ');
-                        const keyDate = new Date(dateStr);
-                        
-                        if (keyDate < cutoffDate) {
-                            keysToDelete.push(key);
-                        }
-                    }
-                }
-                
-                keysToDelete.forEach(key => {
-                    localStorage.removeItem(key);
-                    deletedCount++;
-                });
-                
-                alert(`Deleted ${deletedCount} IP entries older than 1 month for user ${username}`);
-            } else if (deleteType === 'today') {
-                const todayKey = `userIPs_${username}_${new Date().toDateString()}`;
-                localStorage.removeItem(todayKey);
-                alert(`Deleted today's IPs for user ${username}`);
+
+            if (!proxiesInput) {
+                alert('Please enter proxy links!');
+                return;
             }
+
+            const proxies = proxiesInput.split('\n').filter(proxy => proxy.trim());
+            const userProxies = getUserProxies();
             
-            loadStatistics();
-            loadStorageInfo();
+            userProxies[username] = {
+                proxies: proxies,
+                updated: new Date().toISOString()
+            };
+
+            saveUserProxies(userProxies);
+            document.getElementById('userProxiesInput').value = '';
+            loadProxyAssignments();
+            alert(`Assigned ${proxies.length} proxies to ${username}`);
         }
 
-        function showNuclearConfirm() {
-            if (confirm('🚨 NUCLEAR OPTION 🚨\n\nThis will delete ALL IP data from ALL users!\n\nThis action cannot be undone!\n\nAre you absolutely sure?')) {
-                if (confirm('FINAL WARNING: This will permanently delete everything!\n\nType "DELETE ALL" to confirm:')) {
-                    const users = getUsers();
-                    let totalDeleted = 0;
-                    
-                    users.forEach(user => {
-                        totalDeleted += deleteUserIPData(user.username);
-                    });
-                    
-                    alert(`💥 Nuclear cleanup complete! Deleted ${totalDeleted} IP entries.`);
-                    loadStatistics();
-                    loadStorageInfo();
-                }
-            }
-        }
-
-        // Storage Management Functions
-        function loadStorageInfo() {
-            let totalEntries = 0;
-            let totalKeys = 0;
-            let oldestDate = new Date();
-            let dailyCounts = {};
-            
-            // Calculate storage usage
-            let totalSize = 0;
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                const value = localStorage.getItem(key);
-                totalSize += key.length + value.length;
-                totalKeys++;
-                
-                if (key.startsWith('userIPs_')) {
-                    const ips = JSON.parse(value);
-                    totalEntries += ips.length;
-                    
-                    // Extract date from key
-                    const dateStr = key.split('_').slice(2).join(' ');
-                    const keyDate = new Date(dateStr);
-                    
-                    if (keyDate < oldestDate) {
-                        oldestDate = keyDate;
-                    }
-                    
-                    // Count daily entries
-                    const dateKey = keyDate.toDateString();
-                    dailyCounts[dateKey] = (dailyCounts[dateKey] || 0) + ips.length;
-                }
-            }
-            
-            // Calculate days since oldest data
-            const daysOld = Math.floor((new Date() - oldestDate) / (1000 * 60 * 60 * 24));
-            
-            // Calculate average daily IPs
-            const dailyValues = Object.values(dailyCounts);
-            const avgDaily = dailyValues.length > 0 ? 
-                Math.round(dailyValues.reduce((a, b) => a + b) / dailyValues.length) : 0;
-            
-            // Update UI
-            document.getElementById('totalEntries').textContent = totalEntries.toLocaleString();
-            document.getElementById('totalKeys').textContent = totalKeys.toLocaleString();
-            document.getElementById('oldestData').textContent = daysOld;
-            document.getElementById('avgDaily').textContent = avgDaily.toLocaleString();
-            
-            // Update storage progress
-            const usedKB = Math.round(totalSize / 1024);
-            const maxKB = 5120; // 5MB limit for localStorage
-            const percent = Math.min(100, (usedKB / maxKB) * 100);
-            
-            document.getElementById('storageProgress').style.width = percent + '%';
-            document.getElementById('usedStorage').textContent = usedKB + ' KB';
-            document.getElementById('availableStorage').textContent = (maxKB - usedKB) + ' KB';
-        }
-
-        function saveAutoCleanup() {
-            const days = document.getElementById('autoCleanupDays').value;
-            localStorage.setItem('autoCleanupDays', days);
-            alert('Auto-cleanup settings saved!');
-        }
-
-        function runAutoCleanup() {
-            const days = parseInt(localStorage.getItem('autoCleanupDays') || '0');
-            if (days > 0) {
-                document.getElementById('cleanupDays').value = days;
-                cleanupOldIPs();
-            } else {
-                alert('Auto-cleanup is disabled. Please enable it in settings.');
-            }
-        }
-
-        function loadStatistics() {
+        function loadProxyAssignments() {
+            const userProxies = getUserProxies();
             const users = getUsers();
-            let totalIPs = 0;
-            let todayIPs = 0;
-            const recentActivity = [];
+            const table = document.getElementById('proxyAssignmentsTable');
             
-            // Calculate statistics
+            if (Object.keys(userProxies).length === 0) {
+                table.innerHTML = '<tr><td colspan="4" class="text-center">No proxy assignments</td></tr>';
+                return;
+            }
+            
+            let html = '';
             users.forEach(user => {
-                totalIPs += getUserTotalIPs(user.username);
-                todayIPs += getUserTodayIPs(user.username);
-                
-                // Get recent activity for this user
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.startsWith(`userIPs_${user.username}_`)) {
-                        const ips = JSON.parse(localStorage.getItem(key));
-                        ips.forEach(ip => {
-                            recentActivity.push({
-                                user: user.username,
-                                ip: ip.ip,
-                                type: ip.type,
-                                time: ip.timestamp
-                            });
-                        });
-                    }
+                const assignment = userProxies[user.username];
+                if (assignment) {
+                    html += `
+                        <tr>
+                            <td>${user.username}</td>
+                            <td>
+                                ${assignment.proxies.map(proxy => 
+                                    `<span class="badge bg-primary me-1">${proxy}</span>`
+                                ).join('')}
+                            </td>
+                            <td>${new Date(assignment.updated).toLocaleString()}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="removeUserProxies('${user.username}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
                 }
             });
             
-            // Update statistics
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('totalIPs').textContent = totalIPs.toLocaleString();
-            document.getElementById('todayIPs').textContent = todayIPs.toLocaleString();
-            document.getElementById('activeUsers').textContent = users.filter(user => getUserTodayIPs(user.username) > 0).length;
-            
-            // Update recent activity table
-            const activityTable = document.getElementById('recentActivityTable');
-            activityTable.innerHTML = '';
-            
-            // Sort by timestamp (newest first) and take last 20
-            recentActivity
-                .sort((a, b) => new Date(b.time) - new Date(a.time))
-                .slice(0, 20)
-                .forEach(activity => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${activity.user}</td>
-                        <td>${activity.ip}</td>
-                        <td>${activity.type}</td>
-                        <td>${new Date(activity.time).toLocaleString()}</td>
-                    `;
-                    activityTable.appendChild(row);
-                });
+            table.innerHTML = html || '<tr><td colspan="4" class="text-center">No proxy assignments</td></tr>';
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if users exist, if not create default admin user
+        function removeUserProxies(username) {
+            if (confirm(`Remove all proxies from ${username}?`)) {
+                const userProxies = getUserProxies();
+                delete userProxies[username];
+                saveUserProxies(userProxies);
+                loadProxyAssignments();
+            }
+        }
+
+        // User Links Functions
+        function loadUserLinks() {
+            loadUserSelect('linkUserSelect');
+            loadUserLinksTable();
+        }
+
+        function saveUserLinks() {
+            const username = document.getElementById('linkUserSelect').value;
+            const workingLink = document.getElementById('workingLinkInput').value.trim();
+            const campaign = document.getElementById('campaignInput').value.trim();
+            const vertical = document.getElementById('verticalInput').value.trim();
+
+            if (!username) {
+                alert('Please select a user!');
+                return;
+            }
+
+            if (!workingLink || !campaign || !vertical) {
+                alert('Please fill all fields!');
+                return;
+            }
+
+            const userLinks = getUserLinks();
+            
+            userLinks[username] = {
+                workingLink: workingLink,
+                campaign: campaign,
+                vertical: vertical,
+                updated: new Date().toISOString()
+            };
+
+            saveUserLinks(userLinks);
+            
+            document.getElementById('workingLinkInput').value = '';
+            document.getElementById('campaignInput').value = '';
+            document.getElementById('verticalInput').value = '';
+            
+            loadUserLinksTable();
+            alert(`Links saved for ${username}`);
+        }
+
+        function loadUserLinksTable() {
+            const userLinks = getUserLinks();
             const users = getUsers();
-            if (users.length === 0) {
-                const defaultUser = {
-                    username: 'demo',
-                    password: 'demo123',
-                    created: new Date().toISOString()
-                };
-                users.push(defaultUser);
-                saveUsers(users);
+            const table = document.getElementById('userLinksTable');
+            
+            if (Object.keys(userLinks).length === 0) {
+                table.innerHTML = '<tr><td colspan="5" class="text-center">No user links configured</td></tr>';
+                return;
             }
             
-            // Load auto-cleanup settings
-            const autoCleanupDays = localStorage.getItem('autoCleanupDays') || '0';
-            document.getElementById('autoCleanupDays').value = autoCleanupDays;
-        });
+            let html = '';
+            users.forEach(user => {
+                const links = userLinks[user.username];
+                if (links) {
+                    html += `
+                        <tr>
+                            <td>${user.username}</td>
+                            <td><small>${links.workingLink}</small></td>
+                            <td>${links.campaign}</td>
+                            <td>${links.vertical}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="removeUserLinks('${user.username}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+            });
+            
+            table.innerHTML = html || '<tr><td colspan="5" class="text-center">No user links configured</td></tr>';
+        }
+
+        function removeUserLinks(username) {
+            if (confirm(`Remove links from ${username}?`)) {
+                const userLinks = getUserLinks();
+                delete userLinks[username];
+                saveUserLinks(userLinks);
+                loadUserLinksTable();
+            }
+        }
+
+        // Initialize default data
+        function initializeDefaultData() {
+            // Default user agents
+            if (getUserAgents().length === 0) {
+                const defaultAgents = [
+                    "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
+                    "Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                ];
+                saveUserAgents(defaultAgents);
+            }
+
+            // Default demo user
+            if (getUsers().length === 0) {
+                const demoUser = {
+                    username: "demo",
+                    password: "demo123",
+                    created: new Date().toISOString()
+                };
+                saveUsers([demoUser]);
+            }
+        }
     </script>
 </body>
 </html>
