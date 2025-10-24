@@ -1,8 +1,8 @@
 {
-  "name": "ip-checker-system",
+  "name": "ip-system",
   "version": "1.0.0",
-  "description": "Professional IP Checker with User Accounts",
-  "main": "index.html",
+  "description": "Complete IP Management System",
+  "main": "admin-panel.html",
   "scripts": {
     "dev": "vercel dev",
     "start": "serve -s ."
