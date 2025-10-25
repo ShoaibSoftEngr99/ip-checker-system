@@ -1,13 +1,16 @@
 {
-  "name": "ip-system",
+  "name": "ip-checker-system",
   "version": "1.0.0",
-  "description": "Complete IP Management System",
-  "main": "admin-panel.html",
+  "description": "Professional IP Checker with Admin Panel",
+  "main": "index.html",
   "scripts": {
     "dev": "vercel dev",
     "start": "serve -s ."
   },
   "dependencies": {
     "serve": "^14.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^28.0.0"
   }
 }
