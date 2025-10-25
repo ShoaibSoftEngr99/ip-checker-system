@@ -405,52 +405,132 @@
     </div>
 
     <script>
-        // Daily IP counter with reset at 12 PM
-        function getTodayKey() {
-            const now = new Date();
-            return `dailyIPs_${now.toDateString()}`;
+        // Global IP storage with support for 2,000,000+ IPs
+        const IP_STORAGE_KEY = 'allIPsStorage';
+        const USER_STORAGE_KEY = 'userAccounts';
+        const MAX_STORAGE_SIZE = 2000000;
+        
+        // Get current user ID from URL or default
+        function getCurrentUserId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('user') || 'default';
         }
 
-        function getDailyIPs() {
-            const todayKey = getTodayKey();
+        // Daily IP counter with reset at 12 PM
+        function getTodayKey(userId) {
+            const now = new Date();
+            return `dailyIPs_${userId}_${now.toDateString()}`;
+        }
+
+        function getDailyIPs(userId) {
+            const todayKey = getTodayKey(userId);
             return JSON.parse(localStorage.getItem(todayKey)) || [];
         }
 
-        function saveDailyIP(ip) {
-            const todayKey = getTodayKey();
-            const dailyIPs = getDailyIPs();
+        // Get all stored IPs from global storage
+        function getAllStoredIPs() {
+            try {
+                const stored = localStorage.getItem(IP_STORAGE_KEY);
+                return stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                console.error('Error reading IP storage:', e);
+                return [];
+            }
+        }
+
+        // Get user accounts
+        function getUserAccounts() {
+            try {
+                const stored = localStorage.getItem(USER_STORAGE_KEY);
+                return stored ? JSON.parse(stored) : {};
+            } catch (e) {
+                console.error('Error reading user accounts:', e);
+                return {};
+            }
+        }
+
+        // Get current user info
+        function getCurrentUserInfo() {
+            const userId = getCurrentUserId();
+            const users = getUserAccounts();
+            return users[userId] || {
+                id: userId,
+                name: 'Guest User',
+                status: 'Active',
+                created: new Date().toISOString()
+            };
+        }
+
+        // Save IP to global storage
+        function saveIPToGlobalStorage(ip, userId) {
+            try {
+                const allIPs = getAllStoredIPs();
+                
+                // Check if storage is approaching limit
+                if (allIPs.length >= MAX_STORAGE_SIZE) {
+                    console.warn('IP storage is at capacity');
+                    return false;
+                }
+                
+                // Add new IP with timestamp
+                allIPs.push({
+                    ip: ip,
+                    timestamp: new Date().toISOString(),
+                    type: getSelectedCheckType(),
+                    userId: userId
+                });
+                
+                localStorage.setItem(IP_STORAGE_KEY, JSON.stringify(allIPs));
+                return true;
+            } catch (e) {
+                console.error('Error saving IP to storage:', e);
+                return false;
+            }
+        }
+
+        // Check if IP is duplicate in global storage for this user
+        function isDuplicateIP(ip, userId) {
+            const allIPs = getAllStoredIPs();
+            return allIPs.some(entry => entry.ip === ip && entry.userId === userId);
+        }
+
+        function saveDailyIP(ip, userId) {
+            const todayKey = getTodayKey(userId);
+            const dailyIPs = getDailyIPs(userId);
             dailyIPs.push({
                 ip: ip,
                 timestamp: new Date().toISOString(),
-                type: getSelectedCheckType()
+                type: getSelectedCheckType(),
+                userId: userId
             });
             localStorage.setItem(todayKey, JSON.stringify(dailyIPs));
-            updateDailyCounter();
+            updateDailyCounter(userId);
         }
 
-        function updateDailyCounter() {
-            const dailyIPs = getDailyIPs();
+        function updateDailyCounter(userId) {
+            const dailyIPs = getDailyIPs(userId);
             document.getElementById('dailyCount').textContent = dailyIPs.length;
         }
 
         // Check for daily reset
-        function checkDailyReset() {
-            const lastReset = localStorage.getItem('lastReset');
+        function checkDailyReset(userId) {
+            const lastReset = localStorage.getItem(`lastReset_${userId}`);
             const now = new Date();
             const today = now.toDateString();
             
             if (lastReset !== today && now.getHours() >= 12) {
                 // Reset daily counter
-                const todayKey = getTodayKey();
+                const todayKey = getTodayKey(userId);
                 localStorage.removeItem(todayKey);
-                localStorage.setItem('lastReset', today);
+                localStorage.setItem(`lastReset_${userId}`, today);
             }
             
-            updateDailyCounter();
+            updateDailyCounter(userId);
         }
 
         // Initialize
         let currentIP = '';
+        const currentUserId = getCurrentUserId();
         
         function selectCheckbox(type) {
             document.querySelectorAll('.checkbox-card').forEach(card => {
@@ -495,10 +575,16 @@
                 return;
             }
             
-            // Check for duplicate IP in today's list
-            const dailyIPs = getDailyIPs();
+            // Check for duplicate IP in global storage for this user
+            if (isDuplicateIP(ipAddress, currentUserId)) {
+                showMessage('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
+                return;
+            }
+            
+            // Check for duplicate IP in today's list for this user
+            const dailyIPs = getDailyIPs(currentUserId);
             if (dailyIPs.some(entry => entry.ip === ipAddress)) {
-                showMessage('❌ This IP has already been uploaded today!', 'error');
+                showMessage('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
                 return;
             }
             
@@ -518,8 +604,15 @@
         
         function confirmLink(isWorking) {
             if (isWorking) {
-                saveDailyIP(currentIP);
-                showMessage(`✅ IP ${currentIP} successfully verified!`, 'success');
+                // Save to both daily and global storage
+                saveDailyIP(currentIP, currentUserId);
+                const savedToGlobal = saveIPToGlobalStorage(currentIP, currentUserId);
+                
+                if (savedToGlobal) {
+                    showMessage(`✅ IP ${currentIP} successfully verified!`, 'success');
+                } else {
+                    showMessage(`⚠️ IP verified but storage is full!`, 'error');
+                }
             } else {
                 showMessage(`❌ IP ${currentIP} - Link is not working.`, 'error');
             }
@@ -553,9 +646,11 @@
             }
         });
 
-        // Initialize daily counter
-        checkDailyReset();
-        setInterval(checkDailyReset, 60000); // Check every minute for reset
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkDailyReset(currentUserId);
+            setInterval(() => checkDailyReset(currentUserId), 60000);
+        });
     </script>
 </body>
 </html>
