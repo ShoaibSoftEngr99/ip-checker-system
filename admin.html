@@ -3,857 +3,425 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - IP Manager</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Admin Panel - IP Checker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --primary: #2c3e50;
-            --secondary: #34495e;
-            --success: #27ae60;
-            --danger: #e74c3c;
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --danger: #f72585;
+            --success: #4cc9f0;
+            --dark: #212529;
+            --light: #f8f9fa;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f8f9fa;
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: none;
         }
 
         .admin-header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            text-align: center;
         }
 
-        .sidebar {
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: var(--light);
+        }
+
+        .stat-card {
             background: white;
-            min-height: 100vh;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            padding: 20px 0;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--primary);
         }
 
-        .nav-link {
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
             color: var(--primary);
-            padding: 15px 20px;
-            margin: 5px 10px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            text-decoration: none;
             display: block;
         }
 
-        .nav-link:hover, .nav-link.active {
-            background: var(--primary);
+        .stat-label {
+            color: var(--dark);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .data-section {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .data-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-danger {
+            background: var(--danger);
             color: white;
         }
 
-        .nav-link i {
-            width: 20px;
-            margin-right: 10px;
+        .btn-danger:hover {
+            background: #d90429;
         }
 
-        .main-content {
-            padding: 30px;
-            background: #f8f9fa;
-            min-height: 100vh;
+        .login-form {
+            text-align: center;
         }
 
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        .login-form h2 {
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        .form-group {
             margin-bottom: 20px;
+            text-align: left;
         }
 
-        .btn-admin {
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 10px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        .btn-admin:hover {
+        .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--danger);
             color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
         }
 
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 20px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                font-size: 0.9rem;
+            }
+            
+            .admin-header h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Admin Login -->
+    <!-- Login Screen -->
     <div class="login-container" id="loginContainer">
-        <div class="text-center mb-4">
+        <div class="login-form">
             <h2><i class="fas fa-lock"></i> Admin Login</h2>
-            <p class="text-muted">Enter admin credentials</p>
+            <div class="form-group">
+                <label for="adminPassword">Password:</label>
+                <input type="password" id="adminPassword" placeholder="Enter admin password">
+            </div>
+            <button class="login-btn" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Username:</label>
-            <input type="text" class="form-control" id="adminUsername" value="admin" placeholder="Enter username">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Password:</label>
-            <input type="password" class="form-control" id="adminPassword" value="admin123" placeholder="Enter password">
-        </div>
-        <button class="btn btn-admin w-100" onclick="adminLogin()">
-            <i class="fas fa-sign-in-alt"></i> Login
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-container" id="adminContainer">
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
         </button>
-        <div class="text-center mt-3">
-            <a href="dashboard.html" class="text-muted">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>
-    </div>
-
-    <!-- Main Admin Panel -->
-    <div id="adminPanel" style="display: none;">
+        
         <div class="admin-header">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <h3><i class="fas fa-cogs"></i> Admin Panel</h3>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <a href="dashboard.html" class="btn btn-light me-2">
-                            <i class="fas fa-home"></i> Dashboard
-                        </a>
-                        <button class="btn btn-light" onclick="adminLogout()">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </div>
-                </div>
+            <h1><i class="fas fa-cogs"></i> Admin Panel</h1>
+            <p>IP Verification System Analytics</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number" id="todayCount">0</span>
+                <span class="stat-label">Today's IPs</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="totalCount">0</span>
+                <span class="stat-label">Total IPs</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="sessionCount">0</span>
+                <span class="stat-label">Session IPs</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="searchCount">0</span>
+                <span class="stat-label">Search IPs</span>
             </div>
         </div>
 
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Sidebar -->
-                <div class="col-md-3 col-lg-2 sidebar">
-                    <nav class="nav flex-column">
-                        <a class="nav-link active" onclick="showSection('dashboard')">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
-                        </a>
-                        <a class="nav-link" onclick="showSection('users')">
-                            <i class="fas fa-users"></i> Users
-                        </a>
-                        <a class="nav-link" onclick="showSection('userAgents')">
-                            <i class="fas fa-desktop"></i> User Agents
-                        </a>
-                        <a class="nav-link" onclick="showSection('proxies')">
-                            <i class="fas fa-server"></i> Proxies
-                        </a>
-                        <a class="nav-link" onclick="showSection('links')">
-                            <i class="fas fa-link"></i> User Links
-                        </a>
-                    </nav>
-                </div>
+        <div class="data-section">
+            <h3 class="section-title"><i class="fas fa-list"></i> Today's IP Activity</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>Type</th>
+                        <th>Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="todayTable">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
 
-                <!-- Main Content -->
-                <div class="col-md-9 col-lg-10 main-content">
-                    <!-- Dashboard Section -->
-                    <div class="section active" id="dashboardSection">
-                        <h3 class="mb-4">Admin Dashboard</h3>
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-3">
-                                <div class="card stat-card">
-                                    <div class="stat-number" id="totalUsers">0</div>
-                                    <div class="text-muted">Total Users</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card stat-card">
-                                    <div class="stat-number" id="totalAgents">0</div>
-                                    <div class="text-muted">User Agents</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card stat-card">
-                                    <div class="stat-number" id="activeProxies">0</div>
-                                    <div class="text-muted">Active Proxies</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card stat-card">
-                                    <div class="stat-number" id="configuredLinks">0</div>
-                                    <div class="text-muted">User Links</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header bg-primary text-white">
-                                        <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Quick Actions</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <button class="btn btn-admin w-100 mb-2" onclick="showSection('users')">
-                                            <i class="fas fa-user-plus"></i> Add New User
-                                        </button>
-                                        <button class="btn btn-admin w-100 mb-2" onclick="showSection('userAgents')">
-                                            <i class="fas fa-desktop"></i> Manage User Agents
-                                        </button>
-                                        <button class="btn btn-admin w-100" onclick="showSection('proxies')">
-                                            <i class="fas fa-server"></i> Assign Proxies
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header bg-success text-white">
-                                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> System Info</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <p><strong>Last Updated:</strong> <span id="lastUpdated">Just now</span></p>
-                                        <p><strong>Default Admin:</strong> admin / admin123</p>
-                                        <p><strong>Demo User:</strong> demo / demo123</p>
-                                        <p><strong>Status:</strong> <span class="badge bg-success">All Systems Operational</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Users Section -->
-                    <div class="section" id="usersSection">
-                        <h3 class="mb-4">User Management</h3>
-                        
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="fas fa-user-plus"></i> Create New User</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control mb-2" id="newUsername" placeholder="Username">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="password" class="form-control mb-2" id="newPassword" placeholder="Password">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button class="btn btn-admin w-100" onclick="createUser()">
-                                            <i class="fas fa-plus"></i> Create User
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="fas fa-list"></i> All Users</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Username</th>
-                                                <th>Created</th>
-                                                <th>Proxies</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="usersTable">
-                                            <!-- Users will be loaded here -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- User Agents Section -->
-                    <div class="section" id="userAgentsSection">
-                        <h3 class="mb-4">Global User Agents</h3>
-                        
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="fas fa-plus"></i> Add User Agents</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label class="form-label">Add User Agents (One per line):</label>
-                                    <textarea class="form-control" id="userAgentsInput" rows="6" placeholder="Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15..."></textarea>
-                                </div>
-                                <button class="btn btn-admin" onclick="addUserAgents()">
-                                    <i class="fas fa-save"></i> Save User Agents
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="fas fa-list"></i> Current User Agents (<span id="uaCount">0</span>)</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="userAgentsList">
-                                    <!-- User agents will be loaded here -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Proxies Section -->
-                    <div class="section" id="proxiesSection">
-                        <h3 class="mb-4">Proxy Management</h3>
-                        
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="fas fa-link"></i> Assign Proxies</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label class="form-label">Select User:</label>
-                                        <select class="form-control" id="proxyUserSelect">
-                                            <option value="">Select User</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <label class="form-label">Proxy Links (One per line):</label>
-                                        <textarea class="form-control" id="userProxiesInput" rows="3" placeholder="http://proxy1.com:8080&#10;http://proxy2.com:8080"></textarea>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">&nbsp;</label>
-                                        <button class="btn btn-admin w-100" onclick="assignUserProxies()" style="margin-top: 8px;">
-                                            <i class="fas fa-save"></i> Assign
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="fas fa-list"></i> Proxy Assignments</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="proxyAssignmentsList">
-                                    <!-- Proxy assignments will be loaded here -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Links Section -->
-                    <div class="section" id="linksSection">
-                        <h3 class="mb-4">User Links Management</h3>
-                        
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="fas fa-cog"></i> Set User Links</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label class="form-label">Select User:</label>
-                                        <select class="form-control" id="linkUserSelect">
-                                            <option value="">Select User</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Working Link:</label>
-                                        <input type="text" class="form-control" id="workingLinkInput" placeholder="https://example.com/campaign">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Campaign:</label>
-                                        <input type="text" class="form-control" id="campaignInput" placeholder="Summer Promotion">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Vertical:</label>
-                                        <input type="text" class="form-control" id="verticalInput" placeholder="E-commerce">
-                                    </div>
-                                </div>
-                                <button class="btn btn-admin mt-3" onclick="saveUserLinks()">
-                                    <i class="fas fa-save"></i> Save Links
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0"><i class="fas fa-list"></i> Current User Links</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="userLinksList">
-                                    <!-- User links will be loaded here -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="data-section">
+            <h3 class="section-title"><i class="fas fa-history"></i> All Time Data</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Total IPs</th>
+                        <th>Session</th>
+                        <th>Search</th>
+                        <th>Click</th>
+                    </tr>
+                </thead>
+                <tbody id="allTimeTable">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Simplified Admin JavaScript
-        const ADMIN_CREDENTIALS = { username: "admin", password: "admin123" };
+        const ADMIN_PASSWORD = "admin123"; // Change this password
 
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeDefaultData();
-        });
-
-        function adminLogin() {
-            const username = document.getElementById('adminUsername').value;
+        function login() {
             const password = document.getElementById('adminPassword').value;
-
-            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+            if (password === ADMIN_PASSWORD) {
                 document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                loadDashboard();
+                document.getElementById('adminContainer').style.display = 'block';
+                loadAdminData();
             } else {
-                alert('Invalid credentials!');
+                alert('Invalid password!');
             }
         }
 
-        function adminLogout() {
-            document.getElementById('adminPanel').style.display = 'none';
+        function logout() {
             document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('adminContainer').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
         }
 
-        function showSection(sectionName) {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            document.getElementById(sectionName + 'Section').classList.add('active');
-            event.currentTarget.classList.add('active');
-
-            switch(sectionName) {
-                case 'dashboard': loadDashboard(); break;
-                case 'users': loadUsers(); break;
-                case 'userAgents': loadUserAgents(); break;
-                case 'proxies': loadProxies(); break;
-                case 'links': loadLinks(); break;
+        function getAllData() {
+            const allData = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('dailyIPs_')) {
+                    allData[key] = JSON.parse(localStorage.getItem(key));
+                }
             }
+            return allData;
         }
 
-        // Data Storage Functions
-        function getUsers() { return JSON.parse(localStorage.getItem('systemUsers')) || []; }
-        function saveUsers(users) { localStorage.setItem('systemUsers', JSON.stringify(users)); }
-        function getUserAgents() { return JSON.parse(localStorage.getItem('globalUserAgents')) || []; }
-        function saveUserAgents(agents) { localStorage.setItem('globalUserAgents', JSON.stringify(agents)); }
-        function getUserProxies() { return JSON.parse(localStorage.getItem('userProxies')) || {}; }
-        function saveUserProxies(proxies) { localStorage.setItem('userProxies', JSON.stringify(proxies)); }
-        function getUserLinks() { return JSON.parse(localStorage.getItem('userLinks')) || {}; }
-        function saveUserLinks(links) { localStorage.setItem('userLinks', JSON.stringify(links)); }
+        function loadAdminData() {
+            const allData = getAllData();
+            let totalIPs = 0;
+            let sessionCount = 0;
+            let searchCount = 0;
+            let clickCount = 0;
 
-        // Dashboard Functions
-        function loadDashboard() {
-            const users = getUsers();
-            const agents = getUserAgents();
-            const proxies = getUserProxies();
-            const links = getUserLinks();
-
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('totalAgents').textContent = agents.length;
-            document.getElementById('activeProxies').textContent = Object.keys(proxies).length;
-            document.getElementById('configuredLinks').textContent = Object.keys(links).length;
-            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
-        }
-
-        // Users Functions
-        function loadUsers() {
-            const users = getUsers();
-            const usersTable = document.getElementById('usersTable');
+            // Today's data
+            const todayKey = `dailyIPs_${new Date().toDateString()}`;
+            const todayData = allData[todayKey] || [];
             
-            if (users.length === 0) {
-                usersTable.innerHTML = '<tr><td colspan="4" class="text-center">No users found</td></tr>';
-                return;
-            }
+            // Populate today's table
+            const todayTable = document.getElementById('todayTable');
+            todayTable.innerHTML = '';
             
-            let html = '';
-            users.forEach(user => {
-                const userProxies = getUserProxies()[user.username] || [];
-                html += `
-                    <tr>
-                        <td>${user.username}</td>
-                        <td>${new Date(user.created).toLocaleDateString()}</td>
-                        <td>${userProxies.length}</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning" onclick="resetUserPassword('${user.username}')">
-                                <i class="fas fa-key"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.username}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+            todayData.forEach(entry => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${entry.ip}</td>
+                    <td>${entry.type}</td>
+                    <td>${new Date(entry.timestamp).toLocaleTimeString()}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteIP('${todayKey}', '${entry.ip}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
                 `;
-            });
-            
-            usersTable.innerHTML = html;
-        }
+                todayTable.appendChild(row);
 
-        function createUser() {
-            const username = document.getElementById('newUsername').value.trim();
-            const password = document.getElementById('newPassword').value.trim();
-
-            if (!username || !password) {
-                alert('Please enter both username and password!');
-                return;
-            }
-
-            const users = getUsers();
-            
-            if (users.some(user => user.username === username)) {
-                alert('Username already exists!');
-                return;
-            }
-
-            users.push({
-                username: username,
-                password: password,
-                created: new Date().toISOString()
+                // Count by type
+                if (entry.type === 'session') sessionCount++;
+                if (entry.type === 'search') searchCount++;
+                if (entry.type === 'click') clickCount++;
             });
 
-            saveUsers(users);
-            document.getElementById('newUsername').value = '';
-            document.getElementById('newPassword').value = '';
-            loadUsers();
-            alert('User created successfully!');
-        }
+            // All time data
+            const allTimeTable = document.getElementById('allTimeTable');
+            allTimeTable.innerHTML = '';
 
-        function resetUserPassword(username) {
-            const newPassword = prompt(`Enter new password for ${username}:`);
-            if (newPassword) {
-                let users = getUsers();
-                const user = users.find(u => u.username === username);
-                if (user) {
-                    user.password = newPassword;
-                    saveUsers(users);
-                    loadUsers();
-                    alert('Password reset successfully!');
-                }
-            }
-        }
+            Object.keys(allData).sort().reverse().forEach(dateKey => {
+                const dateData = allData[dateKey];
+                const date = dateKey.replace('dailyIPs_', '');
+                let dateSession = 0;
+                let dateSearch = 0;
+                let dateClick = 0;
 
-        function deleteUser(username) {
-            if (confirm(`Delete user "${username}"?`)) {
-                let users = getUsers();
-                users = users.filter(user => user.username !== username);
-                saveUsers(users);
+                dateData.forEach(entry => {
+                    totalIPs++;
+                    if (entry.type === 'session') dateSession++;
+                    if (entry.type === 'search') dateSearch++;
+                    if (entry.type === 'click') dateClick++;
+                });
 
-                const userProxies = getUserProxies();
-                delete userProxies[username];
-                saveUserProxies(userProxies);
-
-                const userLinks = getUserLinks();
-                delete userLinks[username];
-                saveUserLinks(userLinks);
-
-                loadUsers();
-                alert('User deleted successfully!');
-            }
-        }
-
-        // User Agents Functions
-        function loadUserAgents() {
-            const agents = getUserAgents();
-            document.getElementById('uaCount').textContent = agents.length;
-            
-            if (agents.length === 0) {
-                document.getElementById('userAgentsList').innerHTML = '<div class="text-center text-muted">No user agents added</div>';
-                return;
-            }
-            
-            let html = '';
-            agents.forEach((agent, index) => {
-                html += `
-                    <div class="border-bottom pb-3 mb-3">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div style="flex: 1;">
-                                <strong>User Agent ${index + 1}:</strong>
-                                <div class="small text-muted">${agent}</div>
-                            </div>
-                            <button class="btn btn-sm btn-danger ms-2" onclick="deleteUserAgent(${index})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${date}</td>
+                    <td>${dateData.length}</td>
+                    <td>${dateSession}</td>
+                    <td>${dateSearch}</td>
+                    <td>${dateClick}</td>
                 `;
-            });
-            
-            document.getElementById('userAgentsList').innerHTML = html;
-        }
-
-        function addUserAgents() {
-            const agentsInput = document.getElementById('userAgentsInput').value.trim();
-            if (!agentsInput) {
-                alert('Please enter user agents!');
-                return;
-            }
-
-            const newAgents = agentsInput.split('\n').filter(agent => agent.trim());
-            const existingAgents = getUserAgents();
-            
-            let addedCount = 0;
-            newAgents.forEach(agent => {
-                if (!existingAgents.includes(agent.trim())) {
-                    existingAgents.push(agent.trim());
-                    addedCount++;
-                }
+                allTimeTable.appendChild(row);
             });
 
-            saveUserAgents(existingAgents);
-            document.getElementById('userAgentsInput').value = '';
-            loadUserAgents();
-            alert(`Added ${addedCount} user agents!`);
+            // Update stats
+            document.getElementById('todayCount').textContent = todayData.length;
+            document.getElementById('totalCount').textContent = totalIPs;
+            document.getElementById('sessionCount').textContent = sessionCount;
+            document.getElementById('searchCount').textContent = searchCount;
         }
 
-        function deleteUserAgent(index) {
-            const agents = getUserAgents();
-            agents.splice(index, 1);
-            saveUserAgents(agents);
-            loadUserAgents();
-        }
-
-        // Proxies Functions
-        function loadProxies() {
-            loadUserSelect('proxyUserSelect');
-            loadProxyAssignments();
-        }
-
-        function loadUserSelect(selectId) {
-            const users = getUsers();
-            const select = document.getElementById(selectId);
-            
-            let options = '<option value="">Select User</option>';
-            users.forEach(user => {
-                options += `<option value="${user.username}">${user.username}</option>`;
-            });
-            
-            select.innerHTML = options;
-        }
-
-        function assignUserProxies() {
-            const username = document.getElementById('proxyUserSelect').value;
-            const proxiesInput = document.getElementById('userProxiesInput').value.trim();
-
-            if (!username) {
-                alert('Please select a user!');
-                return;
-            }
-
-            if (!proxiesInput) {
-                alert('Please enter proxy links!');
-                return;
-            }
-
-            const proxies = proxiesInput.split('\n').filter(proxy => proxy.trim());
-            const userProxies = getUserProxies();
-            
-            userProxies[username] = {
-                proxies: proxies,
-                updated: new Date().toISOString()
-            };
-
-            saveUserProxies(userProxies);
-            document.getElementById('userProxiesInput').value = '';
-            loadProxyAssignments();
-            alert(`Assigned ${proxies.length} proxies to ${username}`);
-        }
-
-        function loadProxyAssignments() {
-            const userProxies = getUserProxies();
-            const users = getUsers();
-            const list = document.getElementById('proxyAssignmentsList');
-            
-            if (Object.keys(userProxies).length === 0) {
-                list.innerHTML = '<div class="text-center text-muted">No proxy assignments</div>';
-                return;
-            }
-            
-            let html = '';
-            users.forEach(user => {
-                const assignment = userProxies[user.username];
-                if (assignment) {
-                    html += `
-                        <div class="border-bottom pb-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div style="flex: 1;">
-                                    <strong>${user.username}</strong>
-                                    <div class="small text-muted">
-                                        ${assignment.proxies.map(proxy => 
-                                            `<span class="badge bg-primary me-1">${proxy}</span>`
-                                        ).join('')}
-                                    </div>
-                                    <small class="text-muted">Updated: ${new Date(assignment.updated).toLocaleString()}</small>
-                                </div>
-                                <button class="btn btn-sm btn-danger ms-2" onclick="removeUserProxies('${user.username}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            
-            list.innerHTML = html || '<div class="text-center text-muted">No proxy assignments</div>';
-        }
-
-        function removeUserProxies(username) {
-            if (confirm(`Remove proxies from ${username}?`)) {
-                const userProxies = getUserProxies();
-                delete userProxies[username];
-                saveUserProxies(userProxies);
-                loadProxyAssignments();
+        function deleteIP(dateKey, ip) {
+            if (confirm('Are you sure you want to delete this IP?')) {
+                const data = JSON.parse(localStorage.getItem(dateKey));
+                const updatedData = data.filter(entry => entry.ip !== ip);
+                localStorage.setItem(dateKey, JSON.stringify(updatedData));
+                loadAdminData();
             }
         }
 
-        // Links Functions
-        function loadLinks() {
-            loadUserSelect('linkUserSelect');
-            loadUserLinksList();
-        }
-
-        function saveUserLinks() {
-            const username = document.getElementById('linkUserSelect').value;
-            const workingLink = document.getElementById('workingLinkInput').value.trim();
-            const campaign = document.getElementById('campaignInput').value.trim();
-            const vertical = document.getElementById('verticalInput').value.trim();
-
-            if (!username) {
-                alert('Please select a user!');
-                return;
+        // Auto-refresh data every 30 seconds
+        setInterval(() => {
+            if (document.getElementById('adminContainer').style.display === 'block') {
+                loadAdminData();
             }
-
-            if (!workingLink || !campaign || !vertical) {
-                alert('Please fill all fields!');
-                return;
-            }
-
-            const userLinks = getUserLinks();
-            
-            userLinks[username] = {
-                workingLink: workingLink,
-                campaign: campaign,
-                vertical: vertical,
-                updated: new Date().toISOString()
-            };
-
-            saveUserLinks(userLinks);
-            
-            document.getElementById('workingLinkInput').value = '';
-            document.getElementById('campaignInput').value = '';
-            document.getElementById('verticalInput').value = '';
-            
-            loadUserLinksList();
-            alert(`Links saved for ${username}`);
-        }
-
-        function loadUserLinksList() {
-            const userLinks = getUserLinks();
-            const users = getUsers();
-            const list = document.getElementById('userLinksList');
-            
-            if (Object.keys(userLinks).length === 0) {
-                list.innerHTML = '<div class="text-center text-muted">No user links configured</div>';
-                return;
-            }
-            
-            let html = '';
-            users.forEach(user => {
-                const links = userLinks[user.username];
-                if (links) {
-                    html += `
-                        <div class="border-bottom pb-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div style="flex: 1;">
-                                    <strong>${user.username}</strong>
-                                    <div class="small">
-                                        <strong>Link:</strong> ${links.workingLink}<br>
-                                        <strong>Campaign:</strong> ${links.campaign}<br>
-                                        <strong>Vertical:</strong> ${links.vertical}
-                                    </div>
-                                    <small class="text-muted">Updated: ${new Date(links.updated).toLocaleString()}</small>
-                                </div>
-                                <button class="btn btn-sm btn-danger ms-2" onclick="removeUserLinks('${user.username}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            
-            list.innerHTML = html || '<div class="text-center text-muted">No user links configured</div>';
-        }
-
-        function removeUserLinks(username) {
-            if (confirm(`Remove links from ${username}?`)) {
-                const userLinks = getUserLinks();
-                delete userLinks[username];
-                saveUserLinks(userLinks);
-                loadUserLinksList();
-            }
-        }
-
-        // Initialize default data
-        function initializeDefaultData() {
-            if (getUserAgents().length === 0) {
-                const defaultAgents = [
-                    "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
-                    "Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36"
-                ];
-                saveUserAgents(defaultAgents);
-            }
-
-            if (getUsers().length === 0) {
-                saveUsers([{
-                    username: "demo",
-                    password: "demo123",
-                    created: new Date().toISOString()
-                }]);
-            }
-        }
+        }, 30000);
     </script>
 </body>
 </html>
