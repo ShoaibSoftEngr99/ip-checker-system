@@ -32,8 +32,92 @@
             align-items: center;
         }
 
+        /* Login Container */
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h1 {
+            color: var(--dark);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .login-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Main Container */
         .container {
-            max-width: 600px;
+            max-width: 800px;
             width: 100%;
             background: white;
             padding: 40px;
@@ -41,6 +125,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
+            display: none;
         }
 
         .container::before {
@@ -56,6 +141,7 @@
         .header {
             text-align: center;
             margin-bottom: 40px;
+            position: relative;
         }
 
         .header h1 {
@@ -68,6 +154,26 @@
         .header p {
             color: var(--gray);
             font-size: 1.1rem;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: #d90429;
         }
 
         .checkboxes-horizontal {
@@ -297,6 +403,41 @@
             opacity: 0.9;
         }
 
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            z-index: 1001;
+            display: none;
+            animation: slideDown 0.3s ease;
+            min-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .notification.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .notification.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .notification.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -308,12 +449,23 @@
             }
         }
 
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
         @media (max-width: 768px) {
-            .container {
+            .login-container, .container {
                 padding: 25px;
             }
             
-            .header h1 {
+            .login-header h1, .header h1 {
                 font-size: 1.8rem;
             }
             
@@ -341,14 +493,54 @@
             .btn {
                 max-width: 100%;
             }
+            
+            .notification {
+                min-width: 90%;
+                left: 5%;
+                transform: translateX(0);
+            }
+            
+            .logout-btn {
+                position: relative;
+                margin-bottom: 20px;
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-header">
+            <h1><i class="fas fa-shield-alt"></i> IP Verification</h1>
+            <p>Please login to continue</p>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter your username">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter your password">
+        </div>
+
+        <button class="login-btn" onclick="login()">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+
+        <div id="loginMessage" class="message" style="margin-top: 20px;"></div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="container" id="mainContainer">
         <div class="header">
             <h1><i class="fas fa-shield-alt"></i> IP Verification</h1>
-            <p>Check and verify your IP addresses</p>
+            <p>Welcome, <span id="userWelcome">User</span></p>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
 
         <div class="checkboxes-horizontal">
@@ -386,6 +578,7 @@
         <div id="message" class="message"></div>
     </div>
 
+    <!-- Verification Modal -->
     <div class="verification-modal" id="verificationModal">
         <div class="verification-content">
             <div class="verification-icon">
@@ -404,16 +597,131 @@
         </div>
     </div>
 
+    <!-- Global Notification -->
+    <div id="globalNotification" class="notification"></div>
+
     <script>
         // Global IP storage with support for 2,000,000+ IPs
         const IP_STORAGE_KEY = 'allIPsStorage';
         const USER_STORAGE_KEY = 'userAccounts';
+        const CURRENT_USER_KEY = 'currentUser';
         const MAX_STORAGE_SIZE = 2000000;
         
-        // Get current user ID from URL or default
-        function getCurrentUserId() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('user') || 'default';
+        let currentIP = '';
+        let currentUser = null;
+
+        // Get user accounts
+        function getUserAccounts() {
+            try {
+                const stored = localStorage.getItem(USER_STORAGE_KEY);
+                return stored ? JSON.parse(stored) : {};
+            } catch (e) {
+                console.error('Error reading user accounts:', e);
+                return {};
+            }
+        }
+
+        // Save user accounts
+        function saveUserAccounts(users) {
+            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(users));
+        }
+
+        // Get current logged in user
+        function getCurrentUser() {
+            try {
+                const stored = localStorage.getItem(CURRENT_USER_KEY);
+                return stored ? JSON.parse(stored) : null;
+            } catch (e) {
+                console.error('Error reading current user:', e);
+                return null;
+            }
+        }
+
+        // Save current logged in user
+        function saveCurrentUser(user) {
+            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+        }
+
+        // Show global notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('globalNotification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // Login function
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginMessage = document.getElementById('loginMessage');
+
+            if (!username || !password) {
+                loginMessage.textContent = 'Please enter both username and password!';
+                loginMessage.className = 'message error';
+                loginMessage.style.display = 'block';
+                return;
+            }
+
+            const users = getUserAccounts();
+            const user = Object.values(users).find(u => 
+                u.name === username && u.password === password
+            );
+
+            if (user) {
+                if (user.status === 'Inactive') {
+                    loginMessage.textContent = 'Your account is inactive. Please contact administrator.';
+                    loginMessage.className = 'message error';
+                    loginMessage.style.display = 'block';
+                    return;
+                }
+
+                currentUser = user;
+                saveCurrentUser(user);
+                
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+                document.getElementById('userWelcome').textContent = user.name;
+                
+                showNotification(`Welcome back, ${user.name}!`, 'success');
+                initializeUserDashboard();
+            } else {
+                loginMessage.textContent = 'Invalid username or password!';
+                loginMessage.className = 'message error';
+                loginMessage.style.display = 'block';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem(CURRENT_USER_KEY);
+            
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            
+            // Clear form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('loginMessage').style.display = 'none';
+            
+            showNotification('You have been logged out successfully!', 'warning');
+        }
+
+        // Check if user is already logged in
+        function checkLoginStatus() {
+            const user = getCurrentUser();
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+                document.getElementById('userWelcome').textContent = user.name;
+                initializeUserDashboard();
+            }
         }
 
         // Daily IP counter with reset at 12 PM
@@ -436,29 +744,6 @@
                 console.error('Error reading IP storage:', e);
                 return [];
             }
-        }
-
-        // Get user accounts
-        function getUserAccounts() {
-            try {
-                const stored = localStorage.getItem(USER_STORAGE_KEY);
-                return stored ? JSON.parse(stored) : {};
-            } catch (e) {
-                console.error('Error reading user accounts:', e);
-                return {};
-            }
-        }
-
-        // Get current user info
-        function getCurrentUserInfo() {
-            const userId = getCurrentUserId();
-            const users = getUserAccounts();
-            return users[userId] || {
-                id: userId,
-                name: 'Guest User',
-                status: 'Active',
-                created: new Date().toISOString()
-            };
         }
 
         // Save IP to global storage
@@ -528,9 +813,13 @@
             updateDailyCounter(userId);
         }
 
-        // Initialize
-        let currentIP = '';
-        const currentUserId = getCurrentUserId();
+        // Initialize user dashboard
+        function initializeUserDashboard() {
+            if (!currentUser) return;
+            
+            checkDailyReset(currentUser.id);
+            setInterval(() => checkDailyReset(currentUser.id), 60000);
+        }
         
         function selectCheckbox(type) {
             document.querySelectorAll('.checkbox-card').forEach(card => {
@@ -553,6 +842,11 @@
         }
         
         function uploadIP() {
+            if (!currentUser) {
+                showNotification('Please login first!', 'error');
+                return;
+            }
+
             const selectedCheckbox = document.querySelector('input[name="checkType"]:checked');
             const ipAddress = document.getElementById('ipAddress').value.trim();
             const messageDiv = document.getElementById('message');
@@ -560,31 +854,31 @@
             messageDiv.style.display = 'none';
             
             if (!selectedCheckbox) {
-                showMessage('Please select a check type!', 'error');
+                showNotification('Please select a check type!', 'error');
                 return;
             }
             
             if (!ipAddress) {
-                showMessage('Please enter an IP address!', 'error');
+                showNotification('Please enter an IP address!', 'error');
                 return;
             }
             
             const ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
             if (!ipPattern.test(ipAddress)) {
-                showMessage('Please enter a valid IP address!', 'error');
+                showNotification('Please enter a valid IP address!', 'error');
                 return;
             }
             
             // Check for duplicate IP in global storage for this user
-            if (isDuplicateIP(ipAddress, currentUserId)) {
-                showMessage('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
+            if (isDuplicateIP(ipAddress, currentUser.id)) {
+                showNotification('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
                 return;
             }
             
             // Check for duplicate IP in today's list for this user
-            const dailyIPs = getDailyIPs(currentUserId);
+            const dailyIPs = getDailyIPs(currentUser.id);
             if (dailyIPs.some(entry => entry.ip === ipAddress)) {
-                showMessage('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
+                showNotification('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
                 return;
             }
             
@@ -605,16 +899,16 @@
         function confirmLink(isWorking) {
             if (isWorking) {
                 // Save to both daily and global storage
-                saveDailyIP(currentIP, currentUserId);
-                const savedToGlobal = saveIPToGlobalStorage(currentIP, currentUserId);
+                saveDailyIP(currentIP, currentUser.id);
+                const savedToGlobal = saveIPToGlobalStorage(currentIP, currentUser.id);
                 
                 if (savedToGlobal) {
-                    showMessage(`✅ IP ${currentIP} successfully verified!`, 'success');
+                    showNotification(`✅ IP ${currentIP} successfully uploaded and verified!`, 'success');
                 } else {
-                    showMessage(`⚠️ IP verified but storage is full!`, 'error');
+                    showNotification(`⚠️ IP verified but storage is full!`, 'warning');
                 }
             } else {
-                showMessage(`❌ IP ${currentIP} - Link is not working.`, 'error');
+                showNotification(`❌ IP ${currentIP} - Link is not working.`, 'error');
             }
             
             document.getElementById('ipAddress').value = '';
@@ -646,10 +940,16 @@
             }
         });
 
+        // Enter key support for login
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            checkDailyReset(currentUserId);
-            setInterval(() => checkDailyReset(currentUserId), 60000);
+            checkLoginStatus();
         });
     </script>
 </body>
