@@ -17,6 +17,7 @@
             --secondary: #3a0ca3;
             --danger: #f72585;
             --success: #4cc9f0;
+            --warning: #ffc107;
             --dark: #212529;
             --light: #f8f9fa;
         }
@@ -39,7 +40,7 @@
         }
 
         .admin-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -53,11 +54,54 @@
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
         }
 
         .admin-header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
+        }
+
+        .admin-nav {
+            background: var(--light);
+            padding: 0 30px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-tab {
+            padding: 20px 30px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .nav-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            background: white;
+        }
+
+        .nav-tab:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .stats-grid {
@@ -100,6 +144,15 @@
             margin-bottom: 20px;
             border-bottom: 2px solid var(--light);
             padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .data-table {
@@ -132,6 +185,32 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3a56d4;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #3ab0d4;
         }
 
         .btn-danger {
@@ -141,6 +220,15 @@
 
         .btn-danger:hover {
             background: #d90429;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
         }
 
         .login-form {
@@ -209,6 +297,83 @@
             font-weight: 600;
         }
 
+        .bulk-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .storage-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .storage-bar {
+            width: 100%;
+            height: 20px;
+            background: #dee2e6;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .storage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            transition: width 0.3s;
+        }
+
+        .search-box {
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .user-form {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .status-active {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .status-inactive {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .user-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .user-link:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: 1fr;
@@ -220,6 +385,31 @@
             
             .admin-header h1 {
                 font-size: 2rem;
+            }
+            
+            .bulk-actions {
+                flex-direction: column;
+            }
+            
+            .section-title {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                padding: 15px 20px;
+                border-bottom: 1px solid #dee2e6;
+                border-left: 3px solid transparent;
+            }
+            
+            .nav-tab.active {
+                border-left-color: var(--primary);
+                border-bottom-color: #dee2e6;
             }
         }
     </style>
@@ -247,47 +437,156 @@
         
         <div class="admin-header">
             <h1><i class="fas fa-cogs"></i> Admin Panel</h1>
-            <p>IP Verification System Analytics</p>
+            <p>IP Verification System Management</p>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-number" id="todayCount">0</span>
-                <span class="stat-label">Today's IPs</span>
+        <div class="admin-nav">
+            <ul class="nav-tabs">
+                <li class="nav-tab active" onclick="switchTab('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </li>
+                <li class="nav-tab" onclick="switchTab('users')">
+                    <i class="fas fa-users"></i> User Management
+                </li>
+                <li class="nav-tab" onclick="switchTab('ips')">
+                    <i class="fas fa-network-wired"></i> IP Management
+                </li>
+                <li class="nav-tab" onclick="switchTab('reports')">
+                    <i class="fas fa-chart-bar"></i> Reports
+                </li>
+            </ul>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard-tab" class="tab-content active">
+            <div class="storage-info">
+                <h3>Storage Information</h3>
+                <div class="storage-bar">
+                    <div class="storage-fill" id="storageFill"></div>
+                </div>
+                <p>Stored IPs: <span id="storageCount">0</span> / 2,000,000</p>
             </div>
-            <div class="stat-card">
-                <span class="stat-number" id="totalCount">0</span>
-                <span class="stat-label">Total IPs</span>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="todayCount">0</span>
+                    <span class="stat-label">Today's IPs</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalCount">0</span>
+                    <span class="stat-label">Total IPs</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalUsers">0</span>
+                    <span class="stat-label">Total Users</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="activeUsers">0</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
             </div>
-            <div class="stat-card">
-                <span class="stat-number" id="sessionCount">0</span>
-                <span class="stat-label">Session IPs</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="searchCount">0</span>
-                <span class="stat-label">Search IPs</span>
+
+            <div class="data-section">
+                <h3 class="section-title">
+                    <span><i class="fas fa-history"></i> Recent Activity</span>
+                </h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>IP Address</th>
+                            <th>Type</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentActivityTable">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="data-section">
-            <h3 class="section-title"><i class="fas fa-list"></i> Today's IP Activity</h3>
+        <!-- User Management Tab -->
+        <div id="users-tab" class="tab-content">
+            <div class="user-form">
+                <h3><i class="fas fa-user-plus"></i> Create New User</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>User ID</label>
+                        <input type="text" id="newUserId" placeholder="Enter unique user ID">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="newUserName" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="newUserPassword" placeholder="Enter password">
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="createUser()">
+                    <i class="fas fa-plus"></i> Create User
+                </button>
+            </div>
+
+            <div class="section-title">
+                <span><i class="fas fa-users"></i> User Accounts</span>
+                <div class="search-box">
+                    <input type="text" id="userSearch" placeholder="Search users by name or ID..." onkeyup="searchUsers()">
+                </div>
+            </div>
+
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>IP Address</th>
-                        <th>Type</th>
-                        <th>Time</th>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Status</th>
+                        <th>Created Date</th>
+                        <th>Today's Count</th>
+                        <th>Total IPs</th>
+                        <th>User Link</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="todayTable">
+                <tbody id="usersTable">
                     <!-- Data will be populated here -->
                 </tbody>
             </table>
         </div>
 
-        <div class="data-section">
-            <h3 class="section-title"><i class="fas fa-history"></i> All Time Data</h3>
+        <!-- IP Management Tab -->
+        <div id="ips-tab" class="tab-content">
+            <div class="section-title">
+                <span><i class="fas fa-network-wired"></i> All IPs Storage</span>
+                <div class="bulk-actions">
+                    <button class="btn btn-danger" onclick="clearAllIPs()">
+                        <i class="fas fa-bomb"></i> Clear All IPs
+                    </button>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>User</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="allIPsTable">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-tab" class="tab-content">
+            <div class="section-title">
+                <span><i class="fas fa-chart-bar"></i> Daily Summary</span>
+            </div>
             <table class="data-table">
                 <thead>
                     <tr>
@@ -296,17 +595,55 @@
                         <th>Session</th>
                         <th>Search</th>
                         <th>Click</th>
+                        <th>Active Users</th>
                     </tr>
                 </thead>
-                <tbody id="allTimeTable">
+                <tbody id="reportsTable">
                     <!-- Data will be populated here -->
                 </tbody>
             </table>
         </div>
     </div>
 
+    <!-- User Edit Modal -->
+    <div id="userEditModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
+        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%;">
+            <h3 style="margin-bottom: 20px;"><i class="fas fa-edit"></i> Edit User</h3>
+            <div class="form-group">
+                <label>User ID</label>
+                <input type="text" id="editUserId" readonly style="background: #f8f9fa;">
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="editUserName">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="editUserPassword" placeholder="Leave blank to keep current">
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="editUserStatus" style="width: 100%; padding: 12px 15px; border: 2px solid #dee2e6; border-radius: 8px;">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-success" onclick="saveUserChanges()" style="flex: 1;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button class="btn btn-danger" onclick="closeEditModal()" style="flex: 1;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const ADMIN_PASSWORD = "admin123"; // Change this password
+        const IP_STORAGE_KEY = 'allIPsStorage';
+        const USER_STORAGE_KEY = 'userAccounts';
+        let currentEditingUser = null;
 
         function login() {
             const password = document.getElementById('adminPassword').value;
@@ -325,6 +662,53 @@
             document.getElementById('adminPassword').value = '';
         }
 
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Reload data for the tab
+            if (tabName === 'users') {
+                loadUsersData();
+            } else if (tabName === 'ips') {
+                loadIPsData();
+            } else if (tabName === 'reports') {
+                loadReportsData();
+            }
+        }
+
+        function getUserAccounts() {
+            try {
+                const stored = localStorage.getItem(USER_STORAGE_KEY);
+                return stored ? JSON.parse(stored) : {};
+            } catch (e) {
+                console.error('Error reading user accounts:', e);
+                return {};
+            }
+        }
+
+        function saveUserAccounts(users) {
+            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(users));
+        }
+
+        function getAllStoredIPs() {
+            try {
+                const stored = localStorage.getItem(IP_STORAGE_KEY);
+                return stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                console.error('Error reading IP storage:', e);
+                return [];
+            }
+        }
+
         function getAllData() {
             const allData = {};
             for (let i = 0; i < localStorage.length; i++) {
@@ -336,54 +720,150 @@
             return allData;
         }
 
+        function updateStorageInfo() {
+            const allIPs = getAllStoredIPs();
+            const storageCount = allIPs.length;
+            const storagePercentage = (storageCount / 2000000) * 100;
+            
+            document.getElementById('storageCount').textContent = storageCount.toLocaleString();
+            document.getElementById('storageFill').style.width = `${storagePercentage}%`;
+        }
+
         function loadAdminData() {
             const allData = getAllData();
-            let totalIPs = 0;
-            let sessionCount = 0;
-            let searchCount = 0;
-            let clickCount = 0;
+            const allStoredIPs = getAllStoredIPs();
+            const users = getUserAccounts();
+            
+            let todayCount = 0;
+            let totalUsers = Object.keys(users).length;
+            let activeUsers = 0;
 
             // Today's data
-            const todayKey = `dailyIPs_${new Date().toDateString()}`;
+            const todayKey = `dailyIPs_default_${new Date().toDateString()}`;
             const todayData = allData[todayKey] || [];
+            todayCount = todayData.length;
+
+            // Count active users
+            Object.values(users).forEach(user => {
+                if (user.status === 'Active') activeUsers++;
+            });
+
+            // Update stats
+            document.getElementById('todayCount').textContent = todayCount;
+            document.getElementById('totalCount').textContent = allStoredIPs.length;
+            document.getElementById('totalUsers').textContent = totalUsers;
+            document.getElementById('activeUsers').textContent = activeUsers;
             
-            // Populate today's table
-            const todayTable = document.getElementById('todayTable');
-            todayTable.innerHTML = '';
+            // Update storage info
+            updateStorageInfo();
+
+            // Load recent activity
+            loadRecentActivity();
+        }
+
+        function loadRecentActivity() {
+            const allIPs = getAllStoredIPs();
+            const recentTable = document.getElementById('recentActivityTable');
+            recentTable.innerHTML = '';
             
-            todayData.forEach(entry => {
+            // Show latest 10 activities
+            const recentIPs = allIPs.slice(-10).reverse();
+            
+            recentIPs.forEach(entry => {
                 const row = document.createElement('tr');
+                const date = new Date(entry.timestamp);
                 row.innerHTML = `
+                    <td>${entry.userId}</td>
                     <td>${entry.ip}</td>
                     <td>${entry.type}</td>
-                    <td>${new Date(entry.timestamp).toLocaleTimeString()}</td>
+                    <td>${date.toLocaleString()}</td>
+                `;
+                recentTable.appendChild(row);
+            });
+        }
+
+        function loadUsersData() {
+            const users = getUserAccounts();
+            const allIPs = getAllStoredIPs();
+            const usersTable = document.getElementById('usersTable');
+            usersTable.innerHTML = '';
+
+            Object.values(users).forEach(user => {
+                // Count user's IPs
+                const userIPs = allIPs.filter(ip => ip.userId === user.id);
+                const todayKey = `dailyIPs_${user.id}_${new Date().toDateString()}`;
+                const todayData = JSON.parse(localStorage.getItem(todayKey)) || [];
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td class="${user.status === 'Active' ? 'status-active' : 'status-inactive'}">
+                        ${user.status}
+                    </td>
+                    <td>${new Date(user.created).toLocaleDateString()}</td>
+                    <td>${todayData.length}</td>
+                    <td>${userIPs.length}</td>
                     <td>
-                        <button class="btn btn-danger" onclick="deleteIP('${todayKey}', '${entry.ip}')">
+                        <a href="index.html?user=${user.id}" target="_blank" class="user-link">
+                            <i class="fas fa-external-link-alt"></i> Open
+                        </a>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="editUser('${user.id}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteUser('${user.id}')">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </td>
                 `;
-                todayTable.appendChild(row);
-
-                // Count by type
-                if (entry.type === 'session') sessionCount++;
-                if (entry.type === 'search') searchCount++;
-                if (entry.type === 'click') clickCount++;
+                usersTable.appendChild(row);
             });
+        }
 
-            // All time data
-            const allTimeTable = document.getElementById('allTimeTable');
-            allTimeTable.innerHTML = '';
+        function loadIPsData() {
+            const allIPs = getAllStoredIPs();
+            const allIPsTable = document.getElementById('allIPsTable');
+            allIPsTable.innerHTML = '';
+            
+            // Show latest 100 IPs from storage
+            const recentIPs = allIPs.slice(-100).reverse();
+            
+            recentIPs.forEach(entry => {
+                const row = document.createElement('tr');
+                const date = new Date(entry.timestamp);
+                row.innerHTML = `
+                    <td>${entry.ip}</td>
+                    <td>${entry.userId}</td>
+                    <td>${entry.type}</td>
+                    <td>${date.toLocaleDateString()}</td>
+                    <td>${date.toLocaleTimeString()}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="deleteStoredIP('${entry.ip}', '${entry.userId}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                allIPsTable.appendChild(row);
+            });
+        }
+
+        function loadReportsData() {
+            const allData = getAllData();
+            const reportsTable = document.getElementById('reportsTable');
+            reportsTable.innerHTML = '';
 
             Object.keys(allData).sort().reverse().forEach(dateKey => {
                 const dateData = allData[dateKey];
-                const date = dateKey.replace('dailyIPs_', '');
+                const date = dateKey.replace('dailyIPs_default_', '');
                 let dateSession = 0;
                 let dateSearch = 0;
                 let dateClick = 0;
+                const users = new Set();
 
                 dateData.forEach(entry => {
-                    totalIPs++;
+                    users.add(entry.userId);
                     if (entry.type === 'session') dateSession++;
                     if (entry.type === 'search') dateSearch++;
                     if (entry.type === 'click') dateClick++;
@@ -396,23 +876,157 @@
                     <td>${dateSession}</td>
                     <td>${dateSearch}</td>
                     <td>${dateClick}</td>
+                    <td>${users.size}</td>
                 `;
-                allTimeTable.appendChild(row);
+                reportsTable.appendChild(row);
             });
-
-            // Update stats
-            document.getElementById('todayCount').textContent = todayData.length;
-            document.getElementById('totalCount').textContent = totalIPs;
-            document.getElementById('sessionCount').textContent = sessionCount;
-            document.getElementById('searchCount').textContent = searchCount;
         }
 
-        function deleteIP(dateKey, ip) {
+        function createUser() {
+            const userId = document.getElementById('newUserId').value.trim();
+            const userName = document.getElementById('newUserName').value.trim();
+            const password = document.getElementById('newUserPassword').value.trim();
+
+            if (!userId || !userName || !password) {
+                alert('Please fill all fields!');
+                return;
+            }
+
+            const users = getUserAccounts();
+            
+            if (users[userId]) {
+                alert('User ID already exists!');
+                return;
+            }
+
+            // Create new user
+            users[userId] = {
+                id: userId,
+                name: userName,
+                password: password,
+                status: 'Active',
+                created: new Date().toISOString()
+            };
+
+            saveUserAccounts(users);
+            
+            // Clear form
+            document.getElementById('newUserId').value = '';
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserPassword').value = '';
+            
+            // Reload users data
+            loadUsersData();
+            alert('User created successfully!');
+        }
+
+        function searchUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const rows = document.getElementById('usersTable').getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+                
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.toLowerCase().includes(searchTerm)) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                rows[i].style.display = found ? '' : 'none';
+            }
+        }
+
+        function editUser(userId) {
+            const users = getUserAccounts();
+            const user = users[userId];
+            
+            if (!user) return;
+            
+            currentEditingUser = userId;
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('editUserName').value = user.name;
+            document.getElementById('editUserStatus').value = user.status;
+            document.getElementById('editUserPassword').value = '';
+            
+            document.getElementById('userEditModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('userEditModal').style.display = 'none';
+            currentEditingUser = null;
+        }
+
+        function saveUserChanges() {
+            if (!currentEditingUser) return;
+            
+            const users = getUserAccounts();
+            const user = users[currentEditingUser];
+            
+            user.name = document.getElementById('editUserName').value;
+            user.status = document.getElementById('editUserStatus').value;
+            
+            const newPassword = document.getElementById('editUserPassword').value;
+            if (newPassword) {
+                user.password = newPassword;
+            }
+            
+            saveUserAccounts(users);
+            closeEditModal();
+            loadUsersData();
+            alert('User updated successfully!');
+        }
+
+        function deleteUser(userId) {
+            if (confirm(`Are you sure you want to delete user ${userId}? This will also delete all their IP records!`)) {
+                const users = getUserAccounts();
+                delete users[userId];
+                saveUserAccounts(users);
+                
+                // Delete user's IP records
+                const allIPs = getAllStoredIPs();
+                const updatedIPs = allIPs.filter(ip => ip.userId !== userId);
+                localStorage.setItem(IP_STORAGE_KEY, JSON.stringify(updatedIPs));
+                
+                // Delete user's daily records
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith(`dailyIPs_${userId}_`)) {
+                        localStorage.removeItem(key);
+                    }
+                }
+                
+                loadUsersData();
+                alert('User deleted successfully!');
+            }
+        }
+
+        function deleteStoredIP(ip, userId) {
             if (confirm('Are you sure you want to delete this IP?')) {
-                const data = JSON.parse(localStorage.getItem(dateKey));
-                const updatedData = data.filter(entry => entry.ip !== ip);
-                localStorage.setItem(dateKey, JSON.stringify(updatedData));
-                loadAdminData();
+                const allIPs = getAllStoredIPs();
+                const updatedIPs = allIPs.filter(entry => !(entry.ip === ip && entry.userId === userId));
+                localStorage.setItem(IP_STORAGE_KEY, JSON.stringify(updatedIPs));
+                loadIPsData();
+            }
+        }
+
+        function clearAllIPs() {
+            if (confirm('⚠️ WARNING: This will delete ALL stored IPs permanently. This action cannot be undone!\n\nAre you absolutely sure?')) {
+                // Clear global IP storage
+                localStorage.removeItem(IP_STORAGE_KEY);
+                
+                // Clear all daily records
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('dailyIPs_')) {
+                        localStorage.removeItem(key);
+                    }
+                }
+                
+                loadIPsData();
+                alert('All IPs have been cleared successfully!');
             }
         }
 
@@ -422,6 +1036,13 @@
                 loadAdminData();
             }
         }, 30000);
+
+        // Close modal when clicking outside
+        document.getElementById('userEditModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
+        });
     </script>
 </body>
 </html>
