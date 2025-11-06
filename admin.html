@@ -689,15 +689,25 @@
         const MAX_STORAGE_SIZE = 100000000; // 100 Million IPs
         let currentEditingUser = null;
 
-        // Cloud storage functions (same as user panel)
+        // CLOUD STORAGE FUNCTIONS - EXACTLY SAME AS USER PANEL
         function getCloudData(key) {
             try {
                 const cloudKey = `ip_system_${key}`;
                 const stored = localStorage.getItem(cloudKey);
-                return stored ? JSON.parse(stored) : (key === USER_STORAGE_KEY ? getDefaultUsers() : []);
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+                // Agar data nahi hai to default users return karo
+                if (key === USER_STORAGE_KEY) {
+                    return getDefaultUsers();
+                }
+                return [];
             } catch (e) {
                 console.error('Error reading cloud data:', e);
-                return key === USER_STORAGE_KEY ? getDefaultUsers() : [];
+                if (key === USER_STORAGE_KEY) {
+                    return getDefaultUsers();
+                }
+                return [];
             }
         }
 
@@ -712,6 +722,7 @@
             }
         }
 
+        // Get default users - EXACTLY SAME AS USER PANEL
         function getDefaultUsers() {
             return {
                 'admin': {
@@ -773,9 +784,6 @@
                 notification.style.display = 'none';
             }, 5000);
         }
-
-        // Rest of the admin panel code remains the same as before...
-        // (Login, logout, user management, IP management functions)
 
         function login() {
             const password = document.getElementById('adminPassword').value;
@@ -983,6 +991,7 @@
             });
         }
 
+        // FIXED CREATE USER FUNCTION
         function createUser() {
             const userId = document.getElementById('newUserId').value.trim();
             const userName = document.getElementById('newUserName').value.trim();
@@ -995,8 +1004,19 @@
 
             const users = getUserAccounts();
             
+            // Check if user ID already exists
             if (users[userId]) {
-                showNotification('User ID already exists!', 'error');
+                showNotification('User ID already exists! Please choose a different User ID.', 'error');
+                return;
+            }
+
+            // Check if username already exists
+            const usernameExists = Object.values(users).some(user => 
+                user.name.toLowerCase() === userName.toLowerCase()
+            );
+            
+            if (usernameExists) {
+                showNotification('Username already exists! Please choose a different username.', 'error');
                 return;
             }
 
@@ -1010,16 +1030,20 @@
                 role: 'user'
             };
 
-            saveUserAccounts(users);
+            const saved = saveUserAccounts(users);
             
-            // Clear form
-            document.getElementById('newUserId').value = '';
-            document.getElementById('newUserName').value = '';
-            document.getElementById('newUserPassword').value = '';
-            
-            // Reload users data
-            loadUsersData();
-            showNotification(`User ${userName} created successfully!`, 'success');
+            if (saved) {
+                // Clear form
+                document.getElementById('newUserId').value = '';
+                document.getElementById('newUserName').value = '';
+                document.getElementById('newUserPassword').value = '';
+                
+                // Reload users data
+                loadUsersData();
+                showNotification(`User "${userName}" created successfully!`, 'success');
+            } else {
+                showNotification('Error saving user! Please try again.', 'error');
+            }
         }
 
         function searchUsers() {
