@@ -967,7 +967,7 @@
                 return;
             }
 
-            // Create new user
+            // Create new user - FIXED: Proper user structure
             users[userId] = {
                 id: userId,
                 name: userName,
@@ -985,7 +985,7 @@
                 document.getElementById('newUserPassword').value = '';
                 
                 loadUsersData();
-                showNotification(`User "${userName}" created successfully!`, 'success');
+                showNotification(`User "${userName}" created successfully! Login details: Username: ${userName}, Password: ${password}`, 'success');
             } else {
                 showNotification('Error saving user! Please try again.', 'error');
             }
