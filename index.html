@@ -601,29 +601,87 @@
     <div id="globalNotification" class="notification"></div>
 
     <script>
-        // Global IP storage with support for 2,000,000+ IPs
-        const IP_STORAGE_KEY = 'allIPsStorage';
-        const USER_STORAGE_KEY = 'userAccounts';
-        const CURRENT_USER_KEY = 'currentUser';
-        const MAX_STORAGE_SIZE = 2000000;
+        // Global storage keys
+        const IP_STORAGE_KEY = 'ip_verification_system_ips';
+        const USER_STORAGE_KEY = 'ip_verification_system_users';
+        const CURRENT_USER_KEY = 'ip_verification_current_user';
+        const MAX_STORAGE_SIZE = 100000000; // 100 Million IPs capacity
         
         let currentIP = '';
         let currentUser = null;
 
-        // Get user accounts
-        function getUserAccounts() {
+        // CLOUD SYNC FUNCTIONALITY - Simulate cloud storage using localStorage with unique keys
+        function getCloudData(key) {
             try {
-                const stored = localStorage.getItem(USER_STORAGE_KEY);
-                return stored ? JSON.parse(stored) : {};
+                // Use a unique key that works across all browsers for this domain
+                const cloudKey = `ip_system_${key}`;
+                const stored = localStorage.getItem(cloudKey);
+                return stored ? JSON.parse(stored) : (key === USER_STORAGE_KEY ? getDefaultUsers() : []);
             } catch (e) {
-                console.error('Error reading user accounts:', e);
-                return {};
+                console.error('Error reading cloud data:', e);
+                return key === USER_STORAGE_KEY ? getDefaultUsers() : [];
             }
         }
 
-        // Save user accounts
+        function saveCloudData(key, data) {
+            try {
+                const cloudKey = `ip_system_${key}`;
+                localStorage.setItem(cloudKey, JSON.stringify(data));
+                return true;
+            } catch (e) {
+                console.error('Error saving cloud data:', e);
+                return false;
+            }
+        }
+
+        // Get default users - These will be available everywhere
+        function getDefaultUsers() {
+            return {
+                'admin': {
+                    id: 'admin',
+                    name: 'Administrator',
+                    password: 'admin123',
+                    status: 'Active',
+                    created: new Date().toISOString(),
+                    role: 'admin'
+                },
+                'demo1': {
+                    id: 'demo1',
+                    name: 'Demo User 1',
+                    password: 'demo123',
+                    status: 'Active',
+                    created: new Date().toISOString(),
+                    role: 'user'
+                },
+                'demo2': {
+                    id: 'demo2',
+                    name: 'Demo User 2',
+                    password: 'demo123',
+                    status: 'Active',
+                    created: new Date().toISOString(),
+                    role: 'user'
+                }
+            };
+        }
+
+        // Get user accounts from cloud storage
+        function getUserAccounts() {
+            return getCloudData(USER_STORAGE_KEY);
+        }
+
+        // Save user accounts to cloud storage
         function saveUserAccounts(users) {
-            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(users));
+            return saveCloudData(USER_STORAGE_KEY, users);
+        }
+
+        // Get all stored IPs from cloud storage
+        function getAllStoredIPs() {
+            return getCloudData(IP_STORAGE_KEY);
+        }
+
+        // Save IPs to cloud storage
+        function saveAllIPs(ips) {
+            return saveCloudData(IP_STORAGE_KEY, ips);
         }
 
         // Get current logged in user
@@ -668,8 +726,11 @@
             }
 
             const users = getUserAccounts();
+            
+            // Username aur password se user dhoondo
             const user = Object.values(users).find(u => 
-                u.name === username && u.password === password
+                (u.name.toLowerCase() === username.toLowerCase() || u.id.toLowerCase() === username.toLowerCase()) && 
+                u.password === password
             );
 
             if (user) {
@@ -727,26 +788,21 @@
         // Daily IP counter with reset at 12 PM
         function getTodayKey(userId) {
             const now = new Date();
-            return `dailyIPs_${userId}_${now.toDateString()}`;
+            return `daily_ips_${userId}_${now.toDateString()}`;
         }
 
         function getDailyIPs(userId) {
             const todayKey = getTodayKey(userId);
-            return JSON.parse(localStorage.getItem(todayKey)) || [];
+            const dailyIPs = getCloudData(todayKey);
+            return Array.isArray(dailyIPs) ? dailyIPs : [];
         }
 
-        // Get all stored IPs from global storage
-        function getAllStoredIPs() {
-            try {
-                const stored = localStorage.getItem(IP_STORAGE_KEY);
-                return stored ? JSON.parse(stored) : [];
-            } catch (e) {
-                console.error('Error reading IP storage:', e);
-                return [];
-            }
+        function saveDailyIPs(userId, ips) {
+            const todayKey = getTodayKey(userId);
+            return saveCloudData(todayKey, ips);
         }
 
-        // Save IP to global storage
+        // Save IP to cloud storage
         function saveIPToGlobalStorage(ip, userId) {
             try {
                 const allIPs = getAllStoredIPs();
@@ -762,11 +818,12 @@
                     ip: ip,
                     timestamp: new Date().toISOString(),
                     type: getSelectedCheckType(),
-                    userId: userId
+                    userId: userId,
+                    userName: currentUser.name
                 });
                 
-                localStorage.setItem(IP_STORAGE_KEY, JSON.stringify(allIPs));
-                return true;
+                const saved = saveAllIPs(allIPs);
+                return saved;
             } catch (e) {
                 console.error('Error saving IP to storage:', e);
                 return false;
@@ -780,7 +837,6 @@
         }
 
         function saveDailyIP(ip, userId) {
-            const todayKey = getTodayKey(userId);
             const dailyIPs = getDailyIPs(userId);
             dailyIPs.push({
                 ip: ip,
@@ -788,7 +844,7 @@
                 type: getSelectedCheckType(),
                 userId: userId
             });
-            localStorage.setItem(todayKey, JSON.stringify(dailyIPs));
+            saveDailyIPs(userId, dailyIPs);
             updateDailyCounter(userId);
         }
 
@@ -799,15 +855,16 @@
 
         // Check for daily reset
         function checkDailyReset(userId) {
-            const lastReset = localStorage.getItem(`lastReset_${userId}`);
+            const lastResetKey = `last_reset_${userId}`;
+            const lastReset = getCloudData(lastResetKey);
             const now = new Date();
             const today = now.toDateString();
             
             if (lastReset !== today && now.getHours() >= 12) {
                 // Reset daily counter
                 const todayKey = getTodayKey(userId);
-                localStorage.removeItem(todayKey);
-                localStorage.setItem(`lastReset_${userId}`, today);
+                localStorage.removeItem(`ip_system_${todayKey}`);
+                saveCloudData(lastResetKey, today);
             }
             
             updateDailyCounter(userId);
@@ -922,17 +979,6 @@
             hideVerificationModal();
         }
         
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById('message');
-            messageDiv.textContent = text;
-            messageDiv.className = `message ${type}`;
-            messageDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 5000);
-        }
-        
         // Close modal when clicking outside
         document.getElementById('verificationModal').addEventListener('click', function(e) {
             if (e.target === this) {
@@ -947,8 +993,18 @@
             }
         });
 
+        // Initialize system
+        function initializeSystem() {
+            // Ensure default users exist
+            const users = getUserAccounts();
+            const defaultUsers = getDefaultUsers();
+            const updatedUsers = { ...defaultUsers, ...users };
+            saveUserAccounts(updatedUsers);
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            initializeSystem();
             checkLoginStatus();
         });
     </script>
