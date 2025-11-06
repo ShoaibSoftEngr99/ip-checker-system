@@ -6,6 +6,7 @@
     <title>Admin Panel - IP Checker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Same CSS as before - No changes needed */
         * {
             margin: 0;
             padding: 0;
@@ -683,95 +684,62 @@
     <div id="globalNotification" class="notification"></div>
 
     <script>
-        const ADMIN_PASSWORD = "admin123";
-        const IP_STORAGE_KEY = 'ip_verification_system_ips';
-        const USER_STORAGE_KEY = 'ip_verification_system_users';
-        const MAX_STORAGE_SIZE = 100000000; // 100 Million IPs
-        let currentEditingUser = null;
-
-        // CLOUD STORAGE FUNCTIONS - EXACTLY SAME AS USER PANEL
-        function getCloudData(key) {
+        // SIMPLE AND RELIABLE STORAGE SYSTEM - SAME AS USER PANEL
+        const STORAGE_PREFIX = 'ipchecker_';
+        
+        function getStorage(key) {
             try {
-                const cloudKey = `ip_system_${key}`;
-                const stored = localStorage.getItem(cloudKey);
-                if (stored) {
-                    return JSON.parse(stored);
-                }
-                // Agar data nahi hai to default users return karo
-                if (key === USER_STORAGE_KEY) {
-                    return getDefaultUsers();
-                }
-                return [];
+                const fullKey = STORAGE_PREFIX + key;
+                const item = localStorage.getItem(fullKey);
+                return item ? JSON.parse(item) : null;
             } catch (e) {
-                console.error('Error reading cloud data:', e);
-                if (key === USER_STORAGE_KEY) {
-                    return getDefaultUsers();
-                }
-                return [];
+                console.error('Storage read error:', e);
+                return null;
             }
         }
 
-        function saveCloudData(key, data) {
+        function setStorage(key, value) {
             try {
-                const cloudKey = `ip_system_${key}`;
-                localStorage.setItem(cloudKey, JSON.stringify(data));
+                const fullKey = STORAGE_PREFIX + key;
+                localStorage.setItem(fullKey, JSON.stringify(value));
                 return true;
             } catch (e) {
-                console.error('Error saving cloud data:', e);
+                console.error('Storage write error:', e);
                 return false;
             }
         }
 
-        // Get default users - EXACTLY SAME AS USER PANEL
-        function getDefaultUsers() {
-            return {
-                'admin': {
-                    id: 'admin',
-                    name: 'Administrator',
-                    password: 'admin123',
-                    status: 'Active',
-                    created: new Date().toISOString(),
-                    role: 'admin'
-                },
-                'demo1': {
-                    id: 'demo1',
-                    name: 'Demo User 1',
-                    password: 'demo123',
-                    status: 'Active',
-                    created: new Date().toISOString(),
-                    role: 'user'
-                },
-                'demo2': {
-                    id: 'demo2',
-                    name: 'Demo User 2',
-                    password: 'demo123',
-                    status: 'Active',
-                    created: new Date().toISOString(),
-                    role: 'user'
-                }
-            };
+        function getAllUsers() {
+            const users = getStorage('users');
+            if (!users) {
+                const defaultUsers = {
+                    'admin': { id: 'admin', name: 'Administrator', password: 'admin123', status: 'Active', created: new Date().toISOString() },
+                    'user1': { id: 'user1', name: 'User One', password: 'password1', status: 'Active', created: new Date().toISOString() },
+                    'user2': { id: 'user2', name: 'User Two', password: 'password2', status: 'Active', created: new Date().toISOString() }
+                };
+                setStorage('users', defaultUsers);
+                return defaultUsers;
+            }
+            return users;
         }
 
-        function getUserAccounts() {
-            return getCloudData(USER_STORAGE_KEY);
+        function saveAllUsers(users) {
+            return setStorage('users', users);
         }
 
-        function saveUserAccounts(users) {
-            return saveCloudData(USER_STORAGE_KEY, users);
-        }
-
-        function getAllStoredIPs() {
-            return getCloudData(IP_STORAGE_KEY);
+        function getAllIPs() {
+            const ips = getStorage('all_ips');
+            return ips || [];
         }
 
         function saveAllIPs(ips) {
-            return saveCloudData(IP_STORAGE_KEY, ips);
+            return setStorage('all_ips', ips);
         }
 
         function getDailyIPs(userId) {
-            const todayKey = `daily_ips_${userId}_${new Date().toDateString()}`;
-            const dailyIPs = getCloudData(todayKey);
-            return Array.isArray(dailyIPs) ? dailyIPs : [];
+            const today = new Date().toDateString();
+            const key = `daily_${userId}_${today}`;
+            return getStorage(key) || [];
         }
 
         function showNotification(message, type = 'success') {
@@ -784,6 +752,9 @@
                 notification.style.display = 'none';
             }, 5000);
         }
+
+        const ADMIN_PASSWORD = "admin123";
+        let currentEditingUser = null;
 
         function login() {
             const password = document.getElementById('adminPassword').value;
@@ -825,49 +796,42 @@
         }
 
         function updateStorageInfo() {
-            const allIPs = getAllStoredIPs();
+            const allIPs = getAllIPs();
             const storageCount = allIPs.length;
-            const storagePercentage = (storageCount / MAX_STORAGE_SIZE) * 100;
+            const storagePercentage = Math.min((storageCount / 100000000) * 100, 100);
             
             document.getElementById('storageCount').textContent = storageCount.toLocaleString();
             document.getElementById('storageFill').style.width = `${storagePercentage}%`;
         }
 
         function loadAdminData() {
-            const allStoredIPs = getAllStoredIPs();
-            const users = getUserAccounts();
+            const allIPs = getAllIPs();
+            const users = getAllUsers();
             
             let todayCount = 0;
             let totalUsers = Object.keys(users).length;
             let activeUsers = 0;
 
-            // Count active users
             Object.values(users).forEach(user => {
                 if (user.status === 'Active') activeUsers++;
-                // Add today's count for each user
                 const dailyIPs = getDailyIPs(user.id);
                 todayCount += dailyIPs.length;
             });
 
-            // Update stats
             document.getElementById('todayCount').textContent = todayCount;
-            document.getElementById('totalCount').textContent = allStoredIPs.length;
+            document.getElementById('totalCount').textContent = allIPs.length;
             document.getElementById('totalUsers').textContent = totalUsers;
             document.getElementById('activeUsers').textContent = activeUsers;
             
-            // Update storage info
             updateStorageInfo();
-
-            // Load recent activity
             loadRecentActivity();
         }
 
         function loadRecentActivity() {
-            const allIPs = getAllStoredIPs();
+            const allIPs = getAllIPs();
             const recentTable = document.getElementById('recentActivityTable');
             recentTable.innerHTML = '';
             
-            // Show latest 10 activities
             const recentIPs = allIPs.slice(-10).reverse();
             
             recentIPs.forEach(entry => {
@@ -884,13 +848,12 @@
         }
 
         function loadUsersData() {
-            const users = getUserAccounts();
-            const allIPs = getAllStoredIPs();
+            const users = getAllUsers();
+            const allIPs = getAllIPs();
             const usersTable = document.getElementById('usersTable');
             usersTable.innerHTML = '';
 
             Object.values(users).forEach(user => {
-                // Count user's IPs
                 const userIPs = allIPs.filter(ip => ip.userId === user.id);
                 const todayData = getDailyIPs(user.id);
 
@@ -921,77 +884,6 @@
             });
         }
 
-        function loadIPsData() {
-            const allIPs = getAllStoredIPs();
-            const allIPsTable = document.getElementById('allIPsTable');
-            allIPsTable.innerHTML = '';
-            
-            // Show latest 100 IPs from storage
-            const recentIPs = allIPs.slice(-100).reverse();
-            
-            recentIPs.forEach(entry => {
-                const row = document.createElement('tr');
-                const date = new Date(entry.timestamp);
-                row.innerHTML = `
-                    <td>${entry.ip}</td>
-                    <td>${entry.userName || entry.userId}</td>
-                    <td>${entry.type}</td>
-                    <td>${date.toLocaleDateString()}</td>
-                    <td>${date.toLocaleTimeString()}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="deleteStoredIP('${entry.ip}', '${entry.userId}')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </td>
-                `;
-                allIPsTable.appendChild(row);
-            });
-        }
-
-        function loadReportsData() {
-            const allIPs = getAllStoredIPs();
-            const reportsTable = document.getElementById('reportsTable');
-            reportsTable.innerHTML = '';
-
-            // Group by date
-            const dateGroups = {};
-            allIPs.forEach(entry => {
-                const date = new Date(entry.timestamp).toDateString();
-                if (!dateGroups[date]) {
-                    dateGroups[date] = {
-                        session: 0,
-                        search: 0,
-                        click: 0,
-                        users: new Set()
-                    };
-                }
-                dateGroups[date].users.add(entry.userId);
-                if (entry.type === 'session') dateGroups[date].session++;
-                if (entry.type === 'search') dateGroups[date].search++;
-                if (entry.type === 'click') dateGroups[date].click++;
-            });
-
-            // Convert to array and sort by date
-            const sortedDates = Object.keys(dateGroups).sort((a, b) => new Date(b) - new Date(a));
-
-            sortedDates.forEach(date => {
-                const data = dateGroups[date];
-                const total = data.session + data.search + data.click;
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${date}</td>
-                    <td>${total}</td>
-                    <td>${data.session}</td>
-                    <td>${data.search}</td>
-                    <td>${data.click}</td>
-                    <td>${data.users.size}</td>
-                `;
-                reportsTable.appendChild(row);
-            });
-        }
-
-        // FIXED CREATE USER FUNCTION
         function createUser() {
             const userId = document.getElementById('newUserId').value.trim();
             const userName = document.getElementById('newUserName').value.trim();
@@ -1002,15 +894,13 @@
                 return;
             }
 
-            const users = getUserAccounts();
+            const users = getAllUsers();
             
-            // Check if user ID already exists
             if (users[userId]) {
                 showNotification('User ID already exists! Please choose a different User ID.', 'error');
                 return;
             }
 
-            // Check if username already exists
             const usernameExists = Object.values(users).some(user => 
                 user.name.toLowerCase() === userName.toLowerCase()
             );
@@ -1026,19 +916,16 @@
                 name: userName,
                 password: password,
                 status: 'Active',
-                created: new Date().toISOString(),
-                role: 'user'
+                created: new Date().toISOString()
             };
 
-            const saved = saveUserAccounts(users);
+            const saved = saveAllUsers(users);
             
             if (saved) {
-                // Clear form
                 document.getElementById('newUserId').value = '';
                 document.getElementById('newUserName').value = '';
                 document.getElementById('newUserPassword').value = '';
                 
-                // Reload users data
                 loadUsersData();
                 showNotification(`User "${userName}" created successfully!`, 'success');
             } else {
@@ -1066,7 +953,7 @@
         }
 
         function editUser(userId) {
-            const users = getUserAccounts();
+            const users = getAllUsers();
             const user = users[userId];
             
             if (!user) return;
@@ -1088,7 +975,7 @@
         function saveUserChanges() {
             if (!currentEditingUser) return;
             
-            const users = getUserAccounts();
+            const users = getAllUsers();
             const user = users[currentEditingUser];
             
             user.name = document.getElementById('editUserName').value;
@@ -1099,7 +986,7 @@
                 user.password = newPassword;
             }
             
-            saveUserAccounts(users);
+            saveAllUsers(users);
             closeEditModal();
             loadUsersData();
             showNotification('User updated successfully!', 'success');
@@ -1112,12 +999,11 @@
             }
 
             if (confirm(`Are you sure you want to delete user ${userId}? This will also delete all their IP records!`)) {
-                const users = getUserAccounts();
+                const users = getAllUsers();
                 delete users[userId];
-                saveUserAccounts(users);
+                saveAllUsers(users);
                 
-                // Delete user's IP records
-                const allIPs = getAllStoredIPs();
+                const allIPs = getAllIPs();
                 const updatedIPs = allIPs.filter(ip => ip.userId !== userId);
                 saveAllIPs(updatedIPs);
                 
@@ -1126,9 +1012,35 @@
             }
         }
 
+        function loadIPsData() {
+            const allIPs = getAllIPs();
+            const allIPsTable = document.getElementById('allIPsTable');
+            allIPsTable.innerHTML = '';
+            
+            const recentIPs = allIPs.slice(-100).reverse();
+            
+            recentIPs.forEach(entry => {
+                const row = document.createElement('tr');
+                const date = new Date(entry.timestamp);
+                row.innerHTML = `
+                    <td>${entry.ip}</td>
+                    <td>${entry.userName || entry.userId}</td>
+                    <td>${entry.type}</td>
+                    <td>${date.toLocaleDateString()}</td>
+                    <td>${date.toLocaleTimeString()}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="deleteStoredIP('${entry.ip}', '${entry.userId}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                allIPsTable.appendChild(row);
+            });
+        }
+
         function deleteStoredIP(ip, userId) {
             if (confirm('Are you sure you want to delete this IP?')) {
-                const allIPs = getAllStoredIPs();
+                const allIPs = getAllIPs();
                 const updatedIPs = allIPs.filter(entry => !(entry.ip === ip && entry.userId === userId));
                 saveAllIPs(updatedIPs);
                 loadIPsData();
@@ -1144,7 +1056,48 @@
             }
         }
 
-        // Auto-refresh data every 30 seconds
+        function loadReportsData() {
+            const allIPs = getAllIPs();
+            const reportsTable = document.getElementById('reportsTable');
+            reportsTable.innerHTML = '';
+
+            const dateGroups = {};
+            allIPs.forEach(entry => {
+                const date = new Date(entry.timestamp).toDateString();
+                if (!dateGroups[date]) {
+                    dateGroups[date] = {
+                        session: 0,
+                        search: 0,
+                        click: 0,
+                        users: new Set()
+                    };
+                }
+                dateGroups[date].users.add(entry.userId);
+                if (entry.type === 'session') dateGroups[date].session++;
+                if (entry.type === 'search') dateGroups[date].search++;
+                if (entry.type === 'click') dateGroups[date].click++;
+            });
+
+            const sortedDates = Object.keys(dateGroups).sort((a, b) => new Date(b) - new Date(a));
+
+            sortedDates.forEach(date => {
+                const data = dateGroups[date];
+                const total = data.session + data.search + data.click;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${date}</td>
+                    <td>${total}</td>
+                    <td>${data.session}</td>
+                    <td>${data.search}</td>
+                    <td>${data.click}</td>
+                    <td>${data.users.size}</td>
+                `;
+                reportsTable.appendChild(row);
+            });
+        }
+
+        // Auto-refresh data
         setInterval(() => {
             if (document.getElementById('adminContainer').style.display === 'block') {
                 loadAdminData();
@@ -1158,17 +1111,10 @@
             }
         });
 
-        // Initialize system
-        function initializeSystem() {
-            const users = getUserAccounts();
-            const defaultUsers = getDefaultUsers();
-            const updatedUsers = { ...defaultUsers, ...users };
-            saveUserAccounts(updatedUsers);
-        }
-
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            initializeSystem();
+            // Ensure users exist
+            getAllUsers();
         });
     </script>
 </body>
