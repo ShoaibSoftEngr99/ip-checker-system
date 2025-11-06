@@ -6,6 +6,7 @@
     <title>IP Verification System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Same CSS as before - No changes needed */
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +33,6 @@
             align-items: center;
         }
 
-        /* Login Container */
         .login-container {
             max-width: 400px;
             width: 100%;
@@ -115,7 +115,6 @@
             box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
         }
 
-        /* Main Container */
         .container {
             max-width: 800px;
             width: 100%;
@@ -601,115 +600,89 @@
     <div id="globalNotification" class="notification"></div>
 
     <script>
-        // Global storage keys - SAME AS ADMIN PANEL
-        const IP_STORAGE_KEY = 'ip_verification_system_ips';
-        const USER_STORAGE_KEY = 'ip_verification_system_users';
-        const CURRENT_USER_KEY = 'ip_verification_current_user';
-        const MAX_STORAGE_SIZE = 100000000; // 100 Million IPs capacity
+        // SIMPLE AND RELIABLE STORAGE SYSTEM
+        const STORAGE_PREFIX = 'ipchecker_';
         
-        let currentIP = '';
-        let currentUser = null;
-
-        // CLOUD SYNC FUNCTIONALITY - EXACTLY SAME AS ADMIN PANEL
-        function getCloudData(key) {
+        // Storage functions
+        function getStorage(key) {
             try {
-                const cloudKey = `ip_system_${key}`;
-                const stored = localStorage.getItem(cloudKey);
-                if (stored) {
-                    return JSON.parse(stored);
-                }
-                // Agar data nahi hai to default users return karo
-                if (key === USER_STORAGE_KEY) {
-                    return getDefaultUsers();
-                }
-                return [];
+                const fullKey = STORAGE_PREFIX + key;
+                const item = localStorage.getItem(fullKey);
+                return item ? JSON.parse(item) : null;
             } catch (e) {
-                console.error('Error reading cloud data:', e);
-                if (key === USER_STORAGE_KEY) {
-                    return getDefaultUsers();
-                }
-                return [];
-            }
-        }
-
-        function saveCloudData(key, data) {
-            try {
-                const cloudKey = `ip_system_${key}`;
-                localStorage.setItem(cloudKey, JSON.stringify(data));
-                return true;
-            } catch (e) {
-                console.error('Error saving cloud data:', e);
-                return false;
-            }
-        }
-
-        // Get default users - EXACTLY SAME AS ADMIN PANEL
-        function getDefaultUsers() {
-            return {
-                'admin': {
-                    id: 'admin',
-                    name: 'Administrator',
-                    password: 'admin123',
-                    status: 'Active',
-                    created: new Date().toISOString(),
-                    role: 'admin'
-                },
-                'demo1': {
-                    id: 'demo1',
-                    name: 'Demo User 1',
-                    password: 'demo123',
-                    status: 'Active',
-                    created: new Date().toISOString(),
-                    role: 'user'
-                },
-                'demo2': {
-                    id: 'demo2',
-                    name: 'Demo User 2',
-                    password: 'demo123',
-                    status: 'Active',
-                    created: new Date().toISOString(),
-                    role: 'user'
-                }
-            };
-        }
-
-        // Get user accounts from cloud storage - EXACTLY SAME AS ADMIN PANEL
-        function getUserAccounts() {
-            return getCloudData(USER_STORAGE_KEY);
-        }
-
-        // Save user accounts to cloud storage - EXACTLY SAME AS ADMIN PANEL
-        function saveUserAccounts(users) {
-            return saveCloudData(USER_STORAGE_KEY, users);
-        }
-
-        // Get all stored IPs from cloud storage - EXACTLY SAME AS ADMIN PANEL
-        function getAllStoredIPs() {
-            return getCloudData(IP_STORAGE_KEY);
-        }
-
-        // Save IPs to cloud storage - EXACTLY SAME AS ADMIN PANEL
-        function saveAllIPs(ips) {
-            return saveCloudData(IP_STORAGE_KEY, ips);
-        }
-
-        // Get current logged in user
-        function getCurrentUser() {
-            try {
-                const stored = localStorage.getItem(CURRENT_USER_KEY);
-                return stored ? JSON.parse(stored) : null;
-            } catch (e) {
-                console.error('Error reading current user:', e);
+                console.error('Storage read error:', e);
                 return null;
             }
         }
 
-        // Save current logged in user
-        function saveCurrentUser(user) {
-            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+        function setStorage(key, value) {
+            try {
+                const fullKey = STORAGE_PREFIX + key;
+                localStorage.setItem(fullKey, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                console.error('Storage write error:', e);
+                return false;
+            }
         }
 
-        // Show global notification
+        // Get all users
+        function getAllUsers() {
+            const users = getStorage('users');
+            if (!users) {
+                // Create default users if none exist
+                const defaultUsers = {
+                    'admin': { id: 'admin', name: 'Administrator', password: 'admin123', status: 'Active', created: new Date().toISOString() },
+                    'user1': { id: 'user1', name: 'User One', password: 'password1', status: 'Active', created: new Date().toISOString() },
+                    'user2': { id: 'user2', name: 'User Two', password: 'password2', status: 'Active', created: new Date().toISOString() }
+                };
+                setStorage('users', defaultUsers);
+                return defaultUsers;
+            }
+            return users;
+        }
+
+        // Save all users
+        function saveAllUsers(users) {
+            return setStorage('users', users);
+        }
+
+        // Get current user
+        function getCurrentUser() {
+            return getStorage('current_user');
+        }
+
+        // Save current user
+        function saveCurrentUser(user) {
+            return setStorage('current_user', user);
+        }
+
+        // Get IPs
+        function getAllIPs() {
+            const ips = getStorage('all_ips');
+            return ips || [];
+        }
+
+        // Save IPs
+        function saveAllIPs(ips) {
+            return setStorage('all_ips', ips);
+        }
+
+        // Get daily IPs for user
+        function getDailyIPs(userId) {
+            const today = new Date().toDateString();
+            const key = `daily_${userId}_${today}`;
+            return getStorage(key) || [];
+        }
+
+        // Save daily IPs for user
+        function saveDailyIPs(userId, ips) {
+            const today = new Date().toDateString();
+            const key = `daily_${userId}_${today}`;
+            return setStorage(key, ips);
+        }
+
+        // Show notification
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('globalNotification');
             notification.textContent = message;
@@ -721,47 +694,38 @@
             }, 5000);
         }
 
-        // IMPROVED LOGIN FUNCTION - FIXED THE ISSUE
+        let currentUser = null;
+        let currentIP = '';
+
+        // Login function
         function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
             const loginMessage = document.getElementById('loginMessage');
 
             if (!username || !password) {
-                loginMessage.textContent = 'Please enter both username and password!';
-                loginMessage.className = 'message error';
-                loginMessage.style.display = 'block';
+                showMessage('Please enter both username and password!', 'error', loginMessage);
                 return;
             }
 
-            const users = getUserAccounts();
+            const allUsers = getAllUsers();
             
-            console.log('Available users:', users); // Debugging ke liye
-            console.log('Trying to login with:', username, password); // Debugging ke liye
-            
-            // IMPROVED USER SEARCH - Username ya User ID se search karo
-            const user = Object.values(users).find(u => {
-                // Username se match (case insensitive)
-                const usernameMatch = u.name.toLowerCase() === username.toLowerCase();
-                // User ID se match (case insensitive)  
-                const userIdMatch = u.id.toLowerCase() === username.toLowerCase();
-                // Password match
-                const passwordMatch = u.password === password;
-                
-                return (usernameMatch || userIdMatch) && passwordMatch;
-            });
+            // Find user by username or user ID
+            const user = Object.values(allUsers).find(u => 
+                (u.name.toLowerCase() === username.toLowerCase() || u.id.toLowerCase() === username.toLowerCase()) && 
+                u.password === password
+            );
 
             if (user) {
                 if (user.status === 'Inactive') {
-                    loginMessage.textContent = 'Your account is inactive. Please contact administrator.';
-                    loginMessage.className = 'message error';
-                    loginMessage.style.display = 'block';
+                    showMessage('Your account is inactive. Please contact administrator.', 'error', loginMessage);
                     return;
                 }
 
                 currentUser = user;
                 saveCurrentUser(user);
                 
+                // Switch to main app
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'block';
                 document.getElementById('userWelcome').textContent = user.name;
@@ -769,17 +733,19 @@
                 showNotification(`Welcome back, ${user.name}!`, 'success');
                 initializeUserDashboard();
             } else {
-                loginMessage.textContent = 'Invalid username or password! Available users: ' + 
-                    Object.values(users).map(u => u.name).join(', ');
-                loginMessage.className = 'message error';
-                loginMessage.style.display = 'block';
+                showMessage('Invalid username or password!', 'error', loginMessage);
             }
         }
 
-        // Logout function
+        function showMessage(text, type, element) {
+            element.textContent = text;
+            element.className = `message ${type}`;
+            element.style.display = 'block';
+        }
+
         function logout() {
             currentUser = null;
-            localStorage.removeItem(CURRENT_USER_KEY);
+            setStorage('current_user', null);
             
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('loginContainer').style.display = 'block';
@@ -792,7 +758,6 @@
             showNotification('You have been logged out successfully!', 'warning');
         }
 
-        // Check if user is already logged in
         function checkLoginStatus() {
             const user = getCurrentUser();
             if (user) {
@@ -804,99 +769,16 @@
             }
         }
 
-        // Daily IP counter with reset at 12 PM
-        function getTodayKey(userId) {
-            const now = new Date();
-            return `daily_ips_${userId}_${now.toDateString()}`;
+        function initializeUserDashboard() {
+            if (!currentUser) return;
+            updateDailyCounter();
         }
 
-        function getDailyIPs(userId) {
-            const todayKey = getTodayKey(userId);
-            const dailyIPs = getCloudData(todayKey);
-            return Array.isArray(dailyIPs) ? dailyIPs : [];
-        }
-
-        function saveDailyIPs(userId, ips) {
-            const todayKey = getTodayKey(userId);
-            return saveCloudData(todayKey, ips);
-        }
-
-        // Save IP to cloud storage
-        function saveIPToGlobalStorage(ip, userId) {
-            try {
-                const allIPs = getAllStoredIPs();
-                
-                // Check if storage is approaching limit
-                if (allIPs.length >= MAX_STORAGE_SIZE) {
-                    console.warn('IP storage is at capacity');
-                    return false;
-                }
-                
-                // Add new IP with timestamp
-                allIPs.push({
-                    ip: ip,
-                    timestamp: new Date().toISOString(),
-                    type: getSelectedCheckType(),
-                    userId: userId,
-                    userName: currentUser.name
-                });
-                
-                const saved = saveAllIPs(allIPs);
-                return saved;
-            } catch (e) {
-                console.error('Error saving IP to storage:', e);
-                return false;
-            }
-        }
-
-        // Check if IP is duplicate in global storage for this user
-        function isDuplicateIP(ip, userId) {
-            const allIPs = getAllStoredIPs();
-            return allIPs.some(entry => entry.ip === ip && entry.userId === userId);
-        }
-
-        function saveDailyIP(ip, userId) {
-            const dailyIPs = getDailyIPs(userId);
-            dailyIPs.push({
-                ip: ip,
-                timestamp: new Date().toISOString(),
-                type: getSelectedCheckType(),
-                userId: userId
-            });
-            saveDailyIPs(userId, dailyIPs);
-            updateDailyCounter(userId);
-        }
-
-        function updateDailyCounter(userId) {
-            const dailyIPs = getDailyIPs(userId);
+        function updateDailyCounter() {
+            const dailyIPs = getDailyIPs(currentUser.id);
             document.getElementById('dailyCount').textContent = dailyIPs.length;
         }
 
-        // Check for daily reset
-        function checkDailyReset(userId) {
-            const lastResetKey = `last_reset_${userId}`;
-            const lastReset = getCloudData(lastResetKey);
-            const now = new Date();
-            const today = now.toDateString();
-            
-            if (lastReset !== today && now.getHours() >= 12) {
-                // Reset daily counter
-                const todayKey = getTodayKey(userId);
-                localStorage.removeItem(`ip_system_${todayKey}`);
-                saveCloudData(lastResetKey, today);
-            }
-            
-            updateDailyCounter(userId);
-        }
-
-        // Initialize user dashboard
-        function initializeUserDashboard() {
-            if (!currentUser) return;
-            
-            checkDailyReset(currentUser.id);
-            setInterval(() => checkDailyReset(currentUser.id), 60000);
-        }
-        
         function selectCheckbox(type) {
             document.querySelectorAll('.checkbox-card').forEach(card => {
                 card.classList.remove('selected');
@@ -945,13 +827,15 @@
                 return;
             }
             
-            // Check for duplicate IP in global storage for this user
-            if (isDuplicateIP(ipAddress, currentUser.id)) {
+            // Check for duplicate IP
+            const allIPs = getAllIPs();
+            const userIPs = allIPs.filter(ip => ip.userId === currentUser.id);
+            if (userIPs.some(entry => entry.ip === ipAddress)) {
                 showNotification('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
                 return;
             }
             
-            // Check for duplicate IP in today's list for this user
+            // Check for duplicate IP in today's list
             const dailyIPs = getDailyIPs(currentUser.id);
             if (dailyIPs.some(entry => entry.ip === ipAddress)) {
                 showNotification('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
@@ -974,15 +858,28 @@
         
         function confirmLink(isWorking) {
             if (isWorking) {
-                // Save to both daily and global storage
-                saveDailyIP(currentIP, currentUser.id);
-                const savedToGlobal = saveIPToGlobalStorage(currentIP, currentUser.id);
+                // Save to daily IPs
+                const dailyIPs = getDailyIPs(currentUser.id);
+                dailyIPs.push({
+                    ip: currentIP,
+                    timestamp: new Date().toISOString(),
+                    type: getSelectedCheckType(),
+                    userId: currentUser.id
+                });
+                saveDailyIPs(currentUser.id, dailyIPs);
                 
-                if (savedToGlobal) {
-                    showNotification(`✅ IP ${currentIP} successfully uploaded and verified!`, 'success');
-                } else {
-                    showNotification(`⚠️ IP verified but storage is full!`, 'warning');
-                }
+                // Save to all IPs
+                const allIPs = getAllIPs();
+                allIPs.push({
+                    ip: currentIP,
+                    timestamp: new Date().toISOString(),
+                    type: getSelectedCheckType(),
+                    userId: currentUser.id,
+                    userName: currentUser.name
+                });
+                saveAllIPs(allIPs);
+                
+                showNotification(`✅ IP ${currentIP} successfully uploaded and verified!`, 'success');
             } else {
                 showNotification(`❌ IP ${currentIP} - Link is not working.`, 'error');
             }
@@ -995,9 +892,17 @@
                 checkbox.checked = false;
             });
             
+            updateDailyCounter();
             hideVerificationModal();
         }
-        
+
+        // Enter key support
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+
         // Close modal when clicking outside
         document.getElementById('verificationModal').addEventListener('click', function(e) {
             if (e.target === this) {
@@ -1005,28 +910,8 @@
             }
         });
 
-        // Enter key support for login
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                login();
-            }
-        });
-
-        // Initialize system - Ensure users exist
-        function initializeSystem() {
-            const users = getUserAccounts();
-            const defaultUsers = getDefaultUsers();
-            
-            // Admin created users ko preserve karo, default users ko add karo
-            const updatedUsers = { ...defaultUsers, ...users };
-            saveUserAccounts(updatedUsers);
-            
-            console.log('System initialized with users:', updatedUsers);
-        }
-
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            initializeSystem();
             checkLoginStatus();
         });
     </script>
