@@ -6,7 +6,6 @@
     <title>IP Verification System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Same CSS as before - No changes needed */
         * {
             margin: 0;
             padding: 0;
@@ -14,13 +13,14 @@
         }
 
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --success: #4cc9f0;
-            --danger: #f72585;
-            --light: #f8f9fa;
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --success: #1B998B;
+            --danger: #D7263D;
+            --warning: #F46036;
+            --light: #F8F9FA;
             --dark: #212529;
-            --gray: #6c757d;
+            --gray: #6C757D;
         }
 
         body {
@@ -33,14 +33,17 @@
             align-items: center;
         }
 
+        /* Login Container */
         .login-container {
-            max-width: 400px;
+            max-width: 450px;
             width: 100%;
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             display: block;
+            position: relative;
+            overflow: hidden;
         }
 
         .login-container::before {
@@ -49,7 +52,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
+            height: 6px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
@@ -60,9 +63,12 @@
 
         .login-header h1 {
             color: var(--dark);
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .login-header p {
@@ -71,57 +77,98 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: var(--dark);
+            font-size: 1rem;
         }
 
         .form-group input {
             width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
+            padding: 16px 20px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s;
+            background: var(--light);
         }
 
         .form-group input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            box-shadow: 0 0 0 4px rgba(46, 134, 171, 0.1);
+            background: white;
         }
 
         .login-btn {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             margin-top: 10px;
+            box-shadow: 0 8px 25px rgba(46, 134, 171, 0.3);
         }
 
         .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(46, 134, 171, 0.4);
         }
 
+        .saved-credentials {
+            background: #E8F4F8;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .saved-credentials h4 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .credential-item {
+            background: white;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #E9ECEF;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .credential-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .credential-item strong {
+            color: var(--primary);
+        }
+
+        /* Main Container */
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
             display: none;
@@ -133,7 +180,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
+            height: 6px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
@@ -145,9 +192,12 @@
 
         .header h1 {
             color: var(--dark);
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .header p {
@@ -159,20 +209,67 @@
             position: absolute;
             top: 0;
             right: 0;
-            background: var(--danger);
+            background: linear-gradient(135deg, var(--danger), #C81E4A);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 4px 15px rgba(215, 38, 61, 0.3);
+            transition: all 0.3s;
         }
 
         .logout-btn:hover {
-            background: #d90429;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(215, 38, 61, 0.4);
+        }
+
+        .user-welcome {
+            background: linear-gradient(135deg, #E8F4F8, #F0F7FF);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .user-welcome h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 5px;
         }
 
         .checkboxes-horizontal {
@@ -185,25 +282,27 @@
 
         .checkbox-card {
             background: var(--light);
-            padding: 20px 25px;
-            border-radius: 12px;
-            border: 2px solid #e9ecef;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #E9ECEF;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
-            min-width: 120px;
+            min-width: 140px;
+            flex: 1;
         }
 
         .checkbox-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
         }
 
         .checkbox-card.selected {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(46, 134, 171, 0.3);
         }
 
         .checkbox-card input {
@@ -211,22 +310,22 @@
         }
 
         .checkbox-card i {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
             display: block;
         }
 
         .checkbox-card span {
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         .ip-input-section {
-            background: var(--light);
-            padding: 25px;
-            border-radius: 15px;
-            margin: 25px 0;
-            border: 2px dashed #dee2e6;
+            background: linear-gradient(135deg, #F8F9FF, #F0F4FF);
+            padding: 30px;
+            border-radius: 18px;
+            margin: 30px 0;
+            border: 2px dashed #D0D7FF;
         }
 
         .ip-input-group {
@@ -237,37 +336,39 @@
 
         .ip-input-group input {
             flex: 1;
-            padding: 15px 20px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
+            padding: 16px 20px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
             font-size: 1.1rem;
             transition: all 0.3s;
+            background: white;
         }
 
         .ip-input-group input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            box-shadow: 0 0 0 4px rgba(46, 134, 171, 0.1);
         }
 
         .upload-btn {
-            padding: 15px 25px;
+            padding: 16px 30px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(46, 134, 171, 0.3);
         }
 
         .upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(46, 134, 171, 0.4);
         }
 
         .verification-modal {
@@ -276,7 +377,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.7);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -284,6 +385,7 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s;
+            backdrop-filter: blur(5px);
         }
 
         .verification-modal.active {
@@ -293,14 +395,15 @@
 
         .verification-content {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
+            padding: 50px;
+            border-radius: 25px;
             text-align: center;
-            max-width: 500px;
+            max-width: 550px;
             width: 90%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            transform: scale(0.7);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            transform: scale(0.8);
             transition: transform 0.3s;
+            position: relative;
         }
 
         .verification-modal.active .verification-content {
@@ -308,139 +411,149 @@
         }
 
         .verification-icon {
-            font-size: 4rem;
+            font-size: 5rem;
             color: var(--success);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .verification-content h3 {
             color: var(--dark);
-            margin-bottom: 15px;
-            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-size: 2rem;
         }
 
         .verification-content p {
             color: var(--gray);
-            margin-bottom: 30px;
-            font-size: 1.1rem;
+            margin-bottom: 35px;
+            font-size: 1.2rem;
             line-height: 1.6;
         }
 
         .verification-buttons {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
         }
 
         .btn {
-            padding: 12px 30px;
+            padding: 15px 35px;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             flex: 1;
-            max-width: 150px;
+            max-width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .btn-success {
-            background: var(--success);
+            background: linear-gradient(135deg, var(--success), #168B7D);
             color: white;
+            box-shadow: 0 6px 20px rgba(27, 153, 139, 0.3);
         }
 
         .btn-danger {
-            background: var(--danger);
+            background: linear-gradient(135deg, var(--danger), #C81E4A);
             color: white;
+            box-shadow: 0 6px 20px rgba(215, 38, 61, 0.3);
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
         .message {
-            margin-top: 20px;
-            padding: 15px 20px;
-            border-radius: 10px;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
             font-weight: 600;
             display: none;
             animation: slideIn 0.3s ease;
+            font-size: 1.1rem;
         }
 
         .message.success {
-            background: #d4edda;
+            background: #E8F5E8;
             color: #155724;
-            border: 1px solid #c3e6cb;
+            border: 2px solid #C3E6CB;
         }
 
         .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #FDE8E8;
+            color: #721C24;
+            border: 2px solid #F5C6CB;
         }
 
         .daily-counter {
             text-align: center;
-            margin-top: 25px;
-            padding: 20px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #A23B72, #C44569);
             color: white;
-            border-radius: 15px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(162, 59, 114, 0.3);
         }
 
         .counter-number {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 700;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .counter-label {
-            font-size: 1rem;
+            font-size: 1.2rem;
             opacity: 0.9;
         }
 
         .notification {
             position: fixed;
-            top: 20px;
+            top: 30px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 20px 30px;
-            border-radius: 12px;
+            padding: 25px 35px;
+            border-radius: 15px;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             z-index: 1001;
             display: none;
-            animation: slideDown 0.3s ease;
-            min-width: 400px;
+            animation: slideDown 0.4s ease;
+            min-width: 450px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            backdrop-filter: blur(10px);
         }
 
         .notification.success {
-            background: #d4edda;
+            background: linear-gradient(135deg, #E8F5E8, #D4EDDA);
             color: #155724;
-            border: 2px solid #c3e6cb;
+            border: 2px solid #C3E6CB;
         }
 
         .notification.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 2px solid #f5c6cb;
+            background: linear-gradient(135deg, #FDE8E8, #F8D7DA);
+            color: #721C24;
+            border: 2px solid #F5C6CB;
         }
 
         .notification.warning {
-            background: #fff3cd;
+            background: linear-gradient(135deg, #FFF3CD, #FFEEBA);
             color: #856404;
-            border: 2px solid #ffeaa7;
+            border: 2px solid #FFEAA7;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-20px);
             }
             to {
                 opacity: 1;
@@ -451,7 +564,7 @@
         @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateX(-50%) translateY(-20px);
+                transform: translateX(-50%) translateY(-30px);
             }
             to {
                 opacity: 1;
@@ -461,11 +574,12 @@
 
         @media (max-width: 768px) {
             .login-container, .container {
-                padding: 25px;
+                padding: 30px;
+                margin: 15px;
             }
             
             .login-header h1, .header h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             
             .checkboxes-horizontal {
@@ -473,8 +587,8 @@
             }
             
             .checkbox-card {
-                min-width: 100px;
-                padding: 15px 20px;
+                min-width: 120px;
+                padding: 20px;
             }
             
             .ip-input-group {
@@ -504,6 +618,10 @@
                 margin-bottom: 20px;
                 width: 100%;
             }
+            
+            .user-stats {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -512,22 +630,30 @@
     <div class="login-container" id="loginContainer">
         <div class="login-header">
             <h1><i class="fas fa-shield-alt"></i> IP Verification</h1>
-            <p>Please login to continue</p>
+            <p>Secure IP Management System</p>
         </div>
 
         <div class="form-group">
-            <label for="username">Username:</label>
+            <label for="username"><i class="fas fa-user"></i> Username:</label>
             <input type="text" id="username" placeholder="Enter your username">
         </div>
 
         <div class="form-group">
-            <label for="password">Password:</label>
+            <label for="password"><i class="fas fa-lock"></i> Password:</label>
             <input type="password" id="password" placeholder="Enter your password">
         </div>
 
         <button class="login-btn" onclick="login()">
-            <i class="fas fa-sign-in-alt"></i> Login
+            <i class="fas fa-sign-in-alt"></i> Login to System
         </button>
+
+        <!-- Saved Credentials Section -->
+        <div class="saved-credentials" id="savedCredentials">
+            <h4><i class="fas fa-history"></i> Recent Logins</h4>
+            <div id="credentialsList">
+                <!-- Saved credentials will appear here -->
+            </div>
+        </div>
 
         <div id="loginMessage" class="message" style="margin-top: 20px;"></div>
     </div>
@@ -536,27 +662,51 @@
     <div class="container" id="mainContainer">
         <div class="header">
             <h1><i class="fas fa-shield-alt"></i> IP Verification</h1>
-            <p>Welcome, <span id="userWelcome">User</span></p>
+            <p>Secure IP Management Dashboard</p>
             <button class="logout-btn" onclick="logout()">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>
         </div>
 
+        <!-- User Welcome Section -->
+        <div class="user-welcome">
+            <h3><i class="fas fa-user-circle"></i> Welcome, <span id="userWelcome">User</span></h3>
+            <p>You are successfully logged in to the IP verification system.</p>
+            <div class="user-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="dailyCount">0</span>
+                    <span class="stat-label">Today's IPs</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalUserIPs">0</span>
+                    <span class="stat-label">Total IPs</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="sessionCount">0</span>
+                    <span class="stat-label">Session</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="statusBadge">Active</span>
+                    <span class="stat-label">Status</span>
+                </div>
+            </div>
+        </div>
+
         <div class="checkboxes-horizontal">
             <div class="checkbox-card" onclick="selectCheckbox('session')">
                 <input type="checkbox" id="sessionCheck" name="checkType" value="session">
-                <i class="fas fa-globe"></i>
-                <span>Session</span>
+                <i class="fas fa-globe-americas"></i>
+                <span>Session IP</span>
             </div>
             <div class="checkbox-card" onclick="selectCheckbox('search')">
                 <input type="checkbox" id="searchCheck" name="checkType" value="search">
                 <i class="fas fa-search"></i>
-                <span>Search</span>
+                <span>Search IP</span>
             </div>
             <div class="checkbox-card" onclick="selectCheckbox('click')">
                 <input type="checkbox" id="clickCheck" name="checkType" value="click">
                 <i class="fas fa-mouse-pointer"></i>
-                <span>Click</span>
+                <span>Click IP</span>
             </div>
         </div>
 
@@ -570,8 +720,8 @@
         </div>
 
         <div class="daily-counter">
-            <span class="counter-number" id="dailyCount">0</span>
-            <span class="counter-label">Today's IP Count</span>
+            <span class="counter-number" id="totalDailyCount">0</span>
+            <span class="counter-label">IPs Uploaded Today</span>
         </div>
 
         <div id="message" class="message"></div>
@@ -583,14 +733,15 @@
             <div class="verification-icon">
                 <i class="fas fa-link"></i>
             </div>
-            <h3>Link Verification</h3>
-            <p>Is your link working properly and accessible at the provided IP address?</p>
+            <h3>Link Verification Required</h3>
+            <p>Please verify if your link is working properly and accessible at the provided IP address:</p>
+            <p style="font-weight: 700; font-size: 1.3rem; color: var(--primary);" id="verificationIP"></p>
             <div class="verification-buttons">
                 <button class="btn btn-success" onclick="confirmLink(true)">
-                    <i class="fas fa-check"></i> Yes, It's Working
+                    <i class="fas fa-check-circle"></i> Yes, Working
                 </button>
                 <button class="btn btn-danger" onclick="confirmLink(false)">
-                    <i class="fas fa-times"></i> No, Not Working
+                    <i class="fas fa-times-circle"></i> Not Working
                 </button>
             </div>
         </div>
@@ -600,8 +751,8 @@
     <div id="globalNotification" class="notification"></div>
 
     <script>
-        // SIMPLE AND RELIABLE STORAGE SYSTEM
-        const STORAGE_PREFIX = 'ipchecker_';
+        // Simple and reliable storage system
+        const STORAGE_PREFIX = 'ipv_';
         
         // Storage functions
         function getStorage(key) {
@@ -626,18 +777,46 @@
             }
         }
 
-        // Get all users
+        // Get all users - FIXED: Always return proper users object
         function getAllUsers() {
-            const users = getStorage('users');
-            if (!users) {
+            let users = getStorage('users');
+            if (!users || typeof users !== 'object') {
                 // Create default users if none exist
-                const defaultUsers = {
-                    'admin': { id: 'admin', name: 'Administrator', password: 'admin123', status: 'Active', created: new Date().toISOString() },
-                    'user1': { id: 'user1', name: 'User One', password: 'password1', status: 'Active', created: new Date().toISOString() },
-                    'user2': { id: 'user2', name: 'User Two', password: 'password2', status: 'Active', created: new Date().toISOString() }
+                users = {
+                    'admin': { 
+                        id: 'admin', 
+                        name: 'Administrator', 
+                        password: 'admin123', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'admin'
+                    },
+                    'user1': { 
+                        id: 'user1', 
+                        name: 'John Smith', 
+                        password: 'password1', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'user'
+                    },
+                    'user2': { 
+                        id: 'user2', 
+                        name: 'Sarah Johnson', 
+                        password: 'password2', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'user'
+                    },
+                    'demo': { 
+                        id: 'demo', 
+                        name: 'Demo User', 
+                        password: 'demo123', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'user'
+                    }
                 };
-                setStorage('users', defaultUsers);
-                return defaultUsers;
+                setStorage('users', users);
             }
             return users;
         }
@@ -682,6 +861,27 @@
             return setStorage(key, ips);
         }
 
+        // Save login credentials for quick access
+        function saveLoginCredentials(username, password) {
+            const credentials = getStorage('saved_credentials') || [];
+            
+            // Remove if already exists
+            const filtered = credentials.filter(cred => cred.username !== username);
+            
+            // Add to beginning
+            filtered.unshift({ username, password, timestamp: new Date().toISOString() });
+            
+            // Keep only last 5
+            const limited = filtered.slice(0, 5);
+            
+            setStorage('saved_credentials', limited);
+        }
+
+        // Get saved credentials
+        function getSavedCredentials() {
+            return getStorage('saved_credentials') || [];
+        }
+
         // Show notification
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('globalNotification');
@@ -697,7 +897,7 @@
         let currentUser = null;
         let currentIP = '';
 
-        // Login function
+        // Login function - FIXED
         function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
@@ -710,11 +910,19 @@
 
             const allUsers = getAllUsers();
             
+            // Debug: Show available users
+            console.log('Available users:', Object.keys(allUsers));
+            
             // Find user by username or user ID
-            const user = Object.values(allUsers).find(u => 
-                (u.name.toLowerCase() === username.toLowerCase() || u.id.toLowerCase() === username.toLowerCase()) && 
-                u.password === password
-            );
+            const user = Object.values(allUsers).find(u => {
+                const usernameMatch = u.name.toLowerCase() === username.toLowerCase();
+                const userIdMatch = u.id.toLowerCase() === username.toLowerCase();
+                const passwordMatch = u.password === password;
+                
+                console.log(`Checking user: ${u.name}, usernameMatch: ${usernameMatch}, userIdMatch: ${userIdMatch}, passwordMatch: ${passwordMatch}`);
+                
+                return (usernameMatch || userIdMatch) && passwordMatch;
+            });
 
             if (user) {
                 if (user.status === 'Inactive') {
@@ -725,15 +933,19 @@
                 currentUser = user;
                 saveCurrentUser(user);
                 
+                // Save credentials for quick access
+                saveLoginCredentials(user.name, user.password);
+                
                 // Switch to main app
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'block';
                 document.getElementById('userWelcome').textContent = user.name;
                 
-                showNotification(`Welcome back, ${user.name}!`, 'success');
+                showNotification(`🎉 Welcome back, ${user.name}!`, 'success');
                 initializeUserDashboard();
             } else {
-                showMessage('Invalid username or password!', 'error', loginMessage);
+                showMessage('Invalid username or password! Available users: ' + 
+                    Object.values(allUsers).map(u => `${u.name} (${u.id})`).join(', '), 'error', loginMessage);
             }
         }
 
@@ -750,12 +962,42 @@
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('loginContainer').style.display = 'block';
             
-            // Clear form
-            document.getElementById('username').value = '';
+            // Clear form but keep username for convenience
             document.getElementById('password').value = '';
             document.getElementById('loginMessage').style.display = 'none';
             
             showNotification('You have been logged out successfully!', 'warning');
+            
+            // Reload saved credentials
+            loadSavedCredentials();
+        }
+
+        function loadSavedCredentials() {
+            const credentials = getSavedCredentials();
+            const credentialsList = document.getElementById('credentialsList');
+            const savedCredentialsSection = document.getElementById('savedCredentials');
+            
+            if (credentials.length === 0) {
+                savedCredentialsSection.style.display = 'none';
+                return;
+            }
+            
+            savedCredentialsSection.style.display = 'block';
+            credentialsList.innerHTML = '';
+            
+            credentials.forEach(cred => {
+                const item = document.createElement('div');
+                item.className = 'credential-item';
+                item.innerHTML = `
+                    <div><strong>${cred.username}</strong></div>
+                    <div style="font-size: 0.9em; color: #666;">Password: ••••••••</div>
+                `;
+                item.onclick = () => {
+                    document.getElementById('username').value = cred.username;
+                    document.getElementById('password').value = cred.password;
+                };
+                credentialsList.appendChild(item);
+            });
         }
 
         function checkLoginStatus() {
@@ -766,17 +1008,34 @@
                 document.getElementById('mainContainer').style.display = 'block';
                 document.getElementById('userWelcome').textContent = user.name;
                 initializeUserDashboard();
+            } else {
+                loadSavedCredentials();
             }
         }
 
         function initializeUserDashboard() {
             if (!currentUser) return;
-            updateDailyCounter();
+            updateDashboardStats();
         }
 
-        function updateDailyCounter() {
+        function updateDashboardStats() {
             const dailyIPs = getDailyIPs(currentUser.id);
+            const allIPs = getAllIPs();
+            const userIPs = allIPs.filter(ip => ip.userId === currentUser.id);
+            
+            const sessionCount = userIPs.filter(ip => ip.type === 'session').length;
+            const searchCount = userIPs.filter(ip => ip.type === 'search').length;
+            const clickCount = userIPs.filter(ip => ip.type === 'click').length;
+            
             document.getElementById('dailyCount').textContent = dailyIPs.length;
+            document.getElementById('totalDailyCount').textContent = dailyIPs.length;
+            document.getElementById('totalUserIPs').textContent = userIPs.length;
+            document.getElementById('sessionCount').textContent = sessionCount;
+            document.getElementById('statusBadge').textContent = currentUser.status;
+            
+            // Update status badge color
+            const statusBadge = document.getElementById('statusBadge');
+            statusBadge.style.color = currentUser.status === 'Active' ? '#1B998B' : '#D7263D';
         }
 
         function selectCheckbox(type) {
@@ -812,7 +1071,7 @@
             messageDiv.style.display = 'none';
             
             if (!selectedCheckbox) {
-                showNotification('Please select a check type!', 'error');
+                showNotification('Please select an IP type!', 'error');
                 return;
             }
             
@@ -823,7 +1082,7 @@
             
             const ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
             if (!ipPattern.test(ipAddress)) {
-                showNotification('Please enter a valid IP address!', 'error');
+                showNotification('Please enter a valid IP address (e.g., 192.168.1.1)!', 'error');
                 return;
             }
             
@@ -831,18 +1090,19 @@
             const allIPs = getAllIPs();
             const userIPs = allIPs.filter(ip => ip.userId === currentUser.id);
             if (userIPs.some(entry => entry.ip === ipAddress)) {
-                showNotification('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
+                showNotification('❌ This IP address has already been uploaded! Please use a different IP.', 'error');
                 return;
             }
             
             // Check for duplicate IP in today's list
             const dailyIPs = getDailyIPs(currentUser.id);
             if (dailyIPs.some(entry => entry.ip === ipAddress)) {
-                showNotification('❌ Your IP is Duplicate, Please Create a new Profile.', 'error');
+                showNotification('❌ This IP address has already been uploaded today! Please use a different IP.', 'error');
                 return;
             }
             
             currentIP = ipAddress;
+            document.getElementById('verificationIP').textContent = ipAddress;
             showVerificationModal();
         }
         
@@ -879,9 +1139,9 @@
                 });
                 saveAllIPs(allIPs);
                 
-                showNotification(`✅ IP ${currentIP} successfully uploaded and verified!`, 'success');
+                showNotification(`✅ IP ${currentIP} successfully verified and uploaded!`, 'success');
             } else {
-                showNotification(`❌ IP ${currentIP} - Link is not working.`, 'error');
+                showNotification(`❌ IP ${currentIP} verification failed. Please check the link.`, 'error');
             }
             
             document.getElementById('ipAddress').value = '';
@@ -892,7 +1152,7 @@
                 checkbox.checked = false;
             });
             
-            updateDailyCounter();
+            updateDashboardStats();
             hideVerificationModal();
         }
 
@@ -912,6 +1172,8 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            // Ensure users exist
+            getAllUsers();
             checkLoginStatus();
         });
     </script>
