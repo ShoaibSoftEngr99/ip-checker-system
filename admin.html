@@ -6,7 +6,6 @@
     <title>Admin Panel - IP Checker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Same CSS as before - No changes needed */
         * {
             margin: 0;
             padding: 0;
@@ -14,13 +13,13 @@
         }
 
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --danger: #f72585;
-            --success: #4cc9f0;
-            --warning: #ffc107;
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --danger: #D7263D;
+            --success: #1B998B;
+            --warning: #F46036;
             --dark: #212529;
-            --light: #f8f9fa;
+            --light: #F8F9FA;
         }
 
         body {
@@ -31,13 +30,86 @@
         }
 
         .login-container {
-            max-width: 400px;
+            max-width: 450px;
             margin: 50px auto;
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .login-form {
+            text-align: center;
+        }
+
+        .login-form h2 {
+            margin-bottom: 30px;
+            color: var(--dark);
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--light);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(46, 134, 171, 0.1);
+            background: white;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(46, 134, 171, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(46, 134, 171, 0.4);
         }
 
         .admin-container {
@@ -45,7 +117,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             overflow: hidden;
             display: none;
         }
@@ -202,7 +274,7 @@
         }
 
         .btn-primary:hover {
-            background: #3a56d4;
+            background: #267191;
         }
 
         .btn-success {
@@ -211,7 +283,7 @@
         }
 
         .btn-success:hover {
-            background: #3ab0d4;
+            background: #168B7D;
         }
 
         .btn-danger {
@@ -220,7 +292,7 @@
         }
 
         .btn-danger:hover {
-            background: #d90429;
+            background: #C81E4A;
         }
 
         .btn-warning {
@@ -229,73 +301,30 @@
         }
 
         .btn-warning:hover {
-            background: #e0a800;
-        }
-
-        .login-form {
-            text-align: center;
-        }
-
-        .login-form h2 {
-            margin-bottom: 30px;
-            color: var(--dark);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+            background: #E3552B;
         }
 
         .logout-btn {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: var(--danger);
+            background: linear-gradient(135deg, var(--danger), #C81E4A);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(215, 38, 61, 0.3);
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(215, 38, 61, 0.4);
         }
 
         .bulk-actions {
@@ -461,11 +490,11 @@
         <div class="login-form">
             <h2><i class="fas fa-lock"></i> Admin Login</h2>
             <div class="form-group">
-                <label for="adminPassword">Password:</label>
+                <label for="adminPassword">Admin Password:</label>
                 <input type="password" id="adminPassword" placeholder="Enter admin password">
             </div>
             <button class="login-btn" onclick="login()">
-                <i class="fas fa-sign-in-alt"></i> Login
+                <i class="fas fa-sign-in-alt"></i> Login to Admin Panel
             </button>
         </div>
     </div>
@@ -685,7 +714,7 @@
 
     <script>
         // SIMPLE AND RELIABLE STORAGE SYSTEM - SAME AS USER PANEL
-        const STORAGE_PREFIX = 'ipchecker_';
+        const STORAGE_PREFIX = 'ipv_';
         
         function getStorage(key) {
             try {
@@ -710,15 +739,43 @@
         }
 
         function getAllUsers() {
-            const users = getStorage('users');
-            if (!users) {
-                const defaultUsers = {
-                    'admin': { id: 'admin', name: 'Administrator', password: 'admin123', status: 'Active', created: new Date().toISOString() },
-                    'user1': { id: 'user1', name: 'User One', password: 'password1', status: 'Active', created: new Date().toISOString() },
-                    'user2': { id: 'user2', name: 'User Two', password: 'password2', status: 'Active', created: new Date().toISOString() }
+            let users = getStorage('users');
+            if (!users || typeof users !== 'object') {
+                users = {
+                    'admin': { 
+                        id: 'admin', 
+                        name: 'Administrator', 
+                        password: 'admin123', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'admin'
+                    },
+                    'user1': { 
+                        id: 'user1', 
+                        name: 'John Smith', 
+                        password: 'password1', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'user'
+                    },
+                    'user2': { 
+                        id: 'user2', 
+                        name: 'Sarah Johnson', 
+                        password: 'password2', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'user'
+                    },
+                    'demo': { 
+                        id: 'demo', 
+                        name: 'Demo User', 
+                        password: 'demo123', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'user'
+                    }
                 };
-                setStorage('users', defaultUsers);
-                return defaultUsers;
+                setStorage('users', users);
             }
             return users;
         }
@@ -916,7 +973,8 @@
                 name: userName,
                 password: password,
                 status: 'Active',
-                created: new Date().toISOString()
+                created: new Date().toISOString(),
+                role: 'user'
             };
 
             const saved = saveAllUsers(users);
