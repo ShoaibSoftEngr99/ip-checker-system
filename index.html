@@ -601,7 +601,7 @@
     <div id="globalNotification" class="notification"></div>
 
     <script>
-        // Global storage keys
+        // Global storage keys - SAME AS ADMIN PANEL
         const IP_STORAGE_KEY = 'ip_verification_system_ips';
         const USER_STORAGE_KEY = 'ip_verification_system_users';
         const CURRENT_USER_KEY = 'ip_verification_current_user';
@@ -610,16 +610,25 @@
         let currentIP = '';
         let currentUser = null;
 
-        // CLOUD SYNC FUNCTIONALITY - Simulate cloud storage using localStorage with unique keys
+        // CLOUD SYNC FUNCTIONALITY - EXACTLY SAME AS ADMIN PANEL
         function getCloudData(key) {
             try {
-                // Use a unique key that works across all browsers for this domain
                 const cloudKey = `ip_system_${key}`;
                 const stored = localStorage.getItem(cloudKey);
-                return stored ? JSON.parse(stored) : (key === USER_STORAGE_KEY ? getDefaultUsers() : []);
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+                // Agar data nahi hai to default users return karo
+                if (key === USER_STORAGE_KEY) {
+                    return getDefaultUsers();
+                }
+                return [];
             } catch (e) {
                 console.error('Error reading cloud data:', e);
-                return key === USER_STORAGE_KEY ? getDefaultUsers() : [];
+                if (key === USER_STORAGE_KEY) {
+                    return getDefaultUsers();
+                }
+                return [];
             }
         }
 
@@ -634,7 +643,7 @@
             }
         }
 
-        // Get default users - These will be available everywhere
+        // Get default users - EXACTLY SAME AS ADMIN PANEL
         function getDefaultUsers() {
             return {
                 'admin': {
@@ -664,22 +673,22 @@
             };
         }
 
-        // Get user accounts from cloud storage
+        // Get user accounts from cloud storage - EXACTLY SAME AS ADMIN PANEL
         function getUserAccounts() {
             return getCloudData(USER_STORAGE_KEY);
         }
 
-        // Save user accounts to cloud storage
+        // Save user accounts to cloud storage - EXACTLY SAME AS ADMIN PANEL
         function saveUserAccounts(users) {
             return saveCloudData(USER_STORAGE_KEY, users);
         }
 
-        // Get all stored IPs from cloud storage
+        // Get all stored IPs from cloud storage - EXACTLY SAME AS ADMIN PANEL
         function getAllStoredIPs() {
             return getCloudData(IP_STORAGE_KEY);
         }
 
-        // Save IPs to cloud storage
+        // Save IPs to cloud storage - EXACTLY SAME AS ADMIN PANEL
         function saveAllIPs(ips) {
             return saveCloudData(IP_STORAGE_KEY, ips);
         }
@@ -712,7 +721,7 @@
             }, 5000);
         }
 
-        // Login function
+        // IMPROVED LOGIN FUNCTION - FIXED THE ISSUE
         function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
@@ -727,11 +736,20 @@
 
             const users = getUserAccounts();
             
-            // Username aur password se user dhoondo
-            const user = Object.values(users).find(u => 
-                (u.name.toLowerCase() === username.toLowerCase() || u.id.toLowerCase() === username.toLowerCase()) && 
-                u.password === password
-            );
+            console.log('Available users:', users); // Debugging ke liye
+            console.log('Trying to login with:', username, password); // Debugging ke liye
+            
+            // IMPROVED USER SEARCH - Username ya User ID se search karo
+            const user = Object.values(users).find(u => {
+                // Username se match (case insensitive)
+                const usernameMatch = u.name.toLowerCase() === username.toLowerCase();
+                // User ID se match (case insensitive)  
+                const userIdMatch = u.id.toLowerCase() === username.toLowerCase();
+                // Password match
+                const passwordMatch = u.password === password;
+                
+                return (usernameMatch || userIdMatch) && passwordMatch;
+            });
 
             if (user) {
                 if (user.status === 'Inactive') {
@@ -751,7 +769,8 @@
                 showNotification(`Welcome back, ${user.name}!`, 'success');
                 initializeUserDashboard();
             } else {
-                loginMessage.textContent = 'Invalid username or password!';
+                loginMessage.textContent = 'Invalid username or password! Available users: ' + 
+                    Object.values(users).map(u => u.name).join(', ');
                 loginMessage.className = 'message error';
                 loginMessage.style.display = 'block';
             }
@@ -993,13 +1012,16 @@
             }
         });
 
-        // Initialize system
+        // Initialize system - Ensure users exist
         function initializeSystem() {
-            // Ensure default users exist
             const users = getUserAccounts();
             const defaultUsers = getDefaultUsers();
+            
+            // Admin created users ko preserve karo, default users ko add karo
             const updatedUsers = { ...defaultUsers, ...users };
             saveUserAccounts(updatedUsers);
+            
+            console.log('System initialized with users:', updatedUsers);
         }
 
         // Initialize
