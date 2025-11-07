@@ -174,7 +174,7 @@
             max-width: 900px;
             width: 100%;
             background: white;
-            padding: 30px;
+            padding: 40px;
             border-radius: 20px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             position: relative;
@@ -195,7 +195,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             position: relative;
             animation: fadeInDown 0.8s ease-out;
         }
@@ -240,103 +240,45 @@
             box-shadow: 0 6px 20px rgba(215, 38, 61, 0.4);
         }
 
-        /* Compact Stats Section */
-        .compact-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
-            margin: 25px 0;
-            animation: fadeInUp 0.8s ease-out;
+        /* Compact IP Type Selection */
+        .ip-type-section {
+            background: linear-gradient(135deg, #F8F9FF, #F0F4FF);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #E9ECEF;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        .compact-stat-item {
-            background: linear-gradient(135deg, #f8f9ff, #f0f4ff);
-            padding: 15px;
-            border-radius: 12px;
+        .ip-type-section h3 {
             text-align: center;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-            border: 1px solid #e9ecef;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .compact-stat-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
-        .compact-stat-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-
-        .compact-stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .compact-stat-label {
-            color: var(--gray);
-            font-size: 0.8rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-size: 1.2rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .checkboxes-compact {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        .status-active {
-            background: linear-gradient(135deg, #1B998B, #168B7D);
-            color: white;
-        }
-
-        .status-inactive {
-            background: linear-gradient(135deg, #D7263D, #C81E4A);
-            color: white;
-        }
-
-        /* Compact Checkboxes */
-        .compact-checkboxes {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 25px 0;
-            flex-wrap: wrap;
-            animation: slideInUp 0.8s ease-out;
-        }
-
-        .compact-checkbox-card {
-            background: var(--light);
-            padding: 20px 15px;
-            border-radius: 12px;
+        .checkbox-compact {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
             border: 2px solid #E9ECEF;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
-            min-width: 110px;
-            flex: 1;
             position: relative;
             overflow: hidden;
         }
 
-        .compact-checkbox-card::before {
+        .checkbox-compact::before {
             content: '';
             position: absolute;
             top: 0;
@@ -348,44 +290,45 @@
             transition: transform 0.3s ease;
         }
 
-        .compact-checkbox-card:hover {
-            transform: translateY(-5px);
+        .checkbox-compact:hover {
+            transform: translateY(-3px);
             border-color: var(--primary);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        .compact-checkbox-card:hover::before {
+        .checkbox-compact:hover::before {
             transform: scaleX(1);
         }
 
-        .compact-checkbox-card.selected {
+        .checkbox-compact.selected {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-color: var(--primary);
-            box-shadow: 0 8px 20px rgba(46, 134, 171, 0.3);
-            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(46, 134, 171, 0.3);
+            transform: translateY(-2px);
         }
 
-        .compact-checkbox-card input {
+        .checkbox-compact input {
             display: none;
         }
 
-        .compact-checkbox-card i {
-            font-size: 2rem;
-            margin-bottom: 10px;
+        .checkbox-compact i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
             display: block;
             transition: all 0.3s ease;
         }
 
-        .compact-checkbox-card:hover i {
+        .checkbox-compact:hover i {
             transform: scale(1.1);
         }
 
-        .compact-checkbox-card span {
+        .checkbox-compact span {
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
+        /* IP Input Section */
         .ip-input-section {
             background: linear-gradient(135deg, #F8F9FF, #F0F4FF);
             padding: 25px;
@@ -468,13 +411,14 @@
         }
 
         .upload-btn:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(46, 134, 171, 0.4);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(46, 134, 171, 0.4);
         }
 
+        /* Daily Counter - More Compact */
         .daily-counter {
             text-align: center;
-            margin-top: 25px;
+            margin-top: 20px;
             padding: 20px;
             background: linear-gradient(135deg, #A23B72, #C44569);
             color: white;
@@ -500,7 +444,7 @@
             font-size: 2.8rem;
             font-weight: 700;
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             position: relative;
             z-index: 1;
@@ -514,6 +458,7 @@
             font-weight: 600;
         }
 
+        /* Verification Modal */
         .verification-modal {
             position: fixed;
             top: 0;
@@ -626,7 +571,7 @@
         }
 
         .btn:hover {
-            transform: translateY(-2px) scale(1.05);
+            transform: translateY(-2px) scale(1.03);
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
@@ -655,7 +600,7 @@
 
         .notification {
             position: fixed;
-            top: 20px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
             padding: 20px 30px;
@@ -667,7 +612,7 @@
             animation: slideDown 0.4s ease;
             min-width: 400px;
             text-align: center;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             backdrop-filter: blur(10px);
         }
 
@@ -723,17 +668,6 @@
             }
         }
 
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -743,17 +677,6 @@
             from {
                 opacity: 0;
                 transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -798,7 +721,7 @@
 
         @keyframes pulseGlow {
             0% { box-shadow: 0 8px 25px rgba(162, 59, 114, 0.3); }
-            50% { box-shadow: 0 8px 35px rgba(162, 59, 114, 0.6); }
+            50% { box-shadow: 0 8px 30px rgba(162, 59, 114, 0.6); }
             100% { box-shadow: 0 8px 25px rgba(162, 59, 114, 0.3); }
         }
 
@@ -820,7 +743,7 @@
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(-15px);
             }
             to {
                 opacity: 1;
@@ -831,7 +754,7 @@
         @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateX(-50%) translateY(-30px);
+                transform: translateX(-50%) translateY(-25px);
             }
             to {
                 opacity: 1;
@@ -846,16 +769,12 @@
             }
             
             .login-header h1, .header h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
-            .compact-checkboxes {
+            .checkboxes-compact {
+                grid-template-columns: 1fr;
                 gap: 10px;
-            }
-            
-            .compact-checkbox-card {
-                min-width: 100px;
-                padding: 15px 10px;
             }
             
             .ip-input-group {
@@ -884,10 +803,6 @@
                 position: relative;
                 margin-bottom: 15px;
                 width: 100%;
-            }
-            
-            .compact-stats {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -935,46 +850,29 @@
             </button>
         </div>
 
-        <!-- Compact Stats Section -->
-        <div class="compact-stats">
-            <div class="compact-stat-item">
-                <span class="compact-stat-number" id="dailyCount">0</span>
-                <span class="compact-stat-label">Today's IPs</span>
-            </div>
-            <div class="compact-stat-item">
-                <span class="compact-stat-number" id="totalUserIPs">0</span>
-                <span class="compact-stat-label">Total IPs</span>
-            </div>
-            <div class="compact-stat-item">
-                <span class="compact-stat-number" id="sessionCount">0</span>
-                <span class="compact-stat-label">Session</span>
-            </div>
-            <div class="compact-stat-item">
-                <span class="compact-stat-number" id="statusBadge">
-                    <span class="status-badge status-active">Active</span>
-                </span>
-                <span class="compact-stat-label">Status</span>
-            </div>
-        </div>
-
-        <div class="compact-checkboxes">
-            <div class="compact-checkbox-card" onclick="selectCheckbox('session')">
-                <input type="checkbox" id="sessionCheck" name="checkType" value="session">
-                <i class="fas fa-globe-americas"></i>
-                <span>Session IP</span>
-            </div>
-            <div class="compact-checkbox-card" onclick="selectCheckbox('search')">
-                <input type="checkbox" id="searchCheck" name="checkType" value="search">
-                <i class="fas fa-search"></i>
-                <span>Search IP</span>
-            </div>
-            <div class="compact-checkbox-card" onclick="selectCheckbox('click')">
-                <input type="checkbox" id="clickCheck" name="checkType" value="click">
-                <i class="fas fa-mouse-pointer"></i>
-                <span>Click IP</span>
+        <!-- Compact IP Type Selection -->
+        <div class="ip-type-section">
+            <h3>Select IP Type</h3>
+            <div class="checkboxes-compact">
+                <div class="checkbox-compact" onclick="selectCheckbox('session')">
+                    <input type="checkbox" id="sessionCheck" name="checkType" value="session">
+                    <i class="fas fa-globe-americas"></i>
+                    <span>Session IP</span>
+                </div>
+                <div class="checkbox-compact" onclick="selectCheckbox('search')">
+                    <input type="checkbox" id="searchCheck" name="checkType" value="search">
+                    <i class="fas fa-search"></i>
+                    <span>Search IP</span>
+                </div>
+                <div class="checkbox-compact" onclick="selectCheckbox('click')">
+                    <input type="checkbox" id="clickCheck" name="checkType" value="click">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <span>Click IP</span>
+                </div>
             </div>
         </div>
 
+        <!-- IP Input Section -->
         <div class="ip-input-section">
             <div class="ip-input-group">
                 <input type="text" id="ipAddress" placeholder="Enter IP Address (e.g., 192.168.1.1)">
@@ -984,6 +882,7 @@
             </div>
         </div>
 
+        <!-- Daily Counter -->
         <div class="daily-counter">
             <span class="counter-number" id="totalDailyCount">0</span>
             <span class="counter-label">IPs Uploaded Today</span>
@@ -1000,7 +899,7 @@
             </div>
             <h3>Link Verification Required</h3>
             <p>Please verify if your link is working properly and accessible at the provided IP address:</p>
-            <p style="font-weight: 700; font-size: 1.3rem; color: var(--primary);" id="verificationIP"></p>
+            <p style="font-weight: 700; font-size: 1.2rem; color: var(--primary);" id="verificationIP"></p>
             <div class="verification-buttons">
                 <button class="btn btn-success" onclick="confirmLink(true)">
                     <i class="fas fa-check-circle"></i> Yes, Working
@@ -1016,7 +915,7 @@
     <div id="globalNotification" class="notification"></div>
 
     <script>
-        // Storage functions
+        // Storage system (same as before)
         const STORAGE_PREFIX = 'ipv_';
         
         function getStorage(key) {
@@ -1251,24 +1150,11 @@
 
         function updateDashboardStats() {
             const dailyIPs = getDailyIPs(currentUser.id);
-            const allIPs = getAllIPs();
-            const userIPs = allIPs.filter(ip => ip.userId === currentUser.id);
-            
-            const sessionCount = userIPs.filter(ip => ip.type === 'session').length;
-            
-            document.getElementById('dailyCount').textContent = dailyIPs.length;
             document.getElementById('totalDailyCount').textContent = dailyIPs.length;
-            document.getElementById('totalUserIPs').textContent = userIPs.length;
-            document.getElementById('sessionCount').textContent = sessionCount;
-            
-            const statusBadge = document.getElementById('statusBadge');
-            statusBadge.innerHTML = currentUser.status === 'Active' 
-                ? '<span class="status-badge status-active">Active</span>'
-                : '<span class="status-badge status-inactive">Inactive</span>';
         }
 
         function selectCheckbox(type) {
-            document.querySelectorAll('.compact-checkbox-card').forEach(card => {
+            document.querySelectorAll('.checkbox-compact').forEach(card => {
                 card.classList.remove('selected');
             });
             
@@ -1370,7 +1256,7 @@
             }
             
             document.getElementById('ipAddress').value = '';
-            document.querySelectorAll('.compact-checkbox-card').forEach(card => {
+            document.querySelectorAll('.checkbox-compact').forEach(card => {
                 card.classList.remove('selected');
             });
             document.querySelectorAll('input[name="checkType"]').forEach(checkbox => {
