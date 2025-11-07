@@ -33,7 +33,6 @@
             align-items: center;
         }
 
-        /* Login Container */
         .login-container {
             max-width: 450px;
             width: 100%;
@@ -44,7 +43,6 @@
             display: block;
             position: relative;
             overflow: hidden;
-            animation: slideUp 0.6s ease-out;
         }
 
         .login-container::before {
@@ -60,7 +58,6 @@
         .login-header {
             text-align: center;
             margin-bottom: 40px;
-            animation: fadeIn 0.8s ease-out;
         }
 
         .login-header h1 {
@@ -80,7 +77,6 @@
 
         .form-group {
             margin-bottom: 25px;
-            animation: slideInLeft 0.6s ease-out;
         }
 
         .form-group label {
@@ -106,7 +102,6 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(46, 134, 171, 0.1);
             background: white;
-            transform: translateY(-2px);
         }
 
         .login-btn {
@@ -122,54 +117,13 @@
             transition: all 0.3s;
             margin-top: 10px;
             box-shadow: 0 8px 25px rgba(46, 134, 171, 0.3);
-            animation: pulse 2s infinite;
         }
 
         .login-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 30px rgba(46, 134, 171, 0.4);
-            animation: none;
         }
 
-        .saved-credentials {
-            background: #E8F4F8;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 25px;
-            border-left: 4px solid var(--primary);
-            animation: slideInRight 0.6s ease-out;
-        }
-
-        .saved-credentials h4 {
-            color: var(--dark);
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .credential-item {
-            background: white;
-            padding: 12px 15px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border: 1px solid #E9ECEF;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .credential-item:hover {
-            border-color: var(--primary);
-            transform: translateX(5px) scale(1.02);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .credential-item strong {
-            color: var(--primary);
-        }
-
-        /* Main Container */
         .container {
             max-width: 900px;
             width: 100%;
@@ -180,7 +134,6 @@
             position: relative;
             overflow: hidden;
             display: none;
-            animation: zoomIn 0.5s ease-out;
         }
 
         .container::before {
@@ -197,7 +150,6 @@
             text-align: center;
             margin-bottom: 40px;
             position: relative;
-            animation: fadeInDown 0.8s ease-out;
         }
 
         .header h1 {
@@ -231,7 +183,6 @@
             gap: 8px;
             box-shadow: 0 4px 15px rgba(215, 38, 61, 0.3);
             transition: all 0.3s;
-            animation: bounceIn 1s ease-out;
             font-size: 0.9rem;
         }
 
@@ -240,77 +191,12 @@
             box-shadow: 0 6px 20px rgba(215, 38, 61, 0.4);
         }
 
-        /* User Info Bar */
-        .user-info-bar {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            animation: slideInUp 0.8s ease-out;
-            box-shadow: 0 5px 15px rgba(46, 134, 171, 0.3);
-        }
-
-        .user-info-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .user-details h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .user-details p {
-            margin: 0;
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-
-        .user-stats {
-            display: flex;
-            gap: 20px;
-        }
-
-        .user-stat {
-            text-align: center;
-        }
-
-        .user-stat-number {
-            font-size: 1.3rem;
-            font-weight: 700;
-            display: block;
-        }
-
-        .user-stat-label {
-            font-size: 0.75rem;
-            opacity: 0.9;
-        }
-
-        /* Compact IP Type Selection */
         .ip-type-section {
             background: linear-gradient(135deg, #F8F9FF, #F0F4FF);
             padding: 25px;
             border-radius: 15px;
             margin: 20px 0;
             border: 2px solid #E9ECEF;
-            animation: fadeIn 0.8s ease-out;
         }
 
         .ip-type-section h3 {
@@ -341,28 +227,6 @@
             overflow: hidden;
         }
 
-        .checkbox-compact::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .checkbox-compact:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        .checkbox-compact:hover::before {
-            transform: scaleX(1);
-        }
-
         .checkbox-compact.selected {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -379,11 +243,6 @@
             font-size: 1.5rem;
             margin-bottom: 8px;
             display: block;
-            transition: all 0.3s ease;
-        }
-
-        .checkbox-compact:hover i {
-            transform: scale(1.1);
         }
 
         .checkbox-compact span {
@@ -391,36 +250,18 @@
             font-size: 0.85rem;
         }
 
-        /* IP Input Section */
         .ip-input-section {
             background: linear-gradient(135deg, #F8F9FF, #F0F4FF);
             padding: 25px;
             border-radius: 15px;
             margin: 25px 0;
             border: 2px dashed #D0D7FF;
-            animation: fadeIn 0.8s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ip-input-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(45deg);
-            animation: shimmer 3s infinite;
         }
 
         .ip-input-group {
             display: flex;
             gap: 12px;
             align-items: center;
-            position: relative;
-            z-index: 1;
         }
 
         .ip-input-group input {
@@ -437,7 +278,6 @@
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(46, 134, 171, 0.1);
-            transform: translateY(-2px);
         }
 
         .upload-btn {
@@ -454,23 +294,6 @@
             align-items: center;
             gap: 8px;
             box-shadow: 0 6px 20px rgba(46, 134, 171, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s;
-        }
-
-        .upload-btn:hover::before {
-            left: 100%;
         }
 
         .upload-btn:hover {
@@ -478,7 +301,6 @@
             box-shadow: 0 8px 25px rgba(46, 134, 171, 0.4);
         }
 
-        /* Daily Counter - More Compact */
         .daily-counter {
             text-align: center;
             margin-top: 20px;
@@ -487,20 +309,6 @@
             color: white;
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(162, 59, 114, 0.3);
-            animation: pulseGlow 2s infinite;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .daily-counter::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            animation: shine 3s infinite;
         }
 
         .counter-number {
@@ -508,20 +316,14 @@
             font-weight: 700;
             display: block;
             margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 1;
         }
 
         .counter-label {
             font-size: 1rem;
             opacity: 0.9;
-            position: relative;
-            z-index: 1;
             font-weight: 600;
         }
 
-        /* Verification Modal */
         .verification-modal {
             position: fixed;
             top: 0;
@@ -536,7 +338,6 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s;
-            backdrop-filter: blur(5px);
         }
 
         .verification-modal.active {
@@ -552,21 +353,12 @@
             max-width: 500px;
             width: 90%;
             box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            transform: scale(0.8) rotateX(-30deg);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .verification-modal.active .verification-content {
-            transform: scale(1) rotateX(0);
         }
 
         .verification-icon {
             font-size: 4rem;
             color: var(--success);
             margin-bottom: 20px;
-            animation: bounce 1s infinite alternate;
         }
 
         .verification-content h3 {
@@ -602,23 +394,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
         }
 
         .btn-success {
@@ -645,7 +420,6 @@
             text-align: center;
             font-weight: 600;
             display: none;
-            animation: slideIn 0.3s ease;
             font-size: 1rem;
         }
 
@@ -672,11 +446,9 @@
             font-size: 1.1rem;
             z-index: 1001;
             display: none;
-            animation: slideDown 0.4s ease;
             min-width: 400px;
             text-align: center;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            backdrop-filter: blur(10px);
         }
 
         .notification.success {
@@ -691,172 +463,18 @@
             border: 2px solid #F5C6CB;
         }
 
-        .notification.warning {
-            background: linear-gradient(135deg, #FFF3CD, #FFEEBA);
-            color: #856404;
-            border: 2px solid #FFEAA7;
-        }
-
-        /* Animations */
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes zoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes bounceIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.3);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.05);
-            }
-            70% {
-                transform: scale(0.9);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 8px 25px rgba(162, 59, 114, 0.3); }
-            50% { box-shadow: 0 8px 30px rgba(162, 59, 114, 0.6); }
-            100% { box-shadow: 0 8px 25px rgba(162, 59, 114, 0.3); }
-        }
-
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-8px); }
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
         @media (max-width: 768px) {
             .login-container, .container {
                 padding: 25px;
                 margin: 10px;
             }
             
-            .login-header h1, .header h1 {
-                font-size: 1.8rem;
-            }
-            
             .checkboxes-compact {
                 grid-template-columns: 1fr;
-                gap: 10px;
             }
             
             .ip-input-group {
                 flex-direction: column;
-            }
-            
-            .ip-input-group input {
-                width: 100%;
             }
             
             .verification-buttons {
@@ -869,24 +487,6 @@
             
             .notification {
                 min-width: 90%;
-                left: 5%;
-                transform: translateX(0);
-            }
-            
-            .logout-btn {
-                position: relative;
-                margin-bottom: 15px;
-                width: 100%;
-            }
-            
-            .user-info-bar {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .user-stats {
-                justify-content: center;
             }
         }
     </style>
@@ -913,14 +513,6 @@
             <i class="fas fa-sign-in-alt"></i> Login to System
         </button>
 
-        <!-- Saved Credentials Section -->
-        <div class="saved-credentials" id="savedCredentials">
-            <h4><i class="fas fa-history"></i> Recent Logins</h4>
-            <div id="credentialsList">
-                <!-- Saved credentials will appear here -->
-            </div>
-        </div>
-
         <div id="loginMessage" class="message" style="margin-top: 20px;"></div>
     </div>
 
@@ -932,33 +524,6 @@
             <button class="logout-btn" onclick="logout()">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>
-        </div>
-
-        <!-- User Info Bar -->
-        <div class="user-info-bar">
-            <div class="user-info-left">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-details">
-                    <h3 id="userWelcomeName">Live Agent</h3>
-                    <p id="userSessionInfo">Active Session</p>
-                </div>
-            </div>
-            <div class="user-stats">
-                <div class="user-stat">
-                    <span class="user-stat-number" id="userDailyCount">0</span>
-                    <span class="user-stat-label">Today</span>
-                </div>
-                <div class="user-stat">
-                    <span class="user-stat-number" id="userTotalCount">0</span>
-                    <span class="user-stat-label">Total</span>
-                </div>
-                <div class="user-stat">
-                    <span class="user-stat-number" id="userSessionId">#001</span>
-                    <span class="user-stat-label">Session</span>
-                </div>
-            </div>
         </div>
 
         <!-- Compact IP Type Selection -->
@@ -1026,7 +591,7 @@
     <div id="globalNotification" class="notification"></div>
 
     <script>
-        // Storage system
+        // SIMPLE STORAGE SYSTEM
         const STORAGE_PREFIX = 'ipv_';
         
         function getStorage(key) {
@@ -1035,7 +600,6 @@
                 const item = localStorage.getItem(fullKey);
                 return item ? JSON.parse(item) : null;
             } catch (e) {
-                console.error('Storage read error:', e);
                 return null;
             }
         }
@@ -1046,63 +610,49 @@
                 localStorage.setItem(fullKey, JSON.stringify(value));
                 return true;
             } catch (e) {
-                console.error('Storage write error:', e);
                 return false;
             }
         }
 
+        // SIMPLE USER SYSTEM - NO COMPLEX LOGIC
         function getAllUsers() {
             let users = getStorage('users');
-            if (!users || typeof users !== 'object') {
+            if (!users) {
                 users = {
                     'admin': { 
                         id: 'admin', 
                         name: 'Administrator', 
                         password: 'admin123', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'admin'
+                        status: 'Active'
                     },
                     'user1': { 
                         id: 'user1', 
                         name: 'John Smith', 
                         password: 'password1', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
+                        status: 'Active'
                     },
                     'user2': { 
                         id: 'user2', 
                         name: 'Sarah Johnson', 
                         password: 'password2', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
+                        status: 'Active'
                     },
                     'demo': { 
                         id: 'demo', 
                         name: 'Demo User', 
                         password: 'demo123', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
+                        status: 'Active'
                     },
                     'liveagent': { 
                         id: 'liveagent', 
                         name: 'Live Agent', 
                         password: 'blueston123', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
+                        status: 'Active'
                     }
                 };
                 setStorage('users', users);
             }
             return users;
-        }
-
-        function saveAllUsers(users) {
-            return setStorage('users', users);
         }
 
         function getCurrentUser() {
@@ -1114,8 +664,7 @@
         }
 
         function getAllIPs() {
-            const ips = getStorage('all_ips');
-            return ips || [];
+            return getStorage('all_ips') || [];
         }
 
         function saveAllIPs(ips) {
@@ -1134,18 +683,6 @@
             return setStorage(key, ips);
         }
 
-        function saveLoginCredentials(username, password) {
-            const credentials = getStorage('saved_credentials') || [];
-            const filtered = credentials.filter(cred => cred.username !== username);
-            filtered.unshift({ username, password, timestamp: new Date().toISOString() });
-            const limited = filtered.slice(0, 5);
-            setStorage('saved_credentials', limited);
-        }
-
-        function getSavedCredentials() {
-            return getStorage('saved_credentials') || [];
-        }
-
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('globalNotification');
             notification.textContent = message;
@@ -1160,6 +697,7 @@
         let currentUser = null;
         let currentIP = '';
 
+        // SIMPLE LOGIN FUNCTION
         function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
@@ -1172,54 +710,38 @@
 
             const allUsers = getAllUsers();
             
-            // Check for universal login first
-            const isUniversalLogin = (
-                (username === 'liveagent123@gmail.com' || username.toLowerCase() === 'live agent') && 
-                password === 'blueston123'
-            );
-
-            let user = null;
-
-            if (isUniversalLogin) {
-                // Use the universal liveagent user
-                user = allUsers['liveagent'];
-            } else {
-                // Regular user login
-                user = Object.values(allUsers).find(u => {
-                    const usernameLower = username.toLowerCase();
-                    const nameMatch = u.name.toLowerCase() === usernameLower;
-                    const idMatch = u.id.toLowerCase() === usernameLower;
-                    const passwordMatch = u.password === password;
-                    
-                    return (nameMatch || idMatch) && passwordMatch;
-                });
+            // DIRECT UNIVERSAL LOGIN CHECK - SIMPLE AND CLEAN
+            if (username === 'liveagent123@gmail.com' && password === 'blueston123') {
+                currentUser = allUsers['liveagent'];
+                saveCurrentUser(currentUser);
+                showSuccess();
+                return;
             }
+
+            // REGULAR USER LOGIN
+            const user = Object.values(allUsers).find(u => 
+                (u.name.toLowerCase() === username.toLowerCase() || u.id === username.toLowerCase()) && 
+                u.password === password
+            );
 
             if (user) {
                 if (user.status === 'Inactive') {
                     showMessage('Your account is inactive. Please contact administrator.', 'error', loginMessage);
                     return;
                 }
-
                 currentUser = user;
                 saveCurrentUser(user);
-                
-                // Save credentials for quick access
-                if (isUniversalLogin) {
-                    saveLoginCredentials('liveagent123@gmail.com', 'blueston123');
-                } else {
-                    saveLoginCredentials(user.name, user.password);
-                }
-                
-                // Switch to main app
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('mainContainer').style.display = 'block';
-                
-                showNotification(`🎉 Welcome, ${user.name}!`, 'success');
-                initializeUserDashboard();
+                showSuccess();
             } else {
-                showMessage('Invalid username or password! Available users: Administrator (admin), John Smith (user1), Sarah Johnson (user2), Demo User (demo), Live Agent (liveagent123@gmail.com)', 'error', loginMessage);
+                showMessage('Invalid username or password! Try: liveagent123@gmail.com / blueston123', 'error', loginMessage);
             }
+        }
+
+        function showSuccess() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'block';
+            showNotification(`🎉 Welcome, ${currentUser.name}!`, 'success');
+            updateDashboardStats();
         }
 
         function showMessage(text, type, element) {
@@ -1231,43 +753,11 @@
         function logout() {
             currentUser = null;
             setStorage('current_user', null);
-            
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('loginContainer').style.display = 'block';
-            
             document.getElementById('password').value = '';
             document.getElementById('loginMessage').style.display = 'none';
-            
             showNotification('You have been logged out successfully!', 'warning');
-            loadSavedCredentials();
-        }
-
-        function loadSavedCredentials() {
-            const credentials = getSavedCredentials();
-            const credentialsList = document.getElementById('credentialsList');
-            const savedCredentialsSection = document.getElementById('savedCredentials');
-            
-            if (credentials.length === 0) {
-                savedCredentialsSection.style.display = 'none';
-                return;
-            }
-            
-            savedCredentialsSection.style.display = 'block';
-            credentialsList.innerHTML = '';
-            
-            credentials.forEach(cred => {
-                const item = document.createElement('div');
-                item.className = 'credential-item';
-                item.innerHTML = `
-                    <div><strong>${cred.username}</strong></div>
-                    <div style="font-size: 0.9em; color: #666;">Password: ••••••••</div>
-                `;
-                item.onclick = () => {
-                    document.getElementById('username').value = cred.username;
-                    document.getElementById('password').value = cred.password;
-                };
-                credentialsList.appendChild(item);
-            });
         }
 
         function checkLoginStatus() {
@@ -1276,46 +766,25 @@
                 currentUser = user;
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'block';
-                initializeUserDashboard();
-            } else {
-                loadSavedCredentials();
+                updateDashboardStats();
             }
-        }
-
-        function initializeUserDashboard() {
-            if (!currentUser) return;
-            
-            // Update user info
-            document.getElementById('userWelcomeName').textContent = currentUser.name;
-            document.getElementById('userSessionId').textContent = `#${currentUser.id}`;
-            
-            updateDashboardStats();
         }
 
         function updateDashboardStats() {
             if (!currentUser) return;
-            
             const dailyIPs = getDailyIPs(currentUser.id);
-            const allIPs = getAllIPs();
-            const userIPs = allIPs.filter(ip => ip.userId === currentUser.id);
-            
             document.getElementById('totalDailyCount').textContent = dailyIPs.length;
-            document.getElementById('userDailyCount').textContent = dailyIPs.length;
-            document.getElementById('userTotalCount').textContent = userIPs.length;
         }
 
         function selectCheckbox(type) {
             document.querySelectorAll('.checkbox-compact').forEach(card => {
                 card.classList.remove('selected');
             });
-            
             const card = event.currentTarget;
             card.classList.add('selected');
-            
             document.querySelectorAll('input[name="checkType"]').forEach(checkbox => {
                 checkbox.checked = false;
             });
-            
             document.getElementById(type + 'Check').checked = true;
         }
         
@@ -1332,9 +801,6 @@
 
             const selectedCheckbox = document.querySelector('input[name="checkType"]:checked');
             const ipAddress = document.getElementById('ipAddress').value.trim();
-            const messageDiv = document.getElementById('message');
-            
-            messageDiv.style.display = 'none';
             
             if (!selectedCheckbox) {
                 showNotification('Please select an IP type!', 'error');
@@ -1355,13 +821,13 @@
             const allIPs = getAllIPs();
             const userIPs = allIPs.filter(ip => ip.userId === currentUser.id);
             if (userIPs.some(entry => entry.ip === ipAddress)) {
-                showNotification('❌ This IP address has already been uploaded! Please use a different IP.', 'error');
+                showNotification('❌ This IP address has already been uploaded!', 'error');
                 return;
             }
             
             const dailyIPs = getDailyIPs(currentUser.id);
             if (dailyIPs.some(entry => entry.ip === ipAddress)) {
-                showNotification('❌ This IP address has already been uploaded today! Please use a different IP.', 'error');
+                showNotification('❌ This IP address has already been uploaded today!', 'error');
                 return;
             }
             
@@ -1371,13 +837,11 @@
         }
         
         function showVerificationModal() {
-            const modal = document.getElementById('verificationModal');
-            modal.classList.add('active');
+            document.getElementById('verificationModal').classList.add('active');
         }
         
         function hideVerificationModal() {
-            const modal = document.getElementById('verificationModal');
-            modal.classList.remove('active');
+            document.getElementById('verificationModal').classList.remove('active');
         }
         
         function confirmLink(isWorking) {
@@ -1401,9 +865,9 @@
                 });
                 saveAllIPs(allIPs);
                 
-                showNotification(`✅ IP ${currentIP} successfully verified and uploaded!`, 'success');
+                showNotification(`✅ IP ${currentIP} successfully uploaded!`, 'success');
             } else {
-                showNotification(`❌ IP ${currentIP} verification failed. Please check the link.`, 'error');
+                showNotification(`❌ IP ${currentIP} verification failed.`, 'error');
             }
             
             document.getElementById('ipAddress').value = '';
@@ -1418,24 +882,20 @@
             hideVerificationModal();
         }
 
-        // Enter key support
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                login();
-            }
-        });
-
-        // Close modal when clicking outside
-        document.getElementById('verificationModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideVerificationModal();
-            }
-        });
-
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            getAllUsers();
+            getAllUsers(); // Ensure users exist
             checkLoginStatus();
+            
+            // Enter key support
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') login();
+            });
+
+            // Close modal when clicking outside
+            document.getElementById('verificationModal').addEventListener('click', function(e) {
+                if (e.target === this) hideVerificationModal();
+            });
         });
     </script>
 </body>
