@@ -37,18 +37,6 @@
             border-radius: 20px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             display: block;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
         .login-form {
@@ -59,9 +47,6 @@
             margin-bottom: 30px;
             color: var(--dark);
             font-size: 2.2rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .form-group {
@@ -82,34 +67,18 @@
             border: 2px solid #E9ECEF;
             border-radius: 12px;
             font-size: 1rem;
-            transition: all 0.3s;
-            background: var(--light);
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(46, 134, 171, 0.1);
-            background: white;
         }
 
         .login-btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 8px 25px rgba(46, 134, 171, 0.3);
-        }
-
-        .login-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(46, 134, 171, 0.4);
         }
 
         .admin-container {
@@ -118,7 +87,6 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-            overflow: hidden;
             display: none;
         }
 
@@ -138,34 +106,24 @@
         .admin-nav {
             background: var(--light);
             padding: 0 30px;
-            border-bottom: 1px solid #dee2e6;
         }
 
         .nav-tabs {
             display: flex;
             list-style: none;
-            margin: 0;
-            padding: 0;
         }
 
         .nav-tab {
             padding: 20px 30px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
-            transition: all 0.3s;
             font-weight: 600;
-            color: var(--dark);
         }
 
         .nav-tab.active {
             border-bottom-color: var(--primary);
             color: var(--primary);
             background: white;
-        }
-
-        .nav-tab:hover {
-            background: white;
-            color: var(--primary);
         }
 
         .tab-content {
@@ -182,7 +140,6 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             padding: 30px;
-            background: var(--light);
         }
 
         .stat-card {
@@ -198,34 +155,6 @@
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--primary);
-            display: block;
-        }
-
-        .stat-label {
-            color: var(--dark);
-            font-size: 1.1rem;
-            margin-top: 10px;
-        }
-
-        .data-section {
-            padding: 30px;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            color: var(--dark);
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--light);
-            padding-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .section-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
         }
 
         .data-table {
@@ -244,11 +173,6 @@
         .data-table th {
             background: var(--light);
             font-weight: 600;
-            color: var(--dark);
-        }
-
-        .data-table tr:hover {
-            background: #f8f9fa;
         }
 
         .btn {
@@ -257,15 +181,6 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 0.9rem;
         }
 
         .btn-primary {
@@ -273,101 +188,22 @@
             color: white;
         }
 
-        .btn-primary:hover {
-            background: #267191;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #168B7D;
-        }
-
         .btn-danger {
             background: var(--danger);
             color: white;
-        }
-
-        .btn-danger:hover {
-            background: #C81E4A;
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            color: var(--dark);
-        }
-
-        .btn-warning:hover {
-            background: #E3552B;
         }
 
         .logout-btn {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: linear-gradient(135deg, var(--danger), #C81E4A);
+            background: var(--danger);
             color: white;
             border: none;
             padding: 12px 24px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(215, 38, 61, 0.3);
-            transition: all 0.3s;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(215, 38, 61, 0.4);
-        }
-
-        .bulk-actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .storage-info {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .storage-bar {
-            width: 100%;
-            height: 20px;
-            background: #dee2e6;
-            border-radius: 10px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-
-        .storage-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--success), var(--primary));
-            transition: width 0.3s;
-        }
-
-        .search-box {
-            max-width: 400px;
-            margin-bottom: 20px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 1rem;
         }
 
         .user-form {
@@ -384,102 +220,12 @@
             margin-bottom: 15px;
         }
 
-        .status-active {
-            color: #28a745;
-            font-weight: 600;
-        }
-
-        .status-inactive {
-            color: #dc3545;
-            font-weight: 600;
-        }
-
-        .user-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .user-link:hover {
-            text-decoration: underline;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 20px 30px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            z-index: 1001;
-            display: none;
-            animation: slideDown 0.3s ease;
-            min-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .notification.success {
-            background: #d4edda;
-            color: #155724;
-            border: 2px solid #c3e6cb;
-        }
-
-        .notification.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 2px solid #f5c6cb;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .data-table {
-                font-size: 0.9rem;
-            }
-            
-            .admin-header h1 {
-                font-size: 2rem;
-            }
-            
-            .bulk-actions {
-                flex-direction: column;
-            }
-            
-            .section-title {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
-            
             .nav-tabs {
                 flex-direction: column;
-            }
-            
-            .nav-tab {
-                padding: 15px 20px;
-                border-bottom: 1px solid #dee2e6;
-                border-left: 3px solid transparent;
-            }
-            
-            .nav-tab.active {
-                border-left-color: var(--primary);
-                border-bottom-color: #dee2e6;
             }
         }
     </style>
@@ -512,98 +258,40 @@
 
         <div class="admin-nav">
             <ul class="nav-tabs">
-                <li class="nav-tab active" onclick="switchTab('dashboard')">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </li>
-                <li class="nav-tab" onclick="switchTab('users')">
-                    <i class="fas fa-users"></i> User Management
-                </li>
-                <li class="nav-tab" onclick="switchTab('ips')">
-                    <i class="fas fa-network-wired"></i> IP Management
-                </li>
-                <li class="nav-tab" onclick="switchTab('reports')">
-                    <i class="fas fa-chart-bar"></i> Reports
-                </li>
+                <li class="nav-tab active" onclick="switchTab('dashboard')">Dashboard</li>
+                <li class="nav-tab" onclick="switchTab('users')">User Management</li>
+                <li class="nav-tab" onclick="switchTab('ips')">IP Management</li>
             </ul>
         </div>
 
         <!-- Dashboard Tab -->
         <div id="dashboard-tab" class="tab-content active">
-            <div class="storage-info">
-                <h3>Storage Information</h3>
-                <div class="storage-bar">
-                    <div class="storage-fill" id="storageFill"></div>
-                </div>
-                <p>Stored IPs: <span id="storageCount">0</span> / 100,000,000</p>
-            </div>
-
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-number" id="todayCount">0</span>
-                    <span class="stat-label">Today's IPs</span>
+                    <div class="stat-number" id="todayCount">0</div>
+                    <div class="stat-label">Today's IPs</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number" id="totalCount">0</span>
-                    <span class="stat-label">Total IPs</span>
+                    <div class="stat-number" id="totalCount">0</div>
+                    <div class="stat-label">Total IPs</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number" id="totalUsers">0</span>
-                    <span class="stat-label">Total Users</span>
+                    <div class="stat-number" id="totalUsers">0</div>
+                    <div class="stat-label">Total Users</div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="activeUsers">0</span>
-                    <span class="stat-label">Active Users</span>
-                </div>
-            </div>
-
-            <div class="data-section">
-                <h3 class="section-title">
-                    <span><i class="fas fa-history"></i> Recent Activity</span>
-                </h3>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>IP Address</th>
-                            <th>Type</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recentActivityTable">
-                        <!-- Data will be populated here -->
-                    </tbody>
-                </table>
             </div>
         </div>
 
         <!-- User Management Tab -->
         <div id="users-tab" class="tab-content">
             <div class="user-form">
-                <h3><i class="fas fa-user-plus"></i> Create New User</h3>
+                <h3>Create New User</h3>
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>User ID</label>
-                        <input type="text" id="newUserId" placeholder="Enter unique user ID">
-                    </div>
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" id="newUserName" placeholder="Enter username">
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="newUserPassword" placeholder="Enter password">
-                    </div>
+                    <input type="text" id="newUserId" placeholder="User ID">
+                    <input type="text" id="newUserName" placeholder="Username">
+                    <input type="password" id="newUserPassword" placeholder="Password">
                 </div>
-                <button class="btn btn-success" onclick="createUser()">
-                    <i class="fas fa-plus"></i> Create User
-                </button>
-            </div>
-
-            <div class="section-title">
-                <span><i class="fas fa-users"></i> User Accounts</span>
-                <div class="search-box">
-                    <input type="text" id="userSearch" placeholder="Search users by name or ID..." onkeyup="searchUsers()">
-                </div>
+                <button class="btn btn-primary" onclick="createUser()">Create User</button>
             </div>
 
             <table class="data-table">
@@ -611,30 +299,17 @@
                     <tr>
                         <th>User ID</th>
                         <th>Username</th>
-                        <th>Status</th>
-                        <th>Created Date</th>
-                        <th>Today's Count</th>
-                        <th>Total IPs</th>
-                        <th>Login Details</th>
+                        <th>Password</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="usersTable">
-                    <!-- Data will be populated here -->
                 </tbody>
             </table>
         </div>
 
         <!-- IP Management Tab -->
         <div id="ips-tab" class="tab-content">
-            <div class="section-title">
-                <span><i class="fas fa-network-wired"></i> All IPs Storage</span>
-                <div class="bulk-actions">
-                    <button class="btn btn-danger" onclick="clearAllIPs()">
-                        <i class="fas fa-bomb"></i> Clear All IPs
-                    </button>
-                </div>
-            </div>
             <table class="data-table">
                 <thead>
                     <tr>
@@ -642,78 +317,16 @@
                         <th>User</th>
                         <th>Type</th>
                         <th>Date</th>
-                        <th>Time</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="allIPsTable">
-                    <!-- Data will be populated here -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Reports Tab -->
-        <div id="reports-tab" class="tab-content">
-            <div class="section-title">
-                <span><i class="fas fa-chart-bar"></i> Daily Summary</span>
-            </div>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Total IPs</th>
-                        <th>Session</th>
-                        <th>Search</th>
-                        <th>Click</th>
-                        <th>Active Users</th>
-                    </tr>
-                </thead>
-                <tbody id="reportsTable">
-                    <!-- Data will be populated here -->
                 </tbody>
             </table>
         </div>
     </div>
-
-    <!-- User Edit Modal -->
-    <div id="userEditModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%;">
-            <h3 style="margin-bottom: 20px;"><i class="fas fa-edit"></i> Edit User</h3>
-            <div class="form-group">
-                <label>User ID</label>
-                <input type="text" id="editUserId" readonly style="background: #f8f9fa;">
-            </div>
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="editUserName">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="editUserPassword" placeholder="Leave blank to keep current">
-            </div>
-            <div class="form-group">
-                <label>Status</label>
-                <select id="editUserStatus" style="width: 100%; padding: 12px 15px; border: 2px solid #dee2e6; border-radius: 8px;">
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="btn btn-success" onclick="saveUserChanges()" style="flex: 1;">
-                    <i class="fas fa-save"></i> Save Changes
-                </button>
-                <button class="btn btn-danger" onclick="closeEditModal()" style="flex: 1;">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Global Notification -->
-    <div id="globalNotification" class="notification"></div>
 
     <script>
-        // SIMPLE AND RELIABLE STORAGE SYSTEM - SAME AS USER PANEL
+        // SIMPLE STORAGE - SAME AS USER PANEL
         const STORAGE_PREFIX = 'ipv_';
         
         function getStorage(key) {
@@ -722,7 +335,6 @@
                 const item = localStorage.getItem(fullKey);
                 return item ? JSON.parse(item) : null;
             } catch (e) {
-                console.error('Storage read error:', e);
                 return null;
             }
         }
@@ -733,59 +345,12 @@
                 localStorage.setItem(fullKey, JSON.stringify(value));
                 return true;
             } catch (e) {
-                console.error('Storage write error:', e);
                 return false;
             }
         }
 
         function getAllUsers() {
-            let users = getStorage('users');
-            if (!users || typeof users !== 'object') {
-                users = {
-                    'admin': { 
-                        id: 'admin', 
-                        name: 'Administrator', 
-                        password: 'admin123', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'admin'
-                    },
-                    'user1': { 
-                        id: 'user1', 
-                        name: 'John Smith', 
-                        password: 'password1', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
-                    },
-                    'user2': { 
-                        id: 'user2', 
-                        name: 'Sarah Johnson', 
-                        password: 'password2', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
-                    },
-                    'demo': { 
-                        id: 'demo', 
-                        name: 'Demo User', 
-                        password: 'demo123', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
-                    },
-                    'liveagent': { 
-                        id: 'liveagent', 
-                        name: 'Live Agent', 
-                        password: 'blueston123', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
-                    }
-                };
-                setStorage('users', users);
-            }
-            return users;
+            return getStorage('users') || {};
         }
 
         function saveAllUsers(users) {
@@ -793,41 +358,15 @@
         }
 
         function getAllIPs() {
-            const ips = getStorage('all_ips');
-            return ips || [];
+            return getStorage('all_ips') || [];
         }
-
-        function saveAllIPs(ips) {
-            return setStorage('all_ips', ips);
-        }
-
-        function getDailyIPs(userId) {
-            const today = new Date().toDateString();
-            const key = `daily_${userId}_${today}`;
-            return getStorage(key) || [];
-        }
-
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('globalNotification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 5000);
-        }
-
-        const ADMIN_PASSWORD = "admin123";
-        let currentEditingUser = null;
 
         function login() {
             const password = document.getElementById('adminPassword').value;
-            if (password === ADMIN_PASSWORD) {
+            if (password === "admin123") {
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('adminContainer').style.display = 'block';
                 loadAdminData();
-                showNotification('Admin login successful!', 'success');
             } else {
                 alert('Invalid password! Use: admin123');
             }
@@ -836,8 +375,6 @@
         function logout() {
             document.getElementById('loginContainer').style.display = 'block';
             document.getElementById('adminContainer').style.display = 'none';
-            document.getElementById('adminPassword').value = '';
-            showNotification('Admin logged out successfully!', 'warning');
         }
 
         function switchTab(tabName) {
@@ -851,22 +388,8 @@
             document.getElementById(tabName + '-tab').classList.add('active');
             event.currentTarget.classList.add('active');
 
-            if (tabName === 'users') {
-                loadUsersData();
-            } else if (tabName === 'ips') {
-                loadIPsData();
-            } else if (tabName === 'reports') {
-                loadReportsData();
-            }
-        }
-
-        function updateStorageInfo() {
-            const allIPs = getAllIPs();
-            const storageCount = allIPs.length;
-            const storagePercentage = Math.min((storageCount / 100000000) * 100, 100);
-            
-            document.getElementById('storageCount').textContent = storageCount.toLocaleString();
-            document.getElementById('storageFill').style.width = `${storagePercentage}%`;
+            if (tabName === 'users') loadUsersData();
+            if (tabName === 'ips') loadIPsData();
         }
 
         function loadAdminData() {
@@ -874,75 +397,31 @@
             const users = getAllUsers();
             
             let todayCount = 0;
-            let totalUsers = Object.keys(users).length;
-            let activeUsers = 0;
+            const today = new Date().toDateString();
 
             Object.values(users).forEach(user => {
-                if (user.status === 'Active') activeUsers++;
-                const dailyIPs = getDailyIPs(user.id);
+                const dailyIPs = getStorage(`daily_${user.id}_${today}`) || [];
                 todayCount += dailyIPs.length;
             });
 
             document.getElementById('todayCount').textContent = todayCount;
             document.getElementById('totalCount').textContent = allIPs.length;
-            document.getElementById('totalUsers').textContent = totalUsers;
-            document.getElementById('activeUsers').textContent = activeUsers;
-            
-            updateStorageInfo();
-            loadRecentActivity();
-        }
-
-        function loadRecentActivity() {
-            const allIPs = getAllIPs();
-            const recentTable = document.getElementById('recentActivityTable');
-            recentTable.innerHTML = '';
-            
-            const recentIPs = allIPs.slice(-10).reverse();
-            
-            recentIPs.forEach(entry => {
-                const row = document.createElement('tr');
-                const date = new Date(entry.timestamp);
-                row.innerHTML = `
-                    <td>${entry.userName || entry.userId}</td>
-                    <td>${entry.ip}</td>
-                    <td>${entry.type}</td>
-                    <td>${date.toLocaleString()}</td>
-                `;
-                recentTable.appendChild(row);
-            });
+            document.getElementById('totalUsers').textContent = Object.keys(users).length;
         }
 
         function loadUsersData() {
             const users = getAllUsers();
-            const allIPs = getAllIPs();
             const usersTable = document.getElementById('usersTable');
             usersTable.innerHTML = '';
 
             Object.values(users).forEach(user => {
-                const userIPs = allIPs.filter(ip => ip.userId === user.id);
-                const todayData = getDailyIPs(user.id);
-
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${user.id}</td>
                     <td>${user.name}</td>
-                    <td class="${user.status === 'Active' ? 'status-active' : 'status-inactive'}">
-                        ${user.status}
-                    </td>
-                    <td>${new Date(user.created).toLocaleDateString()}</td>
-                    <td>${todayData.length}</td>
-                    <td>${userIPs.length}</td>
+                    <td>${user.password}</td>
                     <td>
-                        <strong>Username:</strong> ${user.name}<br>
-                        <strong>Password:</strong> ${user.password}
-                    </td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" onclick="editUser('${user.id}')">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteUser('${user.id}')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                        <button class="btn btn-danger" onclick="deleteUser('${user.id}')">Delete</button>
                     </td>
                 `;
                 usersTable.appendChild(row);
@@ -955,126 +434,43 @@
             const password = document.getElementById('newUserPassword').value.trim();
 
             if (!userId || !userName || !password) {
-                showNotification('Please fill all fields!', 'error');
+                alert('Please fill all fields!');
                 return;
             }
 
             const users = getAllUsers();
             
             if (users[userId]) {
-                showNotification('User ID already exists! Please choose a different User ID.', 'error');
+                alert('User ID already exists!');
                 return;
             }
 
-            const usernameExists = Object.values(users).some(user => 
-                user.name.toLowerCase() === userName.toLowerCase()
-            );
-            
-            if (usernameExists) {
-                showNotification('Username already exists! Please choose a different username.', 'error');
-                return;
-            }
-
-            // Create new user
             users[userId] = {
                 id: userId,
                 name: userName,
                 password: password,
-                status: 'Active',
-                created: new Date().toISOString(),
-                role: 'user'
+                status: 'Active'
             };
 
-            const saved = saveAllUsers(users);
-            
-            if (saved) {
-                document.getElementById('newUserId').value = '';
-                document.getElementById('newUserName').value = '';
-                document.getElementById('newUserPassword').value = '';
-                
-                loadUsersData();
-                showNotification(`User "${userName}" created successfully! Login details: Username: ${userName}, Password: ${password}`, 'success');
-            } else {
-                showNotification('Error saving user! Please try again.', 'error');
-            }
-        }
-
-        function searchUsers() {
-            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
-            const rows = document.getElementById('usersTable').getElementsByTagName('tr');
-            
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                let found = false;
-                
-                for (let j = 0; j < cells.length; j++) {
-                    if (cells[j].textContent.toLowerCase().includes(searchTerm)) {
-                        found = true;
-                        break;
-                    }
-                }
-                
-                rows[i].style.display = found ? '' : 'none';
-            }
-        }
-
-        function editUser(userId) {
-            const users = getAllUsers();
-            const user = users[userId];
-            
-            if (!user) return;
-            
-            currentEditingUser = userId;
-            document.getElementById('editUserId').value = user.id;
-            document.getElementById('editUserName').value = user.name;
-            document.getElementById('editUserStatus').value = user.status;
-            document.getElementById('editUserPassword').value = '';
-            
-            document.getElementById('userEditModal').style.display = 'flex';
-        }
-
-        function closeEditModal() {
-            document.getElementById('userEditModal').style.display = 'none';
-            currentEditingUser = null;
-        }
-
-        function saveUserChanges() {
-            if (!currentEditingUser) return;
-            
-            const users = getAllUsers();
-            const user = users[currentEditingUser];
-            
-            user.name = document.getElementById('editUserName').value;
-            user.status = document.getElementById('editUserStatus').value;
-            
-            const newPassword = document.getElementById('editUserPassword').value;
-            if (newPassword) {
-                user.password = newPassword;
-            }
-            
             saveAllUsers(users);
-            closeEditModal();
+            document.getElementById('newUserId').value = '';
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserPassword').value = '';
             loadUsersData();
-            showNotification('User updated successfully!', 'success');
+            alert('User created successfully!');
         }
 
         function deleteUser(userId) {
             if (userId === 'admin') {
-                showNotification('Cannot delete admin user!', 'error');
+                alert('Cannot delete admin user!');
                 return;
             }
 
-            if (confirm(`Are you sure you want to delete user ${userId}? This will also delete all their IP records!`)) {
+            if (confirm('Delete this user?')) {
                 const users = getAllUsers();
                 delete users[userId];
                 saveAllUsers(users);
-                
-                const allIPs = getAllIPs();
-                const updatedIPs = allIPs.filter(ip => ip.userId !== userId);
-                saveAllIPs(updatedIPs);
-                
                 loadUsersData();
-                showNotification('User deleted successfully!', 'success');
             }
         }
 
@@ -1083,105 +479,25 @@
             const allIPsTable = document.getElementById('allIPsTable');
             allIPsTable.innerHTML = '';
             
-            const recentIPs = allIPs.slice(-100).reverse();
-            
-            recentIPs.forEach(entry => {
+            allIPs.slice(-50).reverse().forEach(entry => {
                 const row = document.createElement('tr');
                 const date = new Date(entry.timestamp);
                 row.innerHTML = `
                     <td>${entry.ip}</td>
                     <td>${entry.userName || entry.userId}</td>
                     <td>${entry.type}</td>
-                    <td>${date.toLocaleDateString()}</td>
-                    <td>${date.toLocaleTimeString()}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="deleteStoredIP('${entry.ip}', '${entry.userId}')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </td>
+                    <td>${date.toLocaleString()}</td>
                 `;
                 allIPsTable.appendChild(row);
             });
         }
 
-        function deleteStoredIP(ip, userId) {
-            if (confirm('Are you sure you want to delete this IP?')) {
-                const allIPs = getAllIPs();
-                const updatedIPs = allIPs.filter(entry => !(entry.ip === ip && entry.userId === userId));
-                saveAllIPs(updatedIPs);
-                loadIPsData();
-                showNotification('IP deleted successfully!', 'success');
-            }
-        }
-
-        function clearAllIPs() {
-            if (confirm('⚠️ WARNING: This will delete ALL stored IPs permanently. This action cannot be undone!\n\nAre you absolutely sure?')) {
-                saveAllIPs([]);
-                loadIPsData();
-                showNotification('All IPs have been cleared successfully!', 'success');
-            }
-        }
-
-        function loadReportsData() {
-            const allIPs = getAllIPs();
-            const reportsTable = document.getElementById('reportsTable');
-            reportsTable.innerHTML = '';
-
-            const dateGroups = {};
-            allIPs.forEach(entry => {
-                const date = new Date(entry.timestamp).toDateString();
-                if (!dateGroups[date]) {
-                    dateGroups[date] = {
-                        session: 0,
-                        search: 0,
-                        click: 0,
-                        users: new Set()
-                    };
-                }
-                dateGroups[date].users.add(entry.userId);
-                if (entry.type === 'session') dateGroups[date].session++;
-                if (entry.type === 'search') dateGroups[date].search++;
-                if (entry.type === 'click') dateGroups[date].click++;
-            });
-
-            const sortedDates = Object.keys(dateGroups).sort((a, b) => new Date(b) - new Date(a));
-
-            sortedDates.forEach(date => {
-                const data = dateGroups[date];
-                const total = data.session + data.search + data.click;
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${date}</td>
-                    <td>${total}</td>
-                    <td>${data.session}</td>
-                    <td>${data.search}</td>
-                    <td>${data.click}</td>
-                    <td>${data.users.size}</td>
-                `;
-                reportsTable.appendChild(row);
-            });
-        }
-
-        // Auto-refresh data
+        // Auto-refresh
         setInterval(() => {
             if (document.getElementById('adminContainer').style.display === 'block') {
                 loadAdminData();
             }
-        }, 30000);
-
-        // Close modal when clicking outside
-        document.getElementById('userEditModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeEditModal();
-            }
-        });
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ensure users exist
-            getAllUsers();
-        });
+        }, 10000);
     </script>
 </body>
 </html>
