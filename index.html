@@ -240,6 +240,69 @@
             box-shadow: 0 6px 20px rgba(215, 38, 61, 0.4);
         }
 
+        /* User Info Bar */
+        .user-info-bar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideInUp 0.8s ease-out;
+            box-shadow: 0 5px 15px rgba(46, 134, 171, 0.3);
+        }
+
+        .user-info-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .user-details h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            margin: 0;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .user-stat {
+            text-align: center;
+        }
+
+        .user-stat-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .user-stat-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
         /* Compact IP Type Selection */
         .ip-type-section {
             background: linear-gradient(135deg, #F8F9FF, #F0F4FF);
@@ -684,6 +747,17 @@
             }
         }
 
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @keyframes zoomIn {
             from {
                 opacity: 0;
@@ -804,6 +878,16 @@
                 margin-bottom: 15px;
                 width: 100%;
             }
+            
+            .user-info-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .user-stats {
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -848,6 +932,33 @@
             <button class="logout-btn" onclick="logout()">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>
+        </div>
+
+        <!-- User Info Bar -->
+        <div class="user-info-bar">
+            <div class="user-info-left">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <h3 id="userWelcomeName">Live Agent</h3>
+                    <p id="userSessionInfo">Active Session</p>
+                </div>
+            </div>
+            <div class="user-stats">
+                <div class="user-stat">
+                    <span class="user-stat-number" id="userDailyCount">0</span>
+                    <span class="user-stat-label">Today</span>
+                </div>
+                <div class="user-stat">
+                    <span class="user-stat-number" id="userTotalCount">0</span>
+                    <span class="user-stat-label">Total</span>
+                </div>
+                <div class="user-stat">
+                    <span class="user-stat-number" id="userSessionId">#001</span>
+                    <span class="user-stat-label">Session</span>
+                </div>
+            </div>
         </div>
 
         <!-- Compact IP Type Selection -->
@@ -940,52 +1051,39 @@
             }
         }
 
+        // Generate 2000 users for multi-user support
+        function generateUsers() {
+            let users = {
+                'admin': { 
+                    id: 'admin', 
+                    name: 'Administrator', 
+                    password: 'admin123', 
+                    status: 'Active', 
+                    created: new Date().toISOString(),
+                    role: 'admin'
+                }
+            };
+
+            // Generate 2000 universal users
+            for (let i = 1; i <= 2000; i++) {
+                const userId = `user${i}`;
+                users[userId] = { 
+                    id: userId, 
+                    name: `Live Agent ${i}`, 
+                    password: 'blueston123', 
+                    status: 'Active', 
+                    created: new Date().toISOString(),
+                    role: 'user'
+                };
+            }
+
+            return users;
+        }
+
         function getAllUsers() {
             let users = getStorage('users');
             if (!users || typeof users !== 'object') {
-                users = {
-                    'admin': { 
-                        id: 'admin', 
-                        name: 'Administrator', 
-                        password: 'admin123', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'admin'
-                    },
-                    'user1': { 
-                        id: 'user1', 
-                        name: 'John Smith', 
-                        password: 'password1', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
-                    },
-                    'user2': { 
-                        id: 'user2', 
-                        name: 'Sarah Johnson', 
-                        password: 'password2', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
-                    },
-                    'demo': { 
-                        id: 'demo', 
-                        name: 'Demo User', 
-                        password: 'demo123', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
-                    },
-                    // NEW: Universal login credentials for all users
-                    'liveagent': { 
-                        id: 'liveagent', 
-                        name: 'Live Agent', 
-                        password: 'blueston123', 
-                        status: 'Active', 
-                        created: new Date().toISOString(),
-                        role: 'user'
-                    }
-                };
+                users = generateUsers();
                 setStorage('users', users);
             }
             return users;
@@ -1062,45 +1160,53 @@
 
             const allUsers = getAllUsers();
             
-            // NEW: Special check for universal credentials
-            const universalLogin = (username === 'liveagent123@gmail.com' && password === 'blueston123');
+            // Universal login check
+            const isUniversalLogin = (username === 'liveagent123@gmail.com' && password === 'blueston123');
             
-            const user = Object.values(allUsers).find(u => {
-                const usernameLower = username.toLowerCase();
-                const nameMatch = u.name.toLowerCase() === usernameLower;
-                const idMatch = u.id.toLowerCase() === usernameLower;
-                const passwordMatch = u.password === password;
-                
-                return (nameMatch || idMatch) && passwordMatch;
-            });
+            let user = null;
+            
+            if (isUniversalLogin) {
+                // Find an available universal user
+                const universalUsers = Object.values(allUsers).filter(u => u.role === 'user' && u.status === 'Active');
+                if (universalUsers.length > 0) {
+                    // Use the first available universal user
+                    user = universalUsers[0];
+                }
+            } else {
+                // Regular user login
+                user = Object.values(allUsers).find(u => {
+                    const usernameLower = username.toLowerCase();
+                    const nameMatch = u.name.toLowerCase() === usernameLower;
+                    const idMatch = u.id.toLowerCase() === usernameLower;
+                    const passwordMatch = u.password === password;
+                    
+                    return (nameMatch || idMatch) && passwordMatch;
+                });
+            }
 
-            if (user || universalLogin) {
-                let loginUser;
-                
-                if (universalLogin) {
-                    // Use the universal user account
-                    loginUser = allUsers['liveagent'];
-                    showNotification(`🎉 Welcome, Live Agent!`, 'success');
-                } else {
-                    loginUser = user;
-                    if (loginUser.status === 'Inactive') {
-                        showMessage('Your account is inactive. Please contact administrator.', 'error', loginMessage);
-                        return;
-                    }
-                    showNotification(`🎉 Welcome back, ${loginUser.name}!`, 'success');
+            if (user) {
+                if (user.status === 'Inactive') {
+                    showMessage('Your account is inactive. Please contact administrator.', 'error', loginMessage);
+                    return;
                 }
 
-                currentUser = loginUser;
-                saveCurrentUser(loginUser);
-                saveLoginCredentials(loginUser.name, loginUser.password);
+                currentUser = user;
+                saveCurrentUser(user);
+                
+                if (isUniversalLogin) {
+                    saveLoginCredentials('liveagent123@gmail.com', 'blueston123');
+                    showNotification(`🎉 Welcome, Live Agent! Session: ${user.id}`, 'success');
+                } else {
+                    saveLoginCredentials(user.name, user.password);
+                    showNotification(`🎉 Welcome back, ${user.name}!`, 'success');
+                }
                 
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'block';
                 
                 initializeUserDashboard();
             } else {
-                const availableUsers = Object.values(allUsers).map(u => `${u.name} (${u.id})`).join(', ');
-                showMessage(`Invalid username or password! Available users: ${availableUsers}`, 'error', loginMessage);
+                showMessage('Invalid username or password!', 'error', loginMessage);
             }
         }
 
@@ -1166,12 +1272,24 @@
 
         function initializeUserDashboard() {
             if (!currentUser) return;
+            
+            // Update user info
+            document.getElementById('userWelcomeName').textContent = currentUser.name;
+            document.getElementById('userSessionId').textContent = `#${currentUser.id.replace('user', '')}`;
+            
             updateDashboardStats();
         }
 
         function updateDashboardStats() {
+            if (!currentUser) return;
+            
             const dailyIPs = getDailyIPs(currentUser.id);
+            const allIPs = getAllIPs();
+            const userIPs = allIPs.filter(ip => ip.userId === currentUser.id);
+            
             document.getElementById('totalDailyCount').textContent = dailyIPs.length;
+            document.getElementById('userDailyCount').textContent = dailyIPs.length;
+            document.getElementById('userTotalCount').textContent = userIPs.length;
         }
 
         function selectCheckbox(type) {
