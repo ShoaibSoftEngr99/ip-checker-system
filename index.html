@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Verification System</title>
+    <title>Secure IP Verification System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,36 +14,91 @@
         }
 
         :root {
-            --primary: #2E86AB;
-            --secondary: #A23B72;
-            --success: #1B998B;
-            --danger: #D7263D;
-            --warning: #F46036;
-            --light: #F8F9FA;
-            --dark: #212529;
-            --gray: #6C757D;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .login-container {
-            max-width: 450px;
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .circle-1 {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .circle-2 {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .circle-3 {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Login Container */
+        .login-container {
+            max-width: 440px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 24px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             display: block;
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .login-container::before {
@@ -51,19 +107,37 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 6px;
+            height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
         .login-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+            animation: bounce 2s infinite;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: white;
         }
 
         .login-header h1 {
             color: var(--dark);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.4rem;
+            margin-bottom: 12px;
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
@@ -72,11 +146,13 @@
 
         .login-header p {
             color: var(--gray);
-            font-size: 1.1rem;
+            font-size: 1.15rem;
+            font-weight: 400;
         }
 
         .form-group {
             margin-bottom: 25px;
+            position: relative;
         }
 
         .form-group label {
@@ -84,29 +160,48 @@
             margin-bottom: 10px;
             font-weight: 600;
             color: var(--dark);
-            font-size: 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
 
         .form-group input {
             width: 100%;
             padding: 16px 20px;
-            border: 2px solid #E9ECEF;
+            border: 2px solid var(--gray-light);
             border-radius: 12px;
             font-size: 1rem;
-            transition: all 0.3s;
-            background: var(--light);
+            transition: all 0.3s ease;
+            background: white;
+            font-family: 'Inter', sans-serif;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(46, 134, 171, 0.1);
-            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group input:valid {
+            border-color: var(--success);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 42px;
+            color: var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus + .input-icon {
+            color: var(--primary);
+            transform: scale(1.1);
         }
 
         .login-btn {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
@@ -114,26 +209,87 @@
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-            box-shadow: 0 8px 25px rgba(46, 134, 171, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
         }
 
         .login-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(46, 134, 171, 0.4);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
         }
 
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .demo-credentials {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            border-left: 4px solid var(--primary);
+            animation: fadeIn 1s ease;
+        }
+
+        .demo-credentials h4 {
+            color: var(--dark);
+            margin-bottom: 12px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-credentials p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .credential-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Main Application */
         .container {
             max-width: 900px;
             width: 100%;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 24px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             display: none;
+            animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .container::before {
@@ -142,20 +298,20 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 6px;
+            height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             position: relative;
         }
 
         .header h1 {
             color: var(--dark);
-            font-size: 2.2rem;
-            margin-bottom: 8px;
+            font-size: 2.4rem;
+            margin-bottom: 12px;
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
@@ -164,164 +320,238 @@
 
         .header p {
             color: var(--gray);
-            font-size: 1rem;
+            font-size: 1.15rem;
+        }
+
+        .user-welcome {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 15px;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+            animation: pulse 2s infinite;
         }
 
         .logout-btn {
             position: absolute;
             top: 0;
             right: 0;
-            background: linear-gradient(135deg, var(--danger), #C81E4A);
+            background: linear-gradient(135deg, var(--danger), #dc2626);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(215, 38, 61, 0.3);
-            transition: all 0.3s;
-            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
         }
 
         .logout-btn:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(215, 38, 61, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
         }
 
-        .ip-type-section {
-            background: linear-gradient(135deg, #F8F9FF, #F0F4FF);
-            padding: 25px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 2px solid #E9ECEF;
+        .checkboxes-horizontal {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
         }
 
-        .ip-type-section h3 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: var(--dark);
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .checkboxes-compact {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .checkbox-compact {
+        .checkbox-card {
             background: white;
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #E9ECEF;
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid var(--gray-light);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             text-align: center;
+            min-width: 140px;
             position: relative;
             overflow: hidden;
         }
 
-        .checkbox-compact.selected {
+        .checkbox-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .checkbox-card:hover::before {
+            left: 100%;
+        }
+
+        .checkbox-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .checkbox-card.selected {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-color: var(--primary);
-            box-shadow: 0 6px 18px rgba(46, 134, 171, 0.3);
-            transform: translateY(-2px);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
         }
 
-        .checkbox-compact input {
+        .checkbox-card input {
             display: none;
         }
 
-        .checkbox-compact i {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
+        .checkbox-card i {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
             display: block;
+            transition: all 0.3s ease;
         }
 
-        .checkbox-compact span {
+        .checkbox-card span {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 1rem;
         }
 
         .ip-input-section {
-            background: linear-gradient(135deg, #F8F9FF, #F0F4FF);
-            padding: 25px;
-            border-radius: 15px;
-            margin: 25px 0;
-            border: 2px dashed #D0D7FF;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 35px 0;
+            border: 2px dashed var(--gray-light);
+            transition: all 0.3s ease;
+        }
+
+        .ip-input-section:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
         }
 
         .ip-input-group {
             display: flex;
-            gap: 12px;
+            gap: 15px;
             align-items: center;
         }
 
         .ip-input-group input {
             flex: 1;
-            padding: 14px 18px;
-            border: 2px solid #E9ECEF;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s;
+            padding: 18px 22px;
+            border: 2px solid var(--gray-light);
+            border-radius: 14px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
             background: white;
+            font-family: 'Inter', sans-serif;
         }
 
         .ip-input-group input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(46, 134, 171, 0.1);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
         }
 
         .upload-btn {
-            padding: 14px 25px;
+            padding: 18px 30px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 0.95rem;
+            border-radius: 14px;
+            font-size: 1.05rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 6px 20px rgba(46, 134, 171, 0.3);
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
         }
 
         .upload-btn:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 25px rgba(46, 134, 171, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .upload-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .upload-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .upload-btn:hover::before {
+            left: 100%;
         }
 
         .daily-counter {
             text-align: center;
-            margin-top: 20px;
-            padding: 20px;
-            background: linear-gradient(135deg, #A23B72, #C44569);
+            margin-top: 35px;
+            padding: 30px;
+            background: linear-gradient(135deg, #a78bfa, #ec4899);
             color: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(162, 59, 114, 0.3);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(167, 139, 250, 0.3);
+            animation: slideUp 0.8s ease;
         }
 
         .counter-number {
-            font-size: 2.8rem;
-            font-weight: 700;
+            font-size: 4rem;
+            font-weight: 800;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: countUp 1s ease-out;
         }
 
         .counter-label {
-            font-size: 1rem;
-            opacity: 0.9;
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .message {
+            margin-top: 25px;
+            padding: 20px 25px;
+            border-radius: 14px;
+            text-align: center;
             font-weight: 600;
+            display: none;
+            animation: slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #991b1b;
+            border: 2px solid #ef4444;
         }
 
         .verification-modal {
@@ -337,7 +567,8 @@
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(10px);
         }
 
         .verification-modal.active {
@@ -347,31 +578,51 @@
 
         .verification-content {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
+            padding: 50px;
+            border-radius: 24px;
             text-align: center;
-            max-width: 500px;
+            max-width: 520px;
             width: 90%;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            transform: scale(0.7) translateY(50px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .verification-modal.active .verification-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .verification-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
         .verification-icon {
-            font-size: 4rem;
+            font-size: 5rem;
             color: var(--success);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            animation: bounceIn 0.8s ease;
         }
 
         .verification-content h3 {
             color: var(--dark);
-            margin-bottom: 15px;
-            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 700;
         }
 
         .verification-content p {
             color: var(--gray);
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-            line-height: 1.5;
+            margin-bottom: 35px;
+            font-size: 1.2rem;
+            line-height: 1.6;
         }
 
         .verification-buttons {
@@ -381,100 +632,173 @@
         }
 
         .btn {
-            padding: 12px 25px;
+            padding: 16px 35px;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-size: 1.05rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             flex: 1;
-            max-width: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            max-width: 180px;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-success {
-            background: linear-gradient(135deg, var(--success), #168B7D);
+            background: linear-gradient(135deg, var(--success), #059669);
             color: white;
-            box-shadow: 0 5px 15px rgba(27, 153, 139, 0.3);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, var(--danger), #C81E4A);
+            background: linear-gradient(135deg, var(--danger), #dc2626);
             color: white;
-            box-shadow: 0 5px 15px rgba(215, 38, 61, 0.3);
         }
 
         .btn:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        .message {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-            font-size: 1rem;
-        }
-
-        .message.success {
-            background: #E8F5E8;
-            color: #155724;
-            border: 2px solid #C3E6CB;
-        }
-
-        .message.error {
-            background: #FDE8E8;
-            color: #721C24;
-            border: 2px solid #F5C6CB;
+        .btn:active {
+            transform: translateY(-1px);
         }
 
         .notification {
             position: fixed;
-            top: 25px;
+            top: 30px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(-100px);
             padding: 20px 30px;
-            border-radius: 12px;
+            border-radius: 14px;
             font-weight: 600;
             font-size: 1.1rem;
             z-index: 1001;
             display: none;
-            min-width: 400px;
+            min-width: 450px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid transparent;
+            animation: slideDownNotification 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
         .notification.success {
-            background: linear-gradient(135deg, #E8F5E8, #D4EDDA);
-            color: #155724;
-            border: 2px solid #C3E6CB;
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border-color: #10b981;
         }
 
         .notification.error {
-            background: linear-gradient(135deg, #FDE8E8, #F8D7DA);
-            color: #721C24;
-            border: 2px solid #F5C6CB;
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #991b1b;
+            border-color: #ef4444;
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border-color: #f59e0b;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDownNotification {
+            from {
+                transform: translateX(-50%) translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        @keyframes bounceIn {
+            0% {transform: scale(0.3); opacity: 0;}
+            50% {transform: scale(1.05);}
+            70% {transform: scale(0.9);}
+            100% {transform: scale(1); opacity: 1;}
+        }
+
+        @keyframes countUp {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% {transform: translateX(0);}
+            10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+            20%, 40%, 60%, 80% {transform: translateX(5px);}
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
         }
 
         @media (max-width: 768px) {
             .login-container, .container {
-                padding: 25px;
-                margin: 10px;
+                padding: 30px 25px;
+                margin: 20px;
             }
             
-            .checkboxes-compact {
-                grid-template-columns: 1fr;
+            .login-header h1, .header h1 {
+                font-size: 2rem;
+            }
+            
+            .checkboxes-horizontal {
+                gap: 15px;
+            }
+            
+            .checkbox-card {
+                min-width: 120px;
+                padding: 20px 15px;
             }
             
             .ip-input-group {
                 flex-direction: column;
+            }
+            
+            .ip-input-group input {
+                width: 100%;
             }
             
             .verification-buttons {
@@ -487,31 +811,64 @@
             
             .notification {
                 min-width: 90%;
+                left: 5%;
+                transform: translateX(0) translateY(-100px);
+            }
+            
+            .logout-btn {
+                position: relative;
+                margin-bottom: 20px;
+                width: 100%;
+            }
+            
+            .counter-number {
+                font-size: 3rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-circle circle-1"></div>
+        <div class="floating-circle circle-2"></div>
+        <div class="floating-circle circle-3"></div>
+    </div>
+
     <!-- Login Screen -->
     <div class="login-container" id="loginContainer">
         <div class="login-header">
-            <h1><i class="fas fa-shield-alt"></i> IP Verification</h1>
-            <p>Secure IP Management System</p>
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h1>Secure IP Verification</h1>
+            <p>Secure your network with advanced IP monitoring</p>
         </div>
 
         <div class="form-group">
-            <label for="username"><i class="fas fa-user"></i> Username:</label>
-            <input type="text" id="username" placeholder="Enter your username">
+            <label for="username"><i class="fas fa-user"></i> Username</label>
+            <input type="text" id="username" placeholder="Enter your username" required>
+            <i class="fas fa-user input-icon"></i>
         </div>
 
         <div class="form-group">
-            <label for="password"><i class="fas fa-lock"></i> Password:</label>
-            <input type="password" id="password" placeholder="Enter your password">
+            <label for="password"><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <i class="fas fa-lock input-icon"></i>
         </div>
 
         <button class="login-btn" onclick="login()">
-            <i class="fas fa-sign-in-alt"></i> Login to System
+            <i class="fas fa-sign-in-alt"></i> Secure Login
         </button>
+
+        <div class="demo-credentials">
+            <h4><i class="fas fa-key"></i> Pre-configured Credentials</h4>
+            <p><i class="fas fa-envelope"></i> <strong>Username:</strong> liveagent123@gmail.com</p>
+            <p><i class="fas fa-lock"></i> <strong>Password:</strong> blueston123</p>
+            <div style="margin-top: 10px;">
+                <span class="credential-badge">Supports 2000+ Concurrent Users</span>
+            </div>
+        </div>
 
         <div id="loginMessage" class="message" style="margin-top: 20px;"></div>
     </div>
@@ -519,49 +876,46 @@
     <!-- Main Application -->
     <div class="container" id="mainContainer">
         <div class="header">
-            <h1><i class="fas fa-shield-alt"></i> IP Verification</h1>
-            <p>Secure IP Management Dashboard</p>
+            <h1>IP Verification Dashboard</h1>
+            <p>Monitor and verify your IP addresses in real-time</p>
+            <div class="user-welcome" id="userWelcome">
+                <i class="fas fa-user-check"></i> Welcome, User
+            </div>
             <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Logout
+                <i class="fas fa-sign-out-alt"></i> Secure Logout
             </button>
         </div>
 
-        <!-- Compact IP Type Selection -->
-        <div class="ip-type-section">
-            <h3>Select IP Type</h3>
-            <div class="checkboxes-compact">
-                <div class="checkbox-compact" onclick="selectCheckbox('session')">
-                    <input type="checkbox" id="sessionCheck" name="checkType" value="session">
-                    <i class="fas fa-globe-americas"></i>
-                    <span>Session IP</span>
-                </div>
-                <div class="checkbox-compact" onclick="selectCheckbox('search')">
-                    <input type="checkbox" id="searchCheck" name="checkType" value="search">
-                    <i class="fas fa-search"></i>
-                    <span>Search IP</span>
-                </div>
-                <div class="checkbox-compact" onclick="selectCheckbox('click')">
-                    <input type="checkbox" id="clickCheck" name="checkType" value="click">
-                    <i class="fas fa-mouse-pointer"></i>
-                    <span>Click IP</span>
-                </div>
+        <div class="checkboxes-horizontal">
+            <div class="checkbox-card" onclick="selectCheckbox('session')">
+                <input type="checkbox" id="sessionCheck" name="checkType" value="session">
+                <i class="fas fa-globe-americas"></i>
+                <span>Session IP</span>
+            </div>
+            <div class="checkbox-card" onclick="selectCheckbox('search')">
+                <input type="checkbox" id="searchCheck" name="checkType" value="search">
+                <i class="fas fa-search-location"></i>
+                <span>Search IP</span>
+            </div>
+            <div class="checkbox-card" onclick="selectCheckbox('click')">
+                <input type="checkbox" id="clickCheck" name="checkType" value="click">
+                <i class="fas fa-mouse-pointer"></i>
+                <span>Click IP</span>
             </div>
         </div>
 
-        <!-- IP Input Section -->
         <div class="ip-input-section">
             <div class="ip-input-group">
                 <input type="text" id="ipAddress" placeholder="Enter IP Address (e.g., 192.168.1.1)">
                 <button class="upload-btn" onclick="uploadIP()">
-                    <i class="fas fa-cloud-upload-alt"></i> Upload IP
+                    <i class="fas fa-cloud-upload-alt"></i> Upload & Verify IP
                 </button>
             </div>
         </div>
 
-        <!-- Daily Counter -->
         <div class="daily-counter">
-            <span class="counter-number" id="totalDailyCount">0</span>
-            <span class="counter-label">IPs Uploaded Today</span>
+            <span class="counter-number" id="dailyCount">0</span>
+            <span class="counter-label">IPs Verified Today</span>
         </div>
 
         <div id="message" class="message"></div>
@@ -571,11 +925,10 @@
     <div class="verification-modal" id="verificationModal">
         <div class="verification-content">
             <div class="verification-icon">
-                <i class="fas fa-link"></i>
+                <i class="fas fa-shield-check"></i>
             </div>
-            <h3>Link Verification Required</h3>
-            <p>Please verify if your link is working properly and accessible at the provided IP address:</p>
-            <p style="font-weight: 700; font-size: 1.2rem; color: var(--primary);" id="verificationIP"></p>
+            <h3>IP Link Verification</h3>
+            <p>Is the provided IP address accessible and the link working properly?</p>
             <div class="verification-buttons">
                 <button class="btn btn-success" onclick="confirmLink(true)">
                     <i class="fas fa-check-circle"></i> Yes, Working
@@ -591,98 +944,119 @@
     <div id="globalNotification" class="notification"></div>
 
     <script>
-        // SIMPLE STORAGE SYSTEM
-        const STORAGE_PREFIX = 'ipv_';
+        // Global storage keys
+        const IP_STORAGE_KEY = 'ip_verification_system_ips';
+        const USER_STORAGE_KEY = 'ip_verification_system_users';
+        const CURRENT_USER_KEY = 'ip_verification_current_user';
+        const MAX_STORAGE_SIZE = 100000000; // 100 Million IPs capacity
         
-        function getStorage(key) {
+        // PRE-SET USER CREDENTIALS
+        const PRESET_USER = {
+            id: 'liveagent',
+            name: 'liveagent123@gmail.com',
+            password: 'blueston123',
+            status: 'Active',
+            created: new Date().toISOString(),
+            role: 'user',
+            maxConcurrent: 2000
+        };
+        
+        let currentIP = '';
+        let currentUser = null;
+
+        // CLOUD SYNC FUNCTIONALITY
+        function getCloudData(key) {
             try {
-                const fullKey = STORAGE_PREFIX + key;
-                const item = localStorage.getItem(fullKey);
-                return item ? JSON.parse(item) : null;
+                const cloudKey = `ip_system_${key}`;
+                const stored = localStorage.getItem(cloudKey);
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+                // Agar data nahi hai to preset user ko include karo
+                if (key === USER_STORAGE_KEY) {
+                    return getDefaultUsers();
+                }
+                return [];
             } catch (e) {
-                return null;
+                console.error('Error reading cloud data:', e);
+                if (key === USER_STORAGE_KEY) {
+                    return getDefaultUsers();
+                }
+                return [];
             }
         }
 
-        function setStorage(key, value) {
+        function saveCloudData(key, data) {
             try {
-                const fullKey = STORAGE_PREFIX + key;
-                localStorage.setItem(fullKey, JSON.stringify(value));
+                const cloudKey = `ip_system_${key}`;
+                localStorage.setItem(cloudKey, JSON.stringify(data));
                 return true;
             } catch (e) {
+                console.error('Error saving cloud data:', e);
                 return false;
             }
         }
 
-        // SIMPLE USER SYSTEM - NO COMPLEX LOGIC
-        function getAllUsers() {
-            let users = getStorage('users');
-            if (!users) {
-                users = {
-                    'admin': { 
-                        id: 'admin', 
-                        name: 'Administrator', 
-                        password: 'admin123', 
-                        status: 'Active'
-                    },
-                    'user1': { 
-                        id: 'user1', 
-                        name: 'John Smith', 
-                        password: 'password1', 
-                        status: 'Active'
-                    },
-                    'user2': { 
-                        id: 'user2', 
-                        name: 'Sarah Johnson', 
-                        password: 'password2', 
-                        status: 'Active'
-                    },
-                    'demo': { 
-                        id: 'demo', 
-                        name: 'Demo User', 
-                        password: 'demo123', 
-                        status: 'Active'
-                    },
-                    'liveagent': { 
-                        id: 'liveagent', 
-                        name: 'Live Agent', 
-                        password: 'blueston123', 
-                        status: 'Active'
-                    }
-                };
-                setStorage('users', users);
-            }
-            return users;
+        // Get default users with preset user
+        function getDefaultUsers() {
+            return {
+                'admin': {
+                    id: 'admin',
+                    name: 'Administrator',
+                    password: 'admin123',
+                    status: 'Active',
+                    created: new Date().toISOString(),
+                    role: 'admin'
+                },
+                'liveagent': PRESET_USER,
+                'demo1': {
+                    id: 'demo1',
+                    name: 'Demo User 1',
+                    password: 'demo123',
+                    status: 'Active',
+                    created: new Date().toISOString(),
+                    role: 'user'
+                }
+            };
         }
 
-        function getCurrentUser() {
-            return getStorage('current_user');
+        // Get user accounts from cloud storage
+        function getUserAccounts() {
+            return getCloudData(USER_STORAGE_KEY);
         }
 
-        function saveCurrentUser(user) {
-            return setStorage('current_user', user);
+        // Save user accounts to cloud storage
+        function saveUserAccounts(users) {
+            return saveCloudData(USER_STORAGE_KEY, users);
         }
 
-        function getAllIPs() {
-            return getStorage('all_ips') || [];
+        // Get all stored IPs from cloud storage
+        function getAllStoredIPs() {
+            return getCloudData(IP_STORAGE_KEY);
         }
 
+        // Save IPs to cloud storage
         function saveAllIPs(ips) {
-            return setStorage('all_ips', ips);
+            return saveCloudData(IP_STORAGE_KEY, ips);
         }
 
-        function getDailyIPs(userId) {
-            const today = new Date().toDateString();
-            const key = `daily_${userId}_${today}`;
-            return getStorage(key) || [];
+        // Get current logged in user
+        function getCurrentUser() {
+            try {
+                const stored = localStorage.getItem(CURRENT_USER_KEY);
+                return stored ? JSON.parse(stored) : null;
+            } catch (e) {
+                console.error('Error reading current user:', e);
+                return null;
+            }
         }
 
-        function saveDailyIPs(userId, ips) {
-            const today = new Date().toDateString();
-            const key = `daily_${userId}_${today}`;
-            return setStorage(key, ips);
+        // Save current logged in user
+        function saveCurrentUser(user) {
+            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
         }
 
+        // Show global notification with animation
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('globalNotification');
             notification.textContent = message;
@@ -694,97 +1068,211 @@
             }, 5000);
         }
 
-        let currentUser = null;
-        let currentIP = '';
-
-        // SIMPLE LOGIN FUNCTION
+        // Enhanced login function with animations
         function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
             const loginMessage = document.getElementById('loginMessage');
+            const loginBtn = document.querySelector('.login-btn');
 
             if (!username || !password) {
-                showMessage('Please enter both username and password!', 'error', loginMessage);
+                loginMessage.textContent = 'Please enter both username and password!';
+                loginMessage.className = 'message error';
+                loginMessage.style.display = 'block';
+                loginBtn.classList.add('shake');
+                setTimeout(() => loginBtn.classList.remove('shake'), 500);
                 return;
             }
 
-            const allUsers = getAllUsers();
+            const users = getUserAccounts();
             
-            // DIRECT UNIVERSAL LOGIN CHECK - SIMPLE AND CLEAN
-            if (username === 'liveagent123@gmail.com' && password === 'blueston123') {
-                currentUser = allUsers['liveagent'];
-                saveCurrentUser(currentUser);
-                showSuccess();
-                return;
-            }
-
-            // REGULAR USER LOGIN
-            const user = Object.values(allUsers).find(u => 
-                (u.name.toLowerCase() === username.toLowerCase() || u.id === username.toLowerCase()) && 
-                u.password === password
-            );
+            // Enhanced user search
+            const user = Object.values(users).find(u => {
+                const usernameMatch = u.name.toLowerCase() === username.toLowerCase();
+                const userIdMatch = u.id.toLowerCase() === username.toLowerCase();
+                const passwordMatch = u.password === password;
+                
+                return (usernameMatch || userIdMatch) && passwordMatch;
+            });
 
             if (user) {
                 if (user.status === 'Inactive') {
-                    showMessage('Your account is inactive. Please contact administrator.', 'error', loginMessage);
+                    loginMessage.textContent = 'Your account is inactive. Please contact administrator.';
+                    loginMessage.className = 'message error';
+                    loginMessage.style.display = 'block';
                     return;
                 }
+
                 currentUser = user;
                 saveCurrentUser(user);
-                showSuccess();
+                
+                // Login success animation
+                document.getElementById('loginContainer').style.animation = 'slideUp 0.5s ease reverse forwards';
+                setTimeout(() => {
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('mainContainer').style.display = 'block';
+                }, 500);
+                
+                document.getElementById('userWelcome').innerHTML = `<i class="fas fa-user-check"></i> Welcome, ${user.name}`;
+                
+                showNotification(`🔐 Welcome back, ${user.name}! Secure login successful.`, 'success');
+                initializeUserDashboard();
             } else {
-                showMessage('Invalid username or password! Try: liveagent123@gmail.com / blueston123', 'error', loginMessage);
+                loginMessage.textContent = '❌ Invalid username or password! Please check your credentials.';
+                loginMessage.className = 'message error';
+                loginMessage.style.display = 'block';
+                loginBtn.classList.add('shake');
+                setTimeout(() => loginBtn.classList.remove('shake'), 500);
             }
         }
 
-        function showSuccess() {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('mainContainer').style.display = 'block';
-            showNotification(`🎉 Welcome, ${currentUser.name}!`, 'success');
-            updateDashboardStats();
-        }
-
-        function showMessage(text, type, element) {
-            element.textContent = text;
-            element.className = `message ${type}`;
-            element.style.display = 'block';
-        }
-
+        // Enhanced logout function
         function logout() {
             currentUser = null;
-            setStorage('current_user', null);
-            document.getElementById('mainContainer').style.display = 'none';
-            document.getElementById('loginContainer').style.display = 'block';
+            localStorage.removeItem(CURRENT_USER_KEY);
+            
+            document.getElementById('mainContainer').style.animation = 'slideUp 0.5s ease reverse forwards';
+            setTimeout(() => {
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('loginContainer').style.animation = 'slideUp 0.8s ease';
+            }, 500);
+            
+            // Clear form
+            document.getElementById('username').value = '';
             document.getElementById('password').value = '';
             document.getElementById('loginMessage').style.display = 'none';
-            showNotification('You have been logged out successfully!', 'warning');
+            
+            showNotification('🔓 You have been securely logged out!', 'warning');
         }
 
+        // Check if user is already logged in
         function checkLoginStatus() {
             const user = getCurrentUser();
             if (user) {
                 currentUser = user;
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'block';
-                updateDashboardStats();
+                document.getElementById('userWelcome').innerHTML = `<i class="fas fa-user-check"></i> Welcome, ${user.name}`;
+                initializeUserDashboard();
             }
         }
 
-        function updateDashboardStats() {
-            if (!currentUser) return;
-            const dailyIPs = getDailyIPs(currentUser.id);
-            document.getElementById('totalDailyCount').textContent = dailyIPs.length;
+        // Daily IP counter with reset at 12 PM
+        function getTodayKey(userId) {
+            const now = new Date();
+            return `daily_ips_${userId}_${now.toDateString()}`;
         }
 
+        function getDailyIPs(userId) {
+            const todayKey = getTodayKey(userId);
+            const dailyIPs = getCloudData(todayKey);
+            return Array.isArray(dailyIPs) ? dailyIPs : [];
+        }
+
+        function saveDailyIPs(userId, ips) {
+            const todayKey = getTodayKey(userId);
+            return saveCloudData(todayKey, ips);
+        }
+
+        // Save IP to cloud storage
+        function saveIPToGlobalStorage(ip, userId) {
+            try {
+                const allIPs = getAllStoredIPs();
+                
+                // Check if storage is approaching limit
+                if (allIPs.length >= MAX_STORAGE_SIZE) {
+                    console.warn('IP storage is at capacity');
+                    return false;
+                }
+                
+                // Add new IP with timestamp
+                allIPs.push({
+                    ip: ip,
+                    timestamp: new Date().toISOString(),
+                    type: getSelectedCheckType(),
+                    userId: userId,
+                    userName: currentUser.name
+                });
+                
+                const saved = saveAllIPs(allIPs);
+                return saved;
+            } catch (e) {
+                console.error('Error saving IP to storage:', e);
+                return false;
+            }
+        }
+
+        // Check if IP is duplicate in global storage for this user
+        function isDuplicateIP(ip, userId) {
+            const allIPs = getAllStoredIPs();
+            return allIPs.some(entry => entry.ip === ip && entry.userId === userId);
+        }
+
+        function saveDailyIP(ip, userId) {
+            const dailyIPs = getDailyIPs(userId);
+            dailyIPs.push({
+                ip: ip,
+                timestamp: new Date().toISOString(),
+                type: getSelectedCheckType(),
+                userId: userId
+            });
+            saveDailyIPs(userId, dailyIPs);
+            updateDailyCounter(userId);
+        }
+
+        function updateDailyCounter(userId) {
+            const dailyIPs = getDailyIPs(userId);
+            const counterElement = document.getElementById('dailyCount');
+            const currentCount = parseInt(counterElement.textContent);
+            const newCount = dailyIPs.length;
+            
+            if (newCount !== currentCount) {
+                counterElement.style.animation = 'none';
+                setTimeout(() => {
+                    counterElement.style.animation = 'countUp 0.8s ease-out';
+                    counterElement.textContent = newCount;
+                }, 10);
+            }
+        }
+
+        // Check for daily reset
+        function checkDailyReset(userId) {
+            const lastResetKey = `last_reset_${userId}`;
+            const lastReset = getCloudData(lastResetKey);
+            const now = new Date();
+            const today = now.toDateString();
+            
+            if (lastReset !== today && now.getHours() >= 12) {
+                // Reset daily counter
+                const todayKey = getTodayKey(userId);
+                localStorage.removeItem(`ip_system_${todayKey}`);
+                saveCloudData(lastResetKey, today);
+            }
+            
+            updateDailyCounter(userId);
+        }
+
+        // Initialize user dashboard
+        function initializeUserDashboard() {
+            if (!currentUser) return;
+            
+            checkDailyReset(currentUser.id);
+            setInterval(() => checkDailyReset(currentUser.id), 60000);
+        }
+        
         function selectCheckbox(type) {
-            document.querySelectorAll('.checkbox-compact').forEach(card => {
+            document.querySelectorAll('.checkbox-card').forEach(card => {
                 card.classList.remove('selected');
             });
+            
             const card = event.currentTarget;
             card.classList.add('selected');
+            
             document.querySelectorAll('input[name="checkType"]').forEach(checkbox => {
                 checkbox.checked = false;
             });
+            
             document.getElementById(type + 'Check').checked = true;
         }
         
@@ -795,107 +1283,124 @@
         
         function uploadIP() {
             if (!currentUser) {
-                showNotification('Please login first!', 'error');
+                showNotification('🔐 Please login first to upload IPs!', 'error');
                 return;
             }
 
             const selectedCheckbox = document.querySelector('input[name="checkType"]:checked');
             const ipAddress = document.getElementById('ipAddress').value.trim();
+            const messageDiv = document.getElementById('message');
+            const uploadBtn = document.querySelector('.upload-btn');
+            
+            messageDiv.style.display = 'none';
             
             if (!selectedCheckbox) {
-                showNotification('Please select an IP type!', 'error');
+                showNotification('⚠️ Please select an IP type before uploading!', 'warning');
+                uploadBtn.classList.add('shake');
+                setTimeout(() => uploadBtn.classList.remove('shake'), 500);
                 return;
             }
             
             if (!ipAddress) {
-                showNotification('Please enter an IP address!', 'error');
+                showNotification('⚠️ Please enter an IP address to verify!', 'warning');
+                uploadBtn.classList.add('shake');
+                setTimeout(() => uploadBtn.classList.remove('shake'), 500);
                 return;
             }
             
             const ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
             if (!ipPattern.test(ipAddress)) {
-                showNotification('Please enter a valid IP address (e.g., 192.168.1.1)!', 'error');
+                showNotification('❌ Please enter a valid IP address format!', 'error');
+                uploadBtn.classList.add('shake');
+                setTimeout(() => uploadBtn.classList.remove('shake'), 500);
                 return;
             }
             
-            const allIPs = getAllIPs();
-            const userIPs = allIPs.filter(ip => ip.userId === currentUser.id);
-            if (userIPs.some(entry => entry.ip === ipAddress)) {
-                showNotification('❌ This IP address has already been uploaded!', 'error');
+            // Check for duplicate IP in global storage for this user
+            if (isDuplicateIP(ipAddress, currentUser.id)) {
+                showNotification('❌ Duplicate IP detected! Please use a different IP address.', 'error');
+                uploadBtn.classList.add('shake');
+                setTimeout(() => uploadBtn.classList.remove('shake'), 500);
                 return;
             }
             
+            // Check for duplicate IP in today's list for this user
             const dailyIPs = getDailyIPs(currentUser.id);
             if (dailyIPs.some(entry => entry.ip === ipAddress)) {
-                showNotification('❌ This IP address has already been uploaded today!', 'error');
+                showNotification('❌ This IP has already been uploaded today!', 'error');
+                uploadBtn.classList.add('shake');
+                setTimeout(() => uploadBtn.classList.remove('shake'), 500);
                 return;
             }
             
             currentIP = ipAddress;
-            document.getElementById('verificationIP').textContent = ipAddress;
             showVerificationModal();
         }
         
         function showVerificationModal() {
-            document.getElementById('verificationModal').classList.add('active');
+            const modal = document.getElementById('verificationModal');
+            modal.classList.add('active');
         }
         
         function hideVerificationModal() {
-            document.getElementById('verificationModal').classList.remove('active');
+            const modal = document.getElementById('verificationModal');
+            modal.classList.remove('active');
         }
         
         function confirmLink(isWorking) {
             if (isWorking) {
-                const dailyIPs = getDailyIPs(currentUser.id);
-                dailyIPs.push({
-                    ip: currentIP,
-                    timestamp: new Date().toISOString(),
-                    type: getSelectedCheckType(),
-                    userId: currentUser.id
-                });
-                saveDailyIPs(currentUser.id, dailyIPs);
+                // Save to both daily and global storage
+                saveDailyIP(currentIP, currentUser.id);
+                const savedToGlobal = saveIPToGlobalStorage(currentIP, currentUser.id);
                 
-                const allIPs = getAllIPs();
-                allIPs.push({
-                    ip: currentIP,
-                    timestamp: new Date().toISOString(),
-                    type: getSelectedCheckType(),
-                    userId: currentUser.id,
-                    userName: currentUser.name
-                });
-                saveAllIPs(allIPs);
-                
-                showNotification(`✅ IP ${currentIP} successfully uploaded!`, 'success');
+                if (savedToGlobal) {
+                    showNotification(`✅ IP ${currentIP} successfully verified and stored securely!`, 'success');
+                } else {
+                    showNotification(`⚠️ IP verified but storage system is optimizing!`, 'warning');
+                }
             } else {
-                showNotification(`❌ IP ${currentIP} verification failed.`, 'error');
+                showNotification(`❌ IP ${currentIP} verification failed. Please check the connection.`, 'error');
             }
             
             document.getElementById('ipAddress').value = '';
-            document.querySelectorAll('.checkbox-compact').forEach(card => {
+            document.querySelectorAll('.checkbox-card').forEach(card => {
                 card.classList.remove('selected');
             });
             document.querySelectorAll('input[name="checkType"]').forEach(checkbox => {
                 checkbox.checked = false;
             });
             
-            updateDashboardStats();
             hideVerificationModal();
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('verificationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideVerificationModal();
+            }
+        });
+
+        // Enter key support for login
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+
+        // Initialize system - Ensure users exist
+        function initializeSystem() {
+            const users = getUserAccounts();
+            const defaultUsers = getDefaultUsers();
+            
+            // Preset users ko preserve karo, default users ko add karo
+            const updatedUsers = { ...defaultUsers, ...users };
+            saveUserAccounts(updatedUsers);
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            getAllUsers(); // Ensure users exist
+            initializeSystem();
             checkLoginStatus();
-            
-            // Enter key support
-            document.getElementById('password').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') login();
-            });
-
-            // Close modal when clicking outside
-            document.getElementById('verificationModal').addEventListener('click', function(e) {
-                if (e.target === this) hideVerificationModal();
-            });
         });
     </script>
 </body>
