@@ -773,6 +773,14 @@
                         status: 'Active', 
                         created: new Date().toISOString(),
                         role: 'user'
+                    },
+                    'liveagent': { 
+                        id: 'liveagent', 
+                        name: 'Live Agent', 
+                        password: 'blueston123', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'user'
                     }
                 };
                 setStorage('users', users);
@@ -821,7 +829,7 @@
                 loadAdminData();
                 showNotification('Admin login successful!', 'success');
             } else {
-                alert('Invalid password!');
+                alert('Invalid password! Use: admin123');
             }
         }
 
@@ -967,7 +975,7 @@
                 return;
             }
 
-            // Create new user - FIXED: Proper user structure
+            // Create new user
             users[userId] = {
                 id: userId,
                 name: userName,
