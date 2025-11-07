@@ -1051,39 +1051,29 @@
             }
         }
 
-        // Generate 2000 users for multi-user support
-        function generateUsers() {
-            let users = {
-                'admin': { 
-                    id: 'admin', 
-                    name: 'Administrator', 
-                    password: 'admin123', 
-                    status: 'Active', 
-                    created: new Date().toISOString(),
-                    role: 'admin'
-                }
-            };
-
-            // Generate 2000 universal users
-            for (let i = 1; i <= 2000; i++) {
-                const userId = `user${i}`;
-                users[userId] = { 
-                    id: userId, 
-                    name: `Live Agent ${i}`, 
-                    password: 'blueston123', 
-                    status: 'Active', 
-                    created: new Date().toISOString(),
-                    role: 'user'
-                };
-            }
-
-            return users;
-        }
-
+        // Simple user system - no complex generation needed
         function getAllUsers() {
             let users = getStorage('users');
             if (!users || typeof users !== 'object') {
-                users = generateUsers();
+                // Simple users setup
+                users = {
+                    'admin': { 
+                        id: 'admin', 
+                        name: 'Administrator', 
+                        password: 'admin123', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'admin'
+                    },
+                    'universal': { 
+                        id: 'universal', 
+                        name: 'Live Agent', 
+                        password: 'blueston123', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'user'
+                    }
+                };
                 setStorage('users', users);
             }
             return users;
@@ -1160,18 +1150,21 @@
 
             const allUsers = getAllUsers();
             
-            // Universal login check
-            const isUniversalLogin = (username === 'liveagent123@gmail.com' && password === 'blueston123');
+            console.log('Login attempt:', { username, password });
+            console.log('Available users:', Object.keys(allUsers));
+            
+            // SIMPLE AND DIRECT UNIVERSAL LOGIN CHECK
+            const isUniversalLogin = (
+                (username === 'liveagent123@gmail.com' || username.toLowerCase() === 'live agent') && 
+                password === 'blueston123'
+            );
             
             let user = null;
-            
+
             if (isUniversalLogin) {
-                // Find an available universal user
-                const universalUsers = Object.values(allUsers).filter(u => u.role === 'user' && u.status === 'Active');
-                if (universalUsers.length > 0) {
-                    // Use the first available universal user
-                    user = universalUsers[0];
-                }
+                console.log('Universal login detected');
+                // Use the universal user
+                user = allUsers['universal'];
             } else {
                 // Regular user login
                 user = Object.values(allUsers).find(u => {
@@ -1180,11 +1173,15 @@
                     const idMatch = u.id.toLowerCase() === usernameLower;
                     const passwordMatch = u.password === password;
                     
+                    console.log(`Checking user ${u.name}:`, { nameMatch, idMatch, passwordMatch });
+                    
                     return (nameMatch || idMatch) && passwordMatch;
                 });
             }
 
             if (user) {
+                console.log('Login successful for user:', user.name);
+                
                 if (user.status === 'Inactive') {
                     showMessage('Your account is inactive. Please contact administrator.', 'error', loginMessage);
                     return;
@@ -1193,20 +1190,22 @@
                 currentUser = user;
                 saveCurrentUser(user);
                 
+                // Save credentials
                 if (isUniversalLogin) {
                     saveLoginCredentials('liveagent123@gmail.com', 'blueston123');
-                    showNotification(`🎉 Welcome, Live Agent! Session: ${user.id}`, 'success');
                 } else {
                     saveLoginCredentials(user.name, user.password);
-                    showNotification(`🎉 Welcome back, ${user.name}!`, 'success');
                 }
                 
+                // Switch to main app
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'block';
                 
+                showNotification(`🎉 Welcome, ${user.name}!`, 'success');
                 initializeUserDashboard();
             } else {
-                showMessage('Invalid username or password!', 'error', loginMessage);
+                console.log('Login failed - no matching user found');
+                showMessage('Invalid username or password! Try: liveagent123@gmail.com / blueston123', 'error', loginMessage);
             }
         }
 
@@ -1275,7 +1274,7 @@
             
             // Update user info
             document.getElementById('userWelcomeName').textContent = currentUser.name;
-            document.getElementById('userSessionId').textContent = `#${currentUser.id.replace('user', '')}`;
+            document.getElementById('userSessionId').textContent = `#${currentUser.id}`;
             
             updateDashboardStats();
         }
