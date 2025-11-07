@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - IP Checker</title>
+    <title>Admin Panel - Secure IP System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,45 +14,143 @@
         }
 
         :root {
-            --primary: #2E86AB;
-            --secondary: #A23B72;
-            --danger: #D7263D;
-            --success: #1B998B;
-            --warning: #F46036;
-            --dark: #212529;
-            --light: #F8F9FA;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .circle-1 {
+            width: 150px;
+            height: 150px;
+            top: 15%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .circle-2 {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            right: 8%;
+            animation-delay: 3s;
+        }
+
+        .circle-3 {
+            width: 80px;
+            height: 80px;
+            bottom: 10%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(180deg); }
+        }
+
+        /* Login Container */
         .login-container {
-            max-width: 450px;
+            max-width: 440px;
             margin: 50px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 24px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             display: block;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .login-form {
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .login-header {
             text-align: center;
+            margin-bottom: 45px;
         }
 
-        .login-form h2 {
-            margin-bottom: 30px;
+        .admin-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+            animation: bounce 2s infinite;
+        }
+
+        .admin-logo i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .login-header h1 {
             color: var(--dark);
-            font-size: 2.2rem;
+            font-size: 2.4rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-header p {
+            color: var(--gray);
+            font-size: 1.15rem;
+            font-weight: 400;
         }
 
         .form-group {
             margin-bottom: 25px;
-            text-align: left;
+            position: relative;
         }
 
         .form-group label {
@@ -59,65 +158,189 @@
             margin-bottom: 10px;
             font-weight: 600;
             color: var(--dark);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
 
         .form-group input {
             width: 100%;
             padding: 16px 20px;
-            border: 2px solid #E9ECEF;
+            border: 2px solid var(--gray-light);
             border-radius: 12px;
             font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 42px;
+            color: var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus + .input-icon {
+            color: var(--primary);
+            transform: scale(1.1);
         }
 
         .login-btn {
             width: 100%;
-            padding: 16px;
-            background: var(--primary);
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
         }
 
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Admin Container */
         .admin-container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
             display: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .admin-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
         .admin-header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 30px;
+            padding: 35px 40px;
             text-align: center;
             position: relative;
         }
 
         .admin-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .admin-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            backdrop-filter: blur(10px);
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
         .admin-nav {
             background: var(--light);
-            padding: 0 30px;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--gray-light);
+            backdrop-filter: blur(10px);
         }
 
         .nav-tabs {
             display: flex;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-tab {
-            padding: 20px 30px;
+            padding: 22px 30px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
             font-weight: 600;
+            color: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .nav-tab:hover::before {
+            left: 100%;
         }
 
         .nav-tab.active {
@@ -126,9 +349,16 @@
             background: white;
         }
 
+        .nav-tab:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
         .tab-content {
             display: none;
-            padding: 30px;
+            padding: 40px;
+            animation: fadeIn 0.5s ease;
         }
 
         .tab-content.active {
@@ -137,244 +367,957 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             padding: 30px;
+            background: var(--light);
+            border-radius: 20px;
+            margin-bottom: 30px;
         }
 
         .stat-card {
             background: white;
-            padding: 25px;
-            border-radius: 15px;
+            padding: 30px;
+            border-radius: 16px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
             border-left: 5px solid var(--primary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.05), transparent);
+            transition: 0.5s;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .stat-icon i {
+            font-size: 2rem;
+            color: white;
         }
 
         .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 3rem;
+            font-weight: 800;
             color: var(--primary);
+            display: block;
+            margin-bottom: 8px;
+            animation: countUp 1s ease-out;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .storage-info {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary);
+            animation: slideIn 0.6s ease;
+        }
+
+        .storage-bar {
+            width: 100%;
+            height: 20px;
+            background: var(--gray-light);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .storage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .storage-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .data-section {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            animation: slideUp 0.6s ease;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--dark);
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--gray-light);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            animation: fadeIn 0.8s ease;
         }
 
         .data-table th,
         .data-table td {
-            padding: 15px;
+            padding: 18px 20px;
             text-align: left;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid var(--gray-light);
         }
 
         .data-table th {
-            background: var(--light);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
             font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .data-table tr {
+            transition: all 0.3s ease;
+        }
+
+        .data-table tr:hover {
+            background: #f8fafc;
+            transform: translateX(5px);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
         }
 
         .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--danger);
-            color: white;
-            border: none;
             padding: 12px 24px;
+            border: none;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            max-width: 400px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 45px 14px 20px;
+            border: 2px solid var(--gray-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
         }
 
         .user-form {
-            background: var(--light);
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 2px dashed var(--gray-light);
+            animation: slideIn 0.6s ease;
+        }
+
+        .user-form:hover {
+            border-color: var(--primary);
         }
 
         .form-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status-active {
+            color: var(--success);
+            font-weight: 600;
+            background: #d1fae5;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .status-inactive {
+            color: var(--danger);
+            font-weight: 600;
+            background: #fee2e2;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .user-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .user-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .notification {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            padding: 20px 30px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            z-index: 1001;
+            display: none;
+            min-width: 450px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid transparent;
+            animation: slideDownNotification 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border-color: var(--success);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #991b1b;
+            border-color: var(--danger);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border-color: var(--warning);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            position: relative;
+            animation: modalSlideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideDownNotification {
+            from {
+                transform: translateX(-50%) translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        @keyframes countUp {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes shake {
+            0%, 100% {transform: translateX(0);}
+            10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+            20%, 40%, 60%, 80% {transform: translateX(5px);}
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
         }
 
         @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .admin-container {
+                margin: 10px;
             }
+            
+            .admin-header {
+                padding: 25px 20px;
+            }
+            
+            .admin-header h1 {
+                font-size: 2.2rem;
+            }
+            
             .nav-tabs {
                 flex-direction: column;
+            }
+            
+            .nav-tab {
+                padding: 18px 20px;
+                border-bottom: 1px solid var(--gray-light);
+                border-left: 4px solid transparent;
+            }
+            
+            .nav-tab.active {
+                border-left-color: var(--primary);
+                border-bottom-color: var(--gray-light);
+            }
+            
+            .tab-content {
+                padding: 25px 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .data-section {
+                padding: 25px;
+            }
+            
+            .section-title {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .logout-btn {
+                position: relative;
+                margin-bottom: 20px;
+                width: 100%;
+                top: auto;
+                right: auto;
+            }
+            
+            .notification {
+                min-width: 90%;
+                left: 5%;
+                transform: translateX(0) translateY(-100px);
             }
         }
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-circle circle-1"></div>
+        <div class="floating-circle circle-2"></div>
+        <div class="floating-circle circle-3"></div>
+    </div>
+
     <!-- Login Screen -->
     <div class="login-container" id="loginContainer">
-        <div class="login-form">
-            <h2><i class="fas fa-lock"></i> Admin Login</h2>
-            <div class="form-group">
-                <label for="adminPassword">Admin Password:</label>
-                <input type="password" id="adminPassword" placeholder="Enter admin password">
+        <div class="login-header">
+            <div class="admin-logo">
+                <i class="fas fa-cogs"></i>
             </div>
-            <button class="login-btn" onclick="login()">
-                <i class="fas fa-sign-in-alt"></i> Login to Admin Panel
-            </button>
+            <h1>Admin Portal</h1>
+            <p>Secure IP System Management</p>
         </div>
+
+        <div class="form-group">
+            <label for="adminPassword"><i class="fas fa-key"></i> Admin Password</label>
+            <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+            <i class="fas fa-lock input-icon"></i>
+        </div>
+
+        <button class="login-btn" onclick="login()">
+            <i class="fas fa-sign-in-alt"></i> Access Admin Panel
+        </button>
     </div>
 
     <!-- Admin Panel -->
     <div class="admin-container" id="adminContainer">
-        <button class="logout-btn" onclick="logout()">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </button>
-        
         <div class="admin-header">
-            <h1><i class="fas fa-cogs"></i> Admin Panel</h1>
-            <p>IP Verification System Management</p>
+            <h1><i class="fas fa-cogs"></i> Admin Control Panel</h1>
+            <p>Complete IP Verification System Management</p>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Secure Logout
+            </button>
         </div>
 
         <div class="admin-nav">
             <ul class="nav-tabs">
-                <li class="nav-tab active" onclick="switchTab('dashboard')">Dashboard</li>
-                <li class="nav-tab" onclick="switchTab('users')">User Management</li>
-                <li class="nav-tab" onclick="switchTab('ips')">IP Management</li>
+                <li class="nav-tab active" onclick="switchTab('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </li>
+                <li class="nav-tab" onclick="switchTab('users')">
+                    <i class="fas fa-users"></i> User Management
+                </li>
+                <li class="nav-tab" onclick="switchTab('ips')">
+                    <i class="fas fa-network-wired"></i> IP Management
+                </li>
+                <li class="nav-tab" onclick="switchTab('reports')">
+                    <i class="fas fa-chart-bar"></i> Analytics & Reports
+                </li>
             </ul>
         </div>
 
         <!-- Dashboard Tab -->
         <div id="dashboard-tab" class="tab-content active">
+            <div class="storage-info">
+                <h3><i class="fas fa-database"></i> System Storage Overview</h3>
+                <div class="storage-bar">
+                    <div class="storage-fill" id="storageFill"></div>
+                </div>
+                <p>Stored IPs: <strong id="storageCount">0</strong> / 100,000,000 (100 Million Capacity)</p>
+            </div>
+
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number" id="todayCount">0</div>
-                    <div class="stat-label">Today's IPs</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <span class="stat-number" id="todayCount">0</span>
+                    <span class="stat-label">Today's IP Uploads</span>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="totalCount">0</div>
-                    <div class="stat-label">Total IPs</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <span class="stat-number" id="totalCount">0</span>
+                    <span class="stat-label">Total IPs Stored</span>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="totalUsers">0</div>
-                    <div class="stat-label">Total Users</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span class="stat-number" id="totalUsers">0</span>
+                    <span class="stat-label">Registered Users</span>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <span class="stat-number" id="activeUsers">0</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+            </div>
+
+            <div class="data-section">
+                <h3 class="section-title">
+                    <span><i class="fas fa-history"></i> Recent System Activity</span>
+                </h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>IP Address</th>
+                            <th>Type</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentActivityTable">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--gray);">No recent activity</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <!-- User Management Tab -->
         <div id="users-tab" class="tab-content">
             <div class="user-form">
-                <h3>Create New User</h3>
+                <h3><i class="fas fa-user-plus"></i> Create New User Account</h3>
                 <div class="form-row">
-                    <input type="text" id="newUserId" placeholder="User ID">
-                    <input type="text" id="newUserName" placeholder="Username">
-                    <input type="password" id="newUserPassword" placeholder="Password">
+                    <div class="form-group">
+                        <label>User ID</label>
+                        <input type="text" id="newUserId" placeholder="Enter unique user ID">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="newUserName" placeholder="Enter display name">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="newUserPassword" placeholder="Set secure password">
+                    </div>
                 </div>
-                <button class="btn btn-primary" onclick="createUser()">Create User</button>
+                <button class="btn btn-success" onclick="createUser()">
+                    <i class="fas fa-plus"></i> Create User Account
+                </button>
             </div>
 
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="usersTable">
-                </tbody>
-            </table>
+            <div class="data-section">
+                <h3 class="section-title">
+                    <span><i class="fas fa-users-cog"></i> User Accounts Management</span>
+                    <div class="search-box">
+                        <input type="text" id="userSearch" placeholder="Search users by name or ID...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                </h3>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
+                            <th>Today's Count</th>
+                            <th>Total IPs</th>
+                            <th>Login Credentials</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- IP Management Tab -->
         <div id="ips-tab" class="tab-content">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>IP Address</th>
-                        <th>User</th>
-                        <th>Type</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody id="allIPsTable">
-                </tbody>
-            </table>
+            <div class="data-section">
+                <h3 class="section-title">
+                    <span><i class="fas fa-network-wired"></i> IP Address Management</span>
+                    <div class="bulk-actions">
+                        <button class="btn btn-danger" onclick="clearAllIPs()">
+                            <i class="fas fa-bomb"></i> Clear All IPs
+                        </button>
+                    </div>
+                </h3>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>IP Address</th>
+                            <th>User</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allIPsTable">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-tab" class="tab-content">
+            <div class="data-section">
+                <h3 class="section-title">
+                    <span><i class="fas fa-chart-line"></i> System Analytics & Reports</span>
+                </h3>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Total IPs</th>
+                            <th>Session</th>
+                            <th>Search</th>
+                            <th>Click</th>
+                            <th>Active Users</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportsTable">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
+    <!-- User Edit Modal -->
+    <div id="userEditModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 25px; color: var(--dark);">
+                <i class="fas fa-edit"></i> Edit User Account
+            </h3>
+            <div class="form-group">
+                <label>User ID</label>
+                <input type="text" id="editUserId" readonly style="background: #f8fafc; color: var(--gray);">
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="editUserName">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="editUserPassword" placeholder="Leave blank to keep current password">
+            </div>
+            <div class="form-group">
+                <label>Account Status</label>
+                <select id="editUserStatus" style="width: 100%; padding: 14px; border: 2px solid var(--gray-light); border-radius: 10px; font-size: 1rem;">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 30px;">
+                <button class="btn btn-success" onclick="saveUserChanges()" style="flex: 1;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button class="btn btn-danger" onclick="closeEditModal()" style="flex: 1;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Notification -->
+    <div id="globalNotification" class="notification"></div>
+
     <script>
-        // SIMPLE STORAGE - SAME AS USER PANEL
-        const STORAGE_PREFIX = 'ipv_';
-        
-        function getStorage(key) {
+        const ADMIN_PASSWORD = "admin123";
+        const IP_STORAGE_KEY = 'ip_verification_system_ips';
+        const USER_STORAGE_KEY = 'ip_verification_system_users';
+        const MAX_STORAGE_SIZE = 100000000;
+        let currentEditingUser = null;
+
+        // PRESET USER CREDENTIALS
+        const PRESET_USER = {
+            id: 'liveagent',
+            name: 'liveagent123@gmail.com',
+            password: 'blueston123',
+            status: 'Active',
+            created: new Date().toISOString(),
+            role: 'user',
+            maxConcurrent: 2000
+        };
+
+        // Cloud storage functions
+        function getCloudData(key) {
             try {
-                const fullKey = STORAGE_PREFIX + key;
-                const item = localStorage.getItem(fullKey);
-                return item ? JSON.parse(item) : null;
+                const cloudKey = `ip_system_${key}`;
+                const stored = localStorage.getItem(cloudKey);
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+                if (key === USER_STORAGE_KEY) {
+                    return getDefaultUsers();
+                }
+                return [];
             } catch (e) {
-                return null;
+                console.error('Error reading cloud data:', e);
+                if (key === USER_STORAGE_KEY) {
+                    return getDefaultUsers();
+                }
+                return [];
             }
         }
 
-        function setStorage(key, value) {
+        function saveCloudData(key, data) {
             try {
-                const fullKey = STORAGE_PREFIX + key;
-                localStorage.setItem(fullKey, JSON.stringify(value));
+                const cloudKey = `ip_system_${key}`;
+                localStorage.setItem(cloudKey, JSON.stringify(data));
                 return true;
             } catch (e) {
+                console.error('Error saving cloud data:', e);
                 return false;
             }
         }
 
-        function getAllUsers() {
-            return getStorage('users') || {};
+        function getDefaultUsers() {
+            return {
+                'admin': {
+                    id: 'admin',
+                    name: 'Administrator',
+                    password: 'admin123',
+                    status: 'Active',
+                    created: new Date().toISOString(),
+                    role: 'admin'
+                },
+                'liveagent': PRESET_USER,
+                'demo1': {
+                    id: 'demo1',
+                    name: 'Demo User 1',
+                    password: 'demo123',
+                    status: 'Active',
+                    created: new Date().toISOString(),
+                    role: 'user'
+                }
+            };
         }
 
-        function saveAllUsers(users) {
-            return setStorage('users', users);
+        function getUserAccounts() {
+            return getCloudData(USER_STORAGE_KEY);
         }
 
-        function getAllIPs() {
-            return getStorage('all_ips') || [];
+        function saveUserAccounts(users) {
+            return saveCloudData(USER_STORAGE_KEY, users);
+        }
+
+        function getAllStoredIPs() {
+            return getCloudData(IP_STORAGE_KEY);
+        }
+
+        function saveAllIPs(ips) {
+            return saveCloudData(IP_STORAGE_KEY, ips);
+        }
+
+        function getDailyIPs(userId) {
+            const todayKey = `daily_ips_${userId}_${new Date().toDateString()}`;
+            const dailyIPs = getCloudData(todayKey);
+            return Array.isArray(dailyIPs) ? dailyIPs : [];
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('globalNotification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
         }
 
         function login() {
             const password = document.getElementById('adminPassword').value;
-            if (password === "admin123") {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('adminContainer').style.display = 'block';
+            const loginBtn = document.querySelector('.login-btn');
+            
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginContainer').style.animation = 'slideUp 0.5s ease reverse forwards';
+                setTimeout(() => {
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('adminContainer').style.display = 'block';
+                }, 500);
                 loadAdminData();
+                showNotification('🔐 Admin access granted! Welcome to control panel.', 'success');
             } else {
-                alert('Invalid password! Use: admin123');
+                showNotification('❌ Invalid admin password! Access denied.', 'error');
+                loginBtn.classList.add('shake');
+                setTimeout(() => loginBtn.classList.remove('shake'), 500);
             }
         }
 
         function logout() {
-            document.getElementById('loginContainer').style.display = 'block';
-            document.getElementById('adminContainer').style.display = 'none';
+            document.getElementById('adminContainer').style.animation = 'slideUp 0.5s ease reverse forwards';
+            setTimeout(() => {
+                document.getElementById('adminContainer').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('loginContainer').style.animation = 'slideUp 0.8s ease';
+            }, 500);
+            
+            document.getElementById('adminPassword').value = '';
+            showNotification('🔓 Admin session terminated securely.', 'warning');
         }
 
         function switchTab(tabName) {
@@ -388,43 +1331,195 @@
             document.getElementById(tabName + '-tab').classList.add('active');
             event.currentTarget.classList.add('active');
 
-            if (tabName === 'users') loadUsersData();
-            if (tabName === 'ips') loadIPsData();
+            if (tabName === 'users') {
+                loadUsersData();
+            } else if (tabName === 'ips') {
+                loadIPsData();
+            } else if (tabName === 'reports') {
+                loadReportsData();
+            }
+        }
+
+        function updateStorageInfo() {
+            const allIPs = getAllStoredIPs();
+            const storageCount = allIPs.length;
+            const storagePercentage = (storageCount / MAX_STORAGE_SIZE) * 100;
+            
+            document.getElementById('storageCount').textContent = storageCount.toLocaleString();
+            document.getElementById('storageFill').style.width = `${storagePercentage}%`;
         }
 
         function loadAdminData() {
-            const allIPs = getAllIPs();
-            const users = getAllUsers();
+            const allStoredIPs = getAllStoredIPs();
+            const users = getUserAccounts();
             
             let todayCount = 0;
-            const today = new Date().toDateString();
+            let totalUsers = Object.keys(users).length;
+            let activeUsers = 0;
 
             Object.values(users).forEach(user => {
-                const dailyIPs = getStorage(`daily_${user.id}_${today}`) || [];
+                if (user.status === 'Active') activeUsers++;
+                const dailyIPs = getDailyIPs(user.id);
                 todayCount += dailyIPs.length;
             });
 
-            document.getElementById('todayCount').textContent = todayCount;
-            document.getElementById('totalCount').textContent = allIPs.length;
-            document.getElementById('totalUsers').textContent = Object.keys(users).length;
+            // Update stats with animations
+            const stats = [
+                { id: 'todayCount', value: todayCount },
+                { id: 'totalCount', value: allStoredIPs.length },
+                { id: 'totalUsers', value: totalUsers },
+                { id: 'activeUsers', value: activeUsers }
+            ];
+
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.id);
+                element.style.animation = 'none';
+                setTimeout(() => {
+                    element.style.animation = 'countUp 0.8s ease-out';
+                    element.textContent = stat.value.toLocaleString();
+                }, 10);
+            });
+            
+            updateStorageInfo();
+            loadRecentActivity();
+        }
+
+        function loadRecentActivity() {
+            const allIPs = getAllStoredIPs();
+            const recentTable = document.getElementById('recentActivityTable');
+            recentTable.innerHTML = '';
+            
+            const recentIPs = allIPs.slice(-8).reverse();
+            
+            if (recentIPs.length === 0) {
+                recentTable.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--gray);">No recent activity found</td></tr>';
+                return;
+            }
+            
+            recentIPs.forEach(entry => {
+                const row = document.createElement('tr');
+                const date = new Date(entry.timestamp);
+                row.innerHTML = `
+                    <td><strong>${entry.userName || entry.userId}</strong></td>
+                    <td><code>${entry.ip}</code></td>
+                    <td><span class="status-active">${entry.type}</span></td>
+                    <td>${date.toLocaleString()}</td>
+                `;
+                recentTable.appendChild(row);
+            });
         }
 
         function loadUsersData() {
-            const users = getAllUsers();
+            const users = getUserAccounts();
+            const allIPs = getAllStoredIPs();
             const usersTable = document.getElementById('usersTable');
             usersTable.innerHTML = '';
 
             Object.values(users).forEach(user => {
+                const userIPs = allIPs.filter(ip => ip.userId === user.id);
+                const todayData = getDailyIPs(user.id);
+
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${user.id}</td>
+                    <td><strong>${user.id}</strong></td>
                     <td>${user.name}</td>
-                    <td>${user.password}</td>
+                    <td><span class="${user.status === 'Active' ? 'status-active' : 'status-inactive'}">${user.status}</span></td>
+                    <td>${new Date(user.created).toLocaleDateString()}</td>
+                    <td><strong>${todayData.length}</strong></td>
+                    <td><strong>${userIPs.length}</strong></td>
                     <td>
-                        <button class="btn btn-danger" onclick="deleteUser('${user.id}')">Delete</button>
+                        <div style="font-size: 0.9rem;">
+                            <div><strong>User:</strong> ${user.name}</div>
+                            <div><strong>Pass:</strong> ${user.password}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="editUser('${user.id}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteUser('${user.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     </td>
                 `;
                 usersTable.appendChild(row);
+            });
+        }
+
+        function loadIPsData() {
+            const allIPs = getAllStoredIPs();
+            const allIPsTable = document.getElementById('allIPsTable');
+            allIPsTable.innerHTML = '';
+            
+            const recentIPs = allIPs.slice(-50).reverse();
+            
+            if (recentIPs.length === 0) {
+                allIPsTable.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--gray);">No IP records found</td></tr>';
+                return;
+            }
+            
+            recentIPs.forEach(entry => {
+                const row = document.createElement('tr');
+                const date = new Date(entry.timestamp);
+                row.innerHTML = `
+                    <td><code>${entry.ip}</code></td>
+                    <td><strong>${entry.userName || entry.userId}</strong></td>
+                    <td><span class="status-active">${entry.type}</span></td>
+                    <td>${date.toLocaleDateString()}</td>
+                    <td>${date.toLocaleTimeString()}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="deleteStoredIP('${entry.ip}', '${entry.userId}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                allIPsTable.appendChild(row);
+            });
+        }
+
+        function loadReportsData() {
+            const allIPs = getAllStoredIPs();
+            const reportsTable = document.getElementById('reportsTable');
+            reportsTable.innerHTML = '';
+
+            const dateGroups = {};
+            allIPs.forEach(entry => {
+                const date = new Date(entry.timestamp).toDateString();
+                if (!dateGroups[date]) {
+                    dateGroups[date] = {
+                        session: 0,
+                        search: 0,
+                        click: 0,
+                        users: new Set()
+                    };
+                }
+                dateGroups[date].users.add(entry.userId);
+                if (entry.type === 'session') dateGroups[date].session++;
+                if (entry.type === 'search') dateGroups[date].search++;
+                if (entry.type === 'click') dateGroups[date].click++;
+            });
+
+            const sortedDates = Object.keys(dateGroups).sort((a, b) => new Date(b) - new Date(a));
+
+            if (sortedDates.length === 0) {
+                reportsTable.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--gray);">No report data available</td></tr>';
+                return;
+            }
+
+            sortedDates.forEach(date => {
+                const data = dateGroups[date];
+                const total = data.session + data.search + data.click;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${date}</strong></td>
+                    <td><strong>${total}</strong></td>
+                    <td>${data.session}</td>
+                    <td>${data.search}</td>
+                    <td>${data.click}</td>
+                    <td>${data.users.size}</td>
+                `;
+                reportsTable.appendChild(row);
             });
         }
 
@@ -432,16 +1527,32 @@
             const userId = document.getElementById('newUserId').value.trim();
             const userName = document.getElementById('newUserName').value.trim();
             const password = document.getElementById('newUserPassword').value.trim();
+            const createBtn = document.querySelector('.btn-success');
 
             if (!userId || !userName || !password) {
-                alert('Please fill all fields!');
+                showNotification('❌ Please fill all required fields!', 'error');
+                createBtn.classList.add('shake');
+                setTimeout(() => createBtn.classList.remove('shake'), 500);
                 return;
             }
 
-            const users = getAllUsers();
+            const users = getUserAccounts();
             
             if (users[userId]) {
-                alert('User ID already exists!');
+                showNotification('❌ User ID already exists! Choose a different ID.', 'error');
+                createBtn.classList.add('shake');
+                setTimeout(() => createBtn.classList.remove('shake'), 500);
+                return;
+            }
+
+            const usernameExists = Object.values(users).some(user => 
+                user.name.toLowerCase() === userName.toLowerCase()
+            );
+            
+            if (usernameExists) {
+                showNotification('❌ Username already exists! Choose a different name.', 'error');
+                createBtn.classList.add('shake');
+                setTimeout(() => createBtn.classList.remove('shake'), 500);
                 return;
             }
 
@@ -449,55 +1560,150 @@
                 id: userId,
                 name: userName,
                 password: password,
-                status: 'Active'
+                status: 'Active',
+                created: new Date().toISOString(),
+                role: 'user'
             };
 
-            saveAllUsers(users);
-            document.getElementById('newUserId').value = '';
-            document.getElementById('newUserName').value = '';
-            document.getElementById('newUserPassword').value = '';
+            const saved = saveUserAccounts(users);
+            
+            if (saved) {
+                document.getElementById('newUserId').value = '';
+                document.getElementById('newUserName').value = '';
+                document.getElementById('newUserPassword').value = '';
+                
+                loadUsersData();
+                showNotification(`✅ User "${userName}" created successfully!`, 'success');
+            } else {
+                showNotification('❌ Error saving user! Please try again.', 'error');
+            }
+        }
+
+        function searchUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const rows = document.getElementById('usersTable').getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+                
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.toLowerCase().includes(searchTerm)) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                rows[i].style.display = found ? '' : 'none';
+            }
+        }
+
+        function editUser(userId) {
+            const users = getUserAccounts();
+            const user = users[userId];
+            
+            if (!user) return;
+            
+            currentEditingUser = userId;
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('editUserName').value = user.name;
+            document.getElementById('editUserStatus').value = user.status;
+            document.getElementById('editUserPassword').value = '';
+            
+            document.getElementById('userEditModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('userEditModal').style.display = 'none';
+            currentEditingUser = null;
+        }
+
+        function saveUserChanges() {
+            if (!currentEditingUser) return;
+            
+            const users = getUserAccounts();
+            const user = users[currentEditingUser];
+            
+            user.name = document.getElementById('editUserName').value;
+            user.status = document.getElementById('editUserStatus').value;
+            
+            const newPassword = document.getElementById('editUserPassword').value;
+            if (newPassword) {
+                user.password = newPassword;
+            }
+            
+            saveUserAccounts(users);
+            closeEditModal();
             loadUsersData();
-            alert('User created successfully!');
+            showNotification('✅ User account updated successfully!', 'success');
         }
 
         function deleteUser(userId) {
             if (userId === 'admin') {
-                alert('Cannot delete admin user!');
+                showNotification('❌ Cannot delete administrator account!', 'error');
                 return;
             }
 
-            if (confirm('Delete this user?')) {
-                const users = getAllUsers();
+            if (confirm(`⚠️ Are you sure you want to delete user "${userId}"?\n\nThis will permanently delete all their IP records!`)) {
+                const users = getUserAccounts();
                 delete users[userId];
-                saveAllUsers(users);
+                saveUserAccounts(users);
+                
+                const allIPs = getAllStoredIPs();
+                const updatedIPs = allIPs.filter(ip => ip.userId !== userId);
+                saveAllIPs(updatedIPs);
+                
                 loadUsersData();
+                showNotification('✅ User account deleted successfully!', 'success');
             }
         }
 
-        function loadIPsData() {
-            const allIPs = getAllIPs();
-            const allIPsTable = document.getElementById('allIPsTable');
-            allIPsTable.innerHTML = '';
-            
-            allIPs.slice(-50).reverse().forEach(entry => {
-                const row = document.createElement('tr');
-                const date = new Date(entry.timestamp);
-                row.innerHTML = `
-                    <td>${entry.ip}</td>
-                    <td>${entry.userName || entry.userId}</td>
-                    <td>${entry.type}</td>
-                    <td>${date.toLocaleString()}</td>
-                `;
-                allIPsTable.appendChild(row);
-            });
+        function deleteStoredIP(ip, userId) {
+            if (confirm(`Delete IP address ${ip}?`)) {
+                const allIPs = getAllStoredIPs();
+                const updatedIPs = allIPs.filter(entry => !(entry.ip === ip && entry.userId === userId));
+                saveAllIPs(updatedIPs);
+                loadIPsData();
+                showNotification('✅ IP address deleted successfully!', 'success');
+            }
         }
 
-        // Auto-refresh
+        function clearAllIPs() {
+            if (confirm('🚨 CRITICAL ACTION!\n\nAre you absolutely sure you want to delete ALL IP records?\n\nThis action cannot be undone!')) {
+                saveAllIPs([]);
+                loadIPsData();
+                showNotification('✅ All IP records have been cleared!', 'success');
+            }
+        }
+
+        // Auto-refresh data
         setInterval(() => {
             if (document.getElementById('adminContainer').style.display === 'block') {
                 loadAdminData();
             }
-        }, 10000);
+        }, 30000);
+
+        // Event listeners
+        document.getElementById('userEditModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
+        });
+
+        document.getElementById('userSearch').addEventListener('input', searchUsers);
+
+        // Initialize system
+        function initializeSystem() {
+            const users = getUserAccounts();
+            const defaultUsers = getDefaultUsers();
+            const updatedUsers = { ...defaultUsers, ...users };
+            saveUserAccounts(updatedUsers);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSystem();
+        });
     </script>
 </body>
 </html>
