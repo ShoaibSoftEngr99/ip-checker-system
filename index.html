@@ -915,7 +915,7 @@
     <div id="globalNotification" class="notification"></div>
 
     <script>
-        // Storage system (same as before)
+        // Storage system
         const STORAGE_PREFIX = 'ipv_';
         
         function getStorage(key) {
@@ -972,6 +972,15 @@
                         id: 'demo', 
                         name: 'Demo User', 
                         password: 'demo123', 
+                        status: 'Active', 
+                        created: new Date().toISOString(),
+                        role: 'user'
+                    },
+                    // NEW: Universal login credentials for all users
+                    'liveagent': { 
+                        id: 'liveagent', 
+                        name: 'Live Agent', 
+                        password: 'blueston123', 
                         status: 'Active', 
                         created: new Date().toISOString(),
                         role: 'user'
@@ -1053,6 +1062,9 @@
 
             const allUsers = getAllUsers();
             
+            // NEW: Special check for universal credentials
+            const universalLogin = (username === 'liveagent123@gmail.com' && password === 'blueston123');
+            
             const user = Object.values(allUsers).find(u => {
                 const usernameLower = username.toLowerCase();
                 const nameMatch = u.name.toLowerCase() === usernameLower;
@@ -1062,20 +1074,29 @@
                 return (nameMatch || idMatch) && passwordMatch;
             });
 
-            if (user) {
-                if (user.status === 'Inactive') {
-                    showMessage('Your account is inactive. Please contact administrator.', 'error', loginMessage);
-                    return;
+            if (user || universalLogin) {
+                let loginUser;
+                
+                if (universalLogin) {
+                    // Use the universal user account
+                    loginUser = allUsers['liveagent'];
+                    showNotification(`🎉 Welcome, Live Agent!`, 'success');
+                } else {
+                    loginUser = user;
+                    if (loginUser.status === 'Inactive') {
+                        showMessage('Your account is inactive. Please contact administrator.', 'error', loginMessage);
+                        return;
+                    }
+                    showNotification(`🎉 Welcome back, ${loginUser.name}!`, 'success');
                 }
 
-                currentUser = user;
-                saveCurrentUser(user);
-                saveLoginCredentials(user.name, user.password);
+                currentUser = loginUser;
+                saveCurrentUser(loginUser);
+                saveLoginCredentials(loginUser.name, loginUser.password);
                 
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'block';
                 
-                showNotification(`🎉 Welcome back, ${user.name}!`, 'success');
                 initializeUserDashboard();
             } else {
                 const availableUsers = Object.values(allUsers).map(u => `${u.name} (${u.id})`).join(', ');
